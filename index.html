@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keshavanand — Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #EDEAE3;
+      --fg: #2A2535;
+      --muted: #7A7490;
+      --accent: #9B2D7A;
+      --border: rgba(42, 37, 53, 0.1);
+      --sans: 'Inter', sans-serif;
+      --serif: 'DM Serif Display', serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       NAVBAR — smart hide/show
+    ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      padding: 28px 52px;
+      /* Smart hide/show */
+      transform: translateY(0);
+      transition:
+        transform 0.45s var(--ease),
+        padding 0.4s var(--ease),
+        background 0.35s ease,
+        backdrop-filter 0.35s ease;
+    }
+
+    nav.hide { transform: translateY(-110%); }
+
+    nav.scrolled {
+      padding: 14px 52px;
+      background: rgba(237, 234, 227, 0.90);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    /* ── Logo ── */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    /* Square mark */
+    .logo-mark {
+      flex-shrink: 0;
+      transition: transform 0.35s var(--ease);
+    }
+    .nav-logo:hover .logo-mark { transform: rotate(5deg) scale(1.05); }
+
+    /* Wordmark */
+    .logo-word {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+    }
+
+    /* ── Nav links (centered) ── */
+    .nav-center {
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s var(--ease);
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ── Right: resume pill ── */
+    .nav-right { display: flex; justify-content: flex-end; }
+
+    .nav-btn {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg);
+      border: 1.5px solid rgba(42, 37, 53, 0.35);
+      padding: 9px 22px;
+      border-radius: 100px;
+      transition:
+        background 0.3s var(--ease),
+        color 0.3s,
+        border-color 0.3s,
+        transform 0.3s var(--ease);
+    }
+    .nav-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+      transform: scale(1.03);
+    }
+
+    /* ── Hamburger (mobile) ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 5px;
+      width: 32px; height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: auto;
+    }
+    .nav-hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--fg);
+      border-radius: 2px;
+      transform-origin: center;
+      transition: transform 0.35s var(--ease), opacity 0.25s, width 0.3s var(--ease);
+    }
+    .nav-hamburger span:nth-child(1) { width: 22px; }
+    .nav-hamburger span:nth-child(2) { width: 16px; }
+    .nav-hamburger span:nth-child(3) { width: 22px; }
+
+    /* Hamburger → X */
+    .nav-hamburger.open span:nth-child(1) { width: 22px; transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { width: 22px; transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── Mobile nav overlay ── */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .mobile-nav.open {
+      pointer-events: all;
+      opacity: 1;
+    }
+
+    .mobile-nav-links {
+      list-style: none;
+      text-align: center;
+    }
+    .mobile-nav-links li {
+      overflow: hidden;
+    }
+    .mobile-nav-links a {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--fg);
+      text-decoration: none;
+      padding: 6px 0;
+      transform: translateY(40px);
+      opacity: 0;
+      transition: color 0.2s, transform 0.5s var(--ease), opacity 0.5s var(--ease);
+    }
+    .mobile-nav.open .mobile-nav-links li:nth-child(1) a { transition-delay: 0.05s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(2) a { transition-delay: 0.10s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(3) a { transition-delay: 0.15s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(4) a { transition-delay: 0.20s; }
+    .mobile-nav.open .mobile-nav-links a {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .mobile-nav-links a:hover { color: var(--accent); }
+
+    .mobile-nav-footer {
+      position: absolute;
+      bottom: 40px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s var(--ease) 0.3s, transform 0.4s var(--ease) 0.3s;
+    }
+    .mobile-nav.open .mobile-nav-footer { opacity: 1; transform: translateY(0); }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 52px 140px;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.8vw, 58px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      color: var(--fg);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.85s var(--ease) 0.1s forwards;
+      will-change: transform, opacity;
+    }
+
+    .hero-headline .accent {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* Typing cursor */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.82em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: middle;
+      border-radius: 1px;
+      animation: blink 0.65s step-end infinite;
+    }
+    .typing-cursor.done { display: none; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* Rotating scroll badge — no dot */
+    .scroll-badge {
+      position: absolute;
+      bottom: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88px; height: 88px;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeIn 0.7s var(--ease) 1.5s forwards;
+    }
+    .scroll-badge svg {
+      width: 100%; height: 100%;
+      animation: rotateBadge 12s linear infinite;
+    }
+
+    @keyframes rotateBadge {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ─────────────────────────────────────────
+       ABOUT / INTRO
+    ───────────────────────────────────────── */
+    .about-intro {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 52px;
+      overflow: hidden;
+    }
+
+    .about-eyebrow {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 44px;
+    }
+
+    /* Sculpture */
+    .about-visual {
+      width: min(260px, 60vw);
+      margin: 0 auto 44px;
+      position: relative;
+    }
+
+    /* Float lives on wrapper so hover scale doesn't fight it */
+    .sculpture-float {
+      animation: sculptureFloat 5s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .sculpture-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 20px 44px rgba(42,37,53,0.12));
+      transform-origin: center bottom;
+      transition:
+        transform 0.55s var(--ease),
+        filter 0.55s var(--ease);
+      will-change: transform, filter;
+    }
+
+    .about-visual:hover .sculpture-img {
+      transform: scale(1.04);
+      filter:
+        drop-shadow(0 28px 56px rgba(42,37,53,0.16))
+        sepia(0.12) saturate(1.18) brightness(1.04);
+    }
+
+    @keyframes sculptureFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* Tagline: muted base, bold emphasis on "Art & Psychology."
+       DM Serif Display has no bold — use Inter so <strong> has real weight */
+    .about-tagline {
+      font-family: var(--sans);
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .about-tagline strong {
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+    }
+
+    .about-btn {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg);
+      border: 1.5px solid rgba(42, 37, 53, 0.35);
+      padding: 13px 34px;
+      border-radius: 100px;
+      transition:
+        background 0.3s var(--ease),
+        color 0.3s,
+        border-color 0.3s,
+        transform 0.3s var(--ease);
+    }
+    .about-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+      transform: scale(1.03);
+    }
+
+    /* ─────────────────────────────────────────
+       FEATURED PROJECTS
+    ───────────────────────────────────────── */
+    .projects {
+      padding: 120px 52px;
+      position: relative;
+    }
+
+    .projects-heading {
+      font-family: var(--serif);
+      font-size: clamp(36px, 3.8vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      text-align: center;
+      margin-bottom: 88px;
+    }
+
+    /* ── 2×n floating card grid ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    /* Floating card */
+    .project-card {
+      background: #F4F1EC;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow:
+        0 1px 2px rgba(42,37,53,0.04),
+        0 4px 16px rgba(42,37,53,0.05),
+        0 12px 32px rgba(42,37,53,0.04);
+      transition:
+        transform 0.55s var(--ease),
+        box-shadow 0.55s var(--ease);
+      will-change: transform;
+    }
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow:
+        0 2px 4px rgba(42,37,53,0.04),
+        0 12px 32px rgba(42,37,53,0.09),
+        0 32px 64px rgba(42,37,53,0.07);
+    }
+
+    /* Visual area — lives at top of card */
+    .card-visual {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .project-card:not(.wide) .card-visual { aspect-ratio: 16/10; }
+
+    .card-visual-inner {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.75s var(--ease);
+    }
+    .project-card:hover .card-visual-inner { transform: scale(1.05); }
+
+    /* Ghost number on visual */
+    .card-num {
+      position: absolute;
+      bottom: 14px; right: 18px;
+      font-family: var(--serif);
+      font-size: 56px;
+      font-weight: 400;
+      color: white;
+      opacity: 0.2;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Text body below visual */
+    .card-body { padding: 26px 30px 30px; }
+
+    /* ── Wide card: spans both columns, horizontal layout ── */
+    .project-card.wide {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .project-card.wide .card-visual {
+      aspect-ratio: auto;
+      min-height: 320px;
+    }
+    .project-card.wide .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 44px 52px;
+    }
+
+    /* Shared text styles (used in both layouts) */
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .project-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .project-tag:not(:last-child)::after {
+      content: '\00a0\00b7\00a0';
+      opacity: 0.45;
+    }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: clamp(26px, 2.4vw, 38px);
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 13.5px;
+      font-weight: 400;
+      line-height: 1.72;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .project-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg);
+      border: 1.5px solid rgba(42,37,53,0.3);
+      padding: 11px 24px;
+      border-radius: 100px;
+      align-self: flex-start;
+      transition:
+        background 0.3s var(--ease),
+        color 0.3s,
+        border-color 0.3s,
+        gap 0.35s var(--ease);
+    }
+    .project-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+      gap: 13px;
+    }
+
+    /* ── Mockup ── */
+    .mockup-wrap { width: 86%; position: relative; }
+    .mockup-browser {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 36px rgba(0,0,0,0.13);
+    }
+    .mockup-bar-top {
+      background: #F5F5F5;
+      padding: 9px 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-bottom: 1px solid #E8E8E8;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .dot-r { background: #FF6058; }
+    .dot-y { background: #FFC12D; }
+    .dot-g { background: #2CC651; }
+    .mockup-url {
+      flex: 1;
+      background: #EBEBEB;
+      border-radius: 3px;
+      height: 18px;
+      margin: 0 10px;
+    }
+    .mockup-screen { aspect-ratio: 16/9; overflow: hidden; }
+    .screen-bt { background: linear-gradient(135deg, #3B48DE 0%, #5B6AF0 100%); display: flex; }
+    .screen-bt-sidebar { width: 30%; background: rgba(255,255,255,0.1); padding: 10px; }
+    .screen-bt-sidebar-item { height: 7px; border-radius: 3px; background: rgba(255,255,255,0.4); margin-bottom: 7px; }
+    .screen-bt-main { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+    .screen-bt-card { background: rgba(255,255,255,0.15); border-radius: 5px; height: 22px; display: flex; align-items: center; padding: 0 7px; }
+    .screen-bt-line { height: 5px; border-radius: 2px; background: rgba(255,255,255,0.5); }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      padding: 28px 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .footer-copy { font-size: 12px; font-weight: 400; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--fg); }
+
+    /* Scroll to top */
+    .scroll-top {
+      position: fixed;
+      right: 28px; bottom: 28px;
+      width: 40px; height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      font-size: 15px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: opacity 0.3s, transform 0.3s var(--ease), color 0.2s;
+      pointer-events: none;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { transform: translateY(-3px); color: var(--fg); }
+
+    /* ─────────────────────────────────────────
+       TESTIMONIALS — full-width carousel
+    ───────────────────────────────────────── */
+    .testimonials {
+      padding: 120px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 60vh;
+    }
+
+    .testimonials-eyebrow {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 52px;
+    }
+
+    .testimonials-carousel {
+      position: relative;
+      max-width: 780px;
+      width: 100%;
+    }
+
+    .testimonial-slide {
+      display: none;
+    }
+    .testimonial-slide.active {
+      display: block;
+      animation: tSlideIn 0.65s var(--ease) forwards;
+    }
+
+    @keyframes tSlideIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .testimonial-quote {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.6vw, 38px);
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.45;
+      color: var(--fg);
+      margin-bottom: 36px;
+    }
+
+    .testimonial-attribution {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .attribution-name {
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    /* Navigation */
+    .testimonial-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-top: 56px;
+    }
+
+    .t-nav-btn {
+      width: 38px; height: 38px;
+      border: 1.5px solid rgba(42,37,53,0.2);
+      border-radius: 50%;
+      background: none;
+      color: var(--fg);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        background 0.28s var(--ease),
+        border-color 0.28s,
+        color 0.28s,
+        transform 0.35s var(--ease);
+    }
+
+    .t-nav-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+      transform: scale(1.08);
+    }
+
+    .t-counter {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      min-width: 36px;
+      text-align: center;
+    }
+
+    /* ─────────────────────────────────────────
+       REVEAL — silky smooth
+       Uses transition (not animation) + will-change
+    ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity  0.6s var(--ease),
+        transform 0.6s var(--ease);
+      will-change: transform, opacity;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Stagger delays */
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+
+    /* ─────────────────────────────────────────
+       KEYFRAMES
+    ───────────────────────────────────────── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      nav { padding: 22px 36px; }
+      nav.scrolled { padding: 14px 36px; }
+      .nav-links { gap: 32px; }
+      .hero    { padding: 100px 36px 120px; }
+      .projects { padding: 88px 36px; }
+      .about-intro { padding: 88px 36px; }
+      footer   { padding: 24px 36px; }
+    }
+
+    @media (max-width: 768px) {
+      /* Nav: logo left, hamburger right */
+      nav {
+        grid-template-columns: auto 1fr auto;
+        padding: 20px 24px;
+      }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-center  { display: none; }
+      .nav-right   { display: none; }
+      .nav-hamburger { display: flex; }
+
+      /* Hero */
+      .hero { padding: 100px 24px 110px; }
+      .hero-headline { font-size: clamp(28px, 7.5vw, 42px); }
+
+      /* About */
+      .about-intro { padding: 80px 24px; }
+      .about-visual { width: min(220px, 55vw); }
+
+      /* Projects: single column on mobile */
+      .projects { padding: 64px 16px; }
+      /* Testimonials: single column on mobile */
+      .testimonials { padding: 64px 16px; }
+      .testimonials-grid { grid-template-columns: 1fr; gap: 14px; }
+      .projects-grid { grid-template-columns: 1fr; gap: 14px; }
+      .project-card.wide {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+      }
+      .project-card.wide .card-visual { min-height: 220px; }
+      .project-card.wide .card-body { padding: 24px 26px 28px; }
+      .card-body { padding: 22px 24px 26px; }
+
+      /* Footer: stack */
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 24px 36px;
+        gap: 16px;
+      }
+
+      /* Scroll badge smaller */
+      .scroll-badge { width: 72px; height: 72px; bottom: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-headline { font-size: clamp(24px, 8vw, 32px); }
+      .about-tagline { font-size: clamp(18px, 5vw, 22px); }
+      .projects-heading { font-size: clamp(28px, 8vw, 36px); margin-bottom: 56px; }
+      .project-name { font-size: clamp(26px, 7vw, 34px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile full-screen nav overlay -->
+  <div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#work"  class="mobile-link">Work</a></li>
+      <li><a href="#"      class="mobile-link">Resume</a></li>
+      <li><a href="#"      class="mobile-link">Contact</a></li>
+    </ul>
+    <div class="mobile-nav-footer">keshavanand.com</div>
+  </div>
+
+  <!-- ── Nav ── -->
+  <nav id="nav">
+    <!-- Logo: mark + wordmark -->
+    <a href="/" class="nav-logo">
+      <!-- Dot-grid K mark -->
+      <svg class="logo-mark" width="28" height="28" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Row 0 -->
+        <rect x="0"  y="0"  width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <rect x="24" y="0"  width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <!-- Row 1 -->
+        <rect x="0"  y="6"  width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <rect x="18" y="6"  width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <!-- Row 2 — junction -->
+        <rect x="0"  y="12" width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <rect x="6"  y="12" width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <!-- Row 3 -->
+        <rect x="0"  y="18" width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <rect x="18" y="18" width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <!-- Row 4 -->
+        <rect x="0"  y="24" width="3" height="3" rx="0.6" fill="#2A2535"/>
+        <rect x="24" y="24" width="3" height="3" rx="0.6" fill="#2A2535"/>
+      </svg>
+      <span class="logo-word">Keshavanand</span>
+    </a>
+
+    <!-- Center nav links -->
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#">Resume</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Right: resume pill -->
+    <div class="nav-right">
+      <a href="#" class="nav-btn">Resume</a>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-headline">
+        Hi, I'm Keshav and I design <span class="accent" id="typed-word"></span><span class="typing-cursor" id="typing-cursor"></span>
+      </h1>
+    </div>
+
+    <!-- Rotating scroll badge — no dot -->
+    <div class="scroll-badge">
+      <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="circle-path" d="M48,48 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/>
+        </defs>
+        <text
+          font-size="10"
+          font-family="Inter, sans-serif"
+          font-weight="500"
+          letter-spacing="3.5"
+          fill="#9B2D7A"
+        >
+          <textPath href="#circle-path">SCROLL · SCROLL · SCROLL ·</textPath>
+        </text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── About / Intro ── -->
+  <section class="about-intro" id="about">
+    <div class="about-eyebrow reveal">'FOR INQUISITIVE MINDS'</div>
+
+    <div class="about-visual reveal reveal-d1">
+      <div class="sculpture-float">
+        <img
+          src="assets/sculpture.png"
+          alt="Classical sculpture — Keshav Anand"
+          class="sculpture-img"
+        />
+      </div>
+    </div>
+
+    <p class="about-tagline reveal reveal-d2">
+      A digital product designer mad for <strong>Art &amp; Psychology.</strong>
+    </p>
+
+    <a href="#" class="about-btn reveal reveal-d3">About me</a>
+  </section>
+
+  <!-- ── Featured Projects ── -->
+  <section class="projects" id="work">
+    <h2 class="projects-heading reveal">Featured Projects</h2>
+
+    <div class="projects-grid">
+
+      <!-- Card 1 — BuyingTeams -->
+      <div class="project-card reveal">
+        <div class="card-visual" style="background: linear-gradient(145deg, #DEDAD4 0%, #C9C2DC 100%);">
+          <div class="card-visual-inner">
+            <div class="mockup-wrap">
+              <div class="mockup-browser">
+                <div class="mockup-bar-top">
+                  <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                  <div class="mockup-url"></div>
+                </div>
+                <div class="mockup-screen screen-bt">
+                  <div class="screen-bt-sidebar">
+                    <div class="screen-bt-sidebar-item" style="width:62%;"></div>
+                    <div class="screen-bt-sidebar-item" style="width:80%;opacity:0.6;"></div>
+                    <div class="screen-bt-sidebar-item" style="width:50%;opacity:0.6;"></div>
+                    <div class="screen-bt-sidebar-item" style="width:72%;opacity:0.6;"></div>
+                  </div>
+                  <div class="screen-bt-main">
+                    <div style="color:white;font-size:8px;font-weight:600;opacity:0.9;font-family:Inter,sans-serif;line-height:1.5;">Business & Bank<br/>Collaboration Simplified</div>
+                    <div class="screen-bt-card"><div class="screen-bt-line" style="width:60%;"></div></div>
+                    <div class="screen-bt-card"><div class="screen-bt-line" style="width:38%;"></div></div>
+                    <div style="display:flex;gap:4px;margin-top:4px;">
+                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
+                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
+                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="card-num">01</span>
+        </div>
+        <div class="card-body">
+          <div class="project-tags">
+            <span class="project-tag">Web Application</span>
+            <span class="project-tag">Fintech</span>
+            <span class="project-tag">UI/UX</span>
+          </div>
+          <h3 class="project-name">BuyingTeams</h3>
+          <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks — simplifying complex financial workflows into intuitive interfaces.</p>
+          <a href="#" class="project-btn">View Case Study →</a>
+        </div>
+      </div>
+
+      <!-- Card 2 — Wellpath -->
+      <div class="project-card reveal reveal-d1">
+        <div class="card-visual" style="background: linear-gradient(145deg, #D5E4DC 0%, #BDD4C6 100%);">
+          <div class="card-visual-inner">
+            <div class="mockup-wrap" style="width:52%;">
+              <div class="mockup-browser" style="border-radius:22px;">
+                <div style="background:#1C1C1E;padding:12px 16px;border-radius:22px 22px 0 0;display:flex;justify-content:center;">
+                  <div style="width:48px;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;"></div>
+                </div>
+                <div style="background:#1C1C1E;padding:12px;display:flex;flex-direction:column;gap:7px;min-height:100px;">
+                  <div style="background:#2C2C2E;border-radius:9px;padding:10px;">
+                    <div style="height:5px;background:rgba(255,255,255,0.25);border-radius:2px;width:50%;margin-bottom:6px;"></div>
+                    <div style="height:3px;background:#30D158;border-radius:2px;width:68%;"></div>
+                  </div>
+                  <div style="display:flex;gap:6px;">
+                    <div style="flex:1;background:#2C2C2E;border-radius:9px;height:38px;"></div>
+                    <div style="flex:1;background:#2C2C2E;border-radius:9px;height:38px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="card-num">02</span>
+        </div>
+        <div class="card-body">
+          <div class="project-tags">
+            <span class="project-tag">Mobile App</span>
+            <span class="project-tag">Health</span>
+            <span class="project-tag">iOS</span>
+          </div>
+          <h3 class="project-name">Wellpath</h3>
+          <p class="project-desc">Zero-friction health tracking that learns from behaviour — not manual input. Designed for people who hate tracking apps.</p>
+          <a href="#" class="project-btn">View Case Study →</a>
+        </div>
+      </div>
+
+      <!-- Card 3 — Atlas Design System (wide, horizontal) -->
+      <div class="project-card wide reveal">
+        <div class="card-visual" style="background: linear-gradient(145deg, #E4DDD4 0%, #D0C4B4 100%);">
+          <div class="card-visual-inner">
+            <div class="mockup-wrap">
+              <div class="mockup-browser">
+                <div class="mockup-bar-top">
+                  <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                  <div class="mockup-url"></div>
+                </div>
+                <div class="mockup-screen" style="background:#FAFAF8;padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-content:start;">
+                  <div style="background:#F0EDE8;border-radius:6px;height:40px;"></div>
+                  <div style="background:#E8E4F0;border-radius:6px;height:40px;"></div>
+                  <div style="background:#E8F0E8;border-radius:6px;height:40px;"></div>
+                  <div style="background:#F0E8ED;border-radius:6px;height:40px;"></div>
+                  <div style="background:#E8E4F0;border-radius:6px;height:40px;"></div>
+                  <div style="background:#F0EDE8;border-radius:6px;height:40px;"></div>
+                  <div style="background:#E8F0E8;border-radius:6px;height:40px;"></div>
+                  <div style="background:#E8E4F0;border-radius:6px;height:40px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="card-num">03</span>
+        </div>
+        <div class="card-body">
+          <div class="project-tags">
+            <span class="project-tag">Design System</span>
+            <span class="project-tag">Enterprise</span>
+            <span class="project-tag">Figma</span>
+          </div>
+          <h3 class="project-name">Atlas Design System</h3>
+          <p class="project-desc">A scalable component library spanning 12 products, used by 40+ designers and engineers. Reduced design-to-dev handoff time by 60%.</p>
+          <a href="#" class="project-btn">View Case Study →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Testimonials ── -->
+  <section class="testimonials" id="testimonials">
+    <h2 class="testimonials-heading reveal">Kind Words</h2>
+
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card reveal">
+        <span class="testimonial-quote-mark">"</span>
+        <p class="testimonial-text">Keshav has a rare ability to translate complex business problems into elegant, intuitive interfaces. His work on BuyingTeams significantly elevated our product quality and user satisfaction.</p>
+        <div class="testimonial-author">
+          <span class="author-name">Arjun Sharma</span>
+          <span class="author-role">CEO, BuyingTeams</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-d1">
+        <span class="testimonial-quote-mark">"</span>
+        <p class="testimonial-text">Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief — a combination that's genuinely hard to find.</p>
+        <div class="testimonial-author">
+          <span class="author-name">Priya Menon</span>
+          <span class="author-role">Product Manager, Wellpath</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-d2">
+        <span class="testimonial-quote-mark">"</span>
+        <p class="testimonial-text">The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems — which is exactly what we needed at scale.</p>
+        <div class="testimonial-author">
+          <span class="author-name">Daniel Lee</span>
+          <span class="author-role">Head of Design, Atlas</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-copy">© 2026 Keshavanand. All rights reserved.</div>
+    <ul class="footer-links">
+      <li><a href="#">LinkedIn</a></li>
+      <li><a href="#">Dribbble</a></li>
+      <li><a href="#">Read.cv</a></li>
+    </ul>
+  </footer>
+
+  <a href="#" class="scroll-top" id="scrollTop">↑</a>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       SMART NAVBAR — hide on scroll down, show on up
+    ═══════════════════════════════════════════ */
+    const nav = document.getElementById('nav');
+    const scrollTopBtn = document.getElementById('scrollTop');
+    let lastY = 0;
+    let navVisible = true;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+
+          // Scroll-to-top button
+          scrollTopBtn.classList.toggle('visible', y > 500);
+
+          // Scrolled background
+          nav.classList.toggle('scrolled', y > 48);
+
+          // Hide/show logic — only after 80px from top
+          if (y < 80) {
+            if (!navVisible) { nav.classList.remove('hide'); navVisible = true; }
+          } else if (y > lastY + 4) {
+            // Scrolling down
+            if (navVisible) { nav.classList.add('hide'); navVisible = false; }
+          } else if (y < lastY - 4) {
+            // Scrolling up
+            if (!navVisible) { nav.classList.remove('hide'); navVisible = true; }
+          }
+
+          lastY = y;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    /* ═══════════════════════════════════════════
+       MOBILE HAMBURGER
+    ═══════════════════════════════════════════ */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileNav  = document.getElementById('mobileNav');
+    let menuOpen = false;
+
+    function toggleMenu(open) {
+      menuOpen = open;
+      hamburger.classList.toggle('open', open);
+      mobileNav.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', () => toggleMenu(!menuOpen));
+
+    // Close on link tap
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => toggleMenu(false));
+    });
+
+    /* ═══════════════════════════════════════════
+       ONE-SHOT TYPING — "Experience"
+    ═══════════════════════════════════════════ */
+    (function typeWord() {
+      const word   = 'Experience';
+      const target = document.getElementById('typed-word');
+      const cursor = document.getElementById('typing-cursor');
+      let i = 0;
+
+      function type() {
+        if (i < word.length) {
+          target.textContent += word[i++];
+          setTimeout(type, Math.random() * 30 + 40); // 40–70ms natural variation
+        } else {
+          setTimeout(() => cursor.classList.add('done'), 600);
+        }
+      }
+      setTimeout(type, 1200); // Start after headline fades in
+    })();
+
+    /* ═══════════════════════════════════════════
+       SILKY SCROLL REVEAL
+       Uses IntersectionObserver + CSS transitions
+    ═══════════════════════════════════════════ */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -24px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  </script>
+</body>
+</html>
