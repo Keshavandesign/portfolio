@@ -533,6 +533,30 @@
     if (e.code === 'KeyX') throwProjectile();
   });
 
+  /* ── TOUCH CONTROLS ── */
+  function bindBtn(id, code) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const press   = e => { e.preventDefault(); keys[code] = true;  el.classList.add('pressed'); };
+    const release = e => { e.preventDefault(); keys[code] = false; el.classList.remove('pressed'); };
+    el.addEventListener('touchstart',  press,   { passive: false });
+    el.addEventListener('touchend',    release, { passive: false });
+    el.addEventListener('touchcancel', release, { passive: false });
+    el.addEventListener('mousedown',  press);
+    el.addEventListener('mouseup',    release);
+    el.addEventListener('mouseleave', release);
+  }
+  bindBtn('btnLeft',  'ArrowLeft');
+  bindBtn('btnRight', 'ArrowRight');
+  bindBtn('btnJump',  'Space');
+
+  const btnThrowEl = document.getElementById('btnThrow');
+  if (btnThrowEl) {
+    const throwFn = e => { e.preventDefault(); throwProjectile(); };
+    btnThrowEl.addEventListener('touchstart', throwFn, { passive: false });
+    btnThrowEl.addEventListener('mousedown',  throwFn);
+  }
+
   function updateCollectibles() {
     if (state !== 'PLAY') return;
     coinDefs.forEach(c => {
