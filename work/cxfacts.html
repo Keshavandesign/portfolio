@@ -100,6 +100,7 @@
       font-size: 11px; font-weight: 400; letter-spacing: 0.06em; color: var(--muted);
       opacity: 0; transform: translateY(-6px);
       animation: breadcrumbIn 0.5s var(--ease) 0.4s forwards;
+      transition: top 0.4s var(--ease);
     }
     .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
     .breadcrumb a:hover { color: var(--accent); }
@@ -152,7 +153,7 @@
       animation: fadeSlideUp 0.7s var(--ease) 0.5s both;
     }
     .cs-hero-scroll { position: absolute; bottom: 48px; right: 52px; animation: fadeSlideUp 0.6s var(--ease) 0.8s both; }
-    .cs-hero-scroll span { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,234,227,0.3); }
+    .cs-hero-scroll-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,234,227,0.3); }
     .cs-hero-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(237,234,227,0.3), transparent); animation: floatY 2s ease-in-out infinite; }
 
     /* ─── OVERVIEW ─── */
@@ -228,7 +229,7 @@
       font-size: 10px; font-weight: 600; color: var(--muted);
       transition: background 0.3s, border-color 0.3s, color 0.3s;
     }
-    .cs-step.active .cs-step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .cs-step.active .cs-step-num { background: var(--accent); border-color: var(--accent); color: var(--bg); }
     .cs-step-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 0.25s; }
     .cs-step.active .cs-step-label { color: var(--fg); }
     .cs-step-connector { width: 40px; height: 1px; background: var(--border); }
@@ -481,10 +482,10 @@
       Giving users the freedom to ask what matters most — a new feature built in 30 days that attracted 2 Major Nordic Banks.
     </p>
     <div class="cs-hero-scroll">
-      <span>
+      <div class="cs-hero-scroll-inner">
         <div class="cs-hero-scroll-line"></div>
         Scroll
-      </span>
+      </div>
     </div>
   </section>
 
@@ -577,7 +578,7 @@
     <div class="cs-illus-zone">
       <div class="cs-illus-placeholder">
         <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
         </div>
         <div class="cs-illus-label">Project Brief</div>
         <div class="cs-illus-sub">Illustration coming soon</div>
@@ -603,7 +604,7 @@
     <div class="cs-illus-zone">
       <div class="cs-illus-placeholder">
         <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg>
         </div>
         <div class="cs-illus-label">User Personas &amp; Journey Map</div>
         <div class="cs-illus-sub">Illustration coming soon</div>
@@ -630,7 +631,7 @@
     <div class="cs-illus-zone">
       <div class="cs-illus-placeholder">
         <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         </div>
         <div class="cs-illus-label">Wireframes &amp; Design System</div>
         <div class="cs-illus-sub">Illustration coming soon</div>
@@ -656,7 +657,7 @@
     <div class="cs-illus-zone">
       <div class="cs-illus-placeholder">
         <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <div class="cs-illus-label">Dev Handoff &amp; Jira</div>
         <div class="cs-illus-sub">Illustration coming soon</div>
@@ -674,7 +675,7 @@
       <span class="cs-final-stat">Now Under Development</span>
     </div>
     <div class="cs-final-illus reveal reveal-d3">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(237,234,227,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="rgba(237,234,227,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <div class="cs-final-illus-label">Final Designs — Illustration Coming Soon</div>
     </div>
   </section>
@@ -748,7 +749,7 @@
   <a href="#top" class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</a>
 
   <a href="mailto:keshav@thekasper.ai" class="email-button" id="emailBtn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     Let's Talk
   </a>
 
@@ -768,7 +769,7 @@
         });
         ticking = true;
       }
-    });
+    }, { passive: true });
 
     const hamburger = document.getElementById('hamburger');
     const mobileNav = document.getElementById('mobileNav');
@@ -797,7 +798,7 @@
       const past = window.scrollY > 400;
       scrollTop.classList.toggle('visible', past);
       emailBtn.classList.toggle('visible', past);
-    });
+    }, { passive: true });
 
     const steps = document.querySelectorAll('.cs-step');
     const sections = ['discover','define','design','deliver'].map(id => document.getElementById(id));
