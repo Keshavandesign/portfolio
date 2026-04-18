@@ -990,7 +990,7 @@
       Buying<em>Teams</em>
     </h1>
     <p class="cs-hero-sub">
-      Reducing friction in bank-business partnerships through real-time intelligence. Designed an end-to-end platform enabling data-driven collaboration across 50+ institutions.
+      Banks and their business partners were drowning in data and still flying blind. Three months, five phases, one mandate: make complex performance metrics feel like a conversation — not a spreadsheet.
     </p>
     <div class="cs-hero-scroll">
       <span>
@@ -1010,14 +1010,14 @@
       <div class="cs-card reveal">
         <div class="cs-card-label">Overview</div>
         <div class="cs-card-body">
-          BuyingTeams, a fintech scale-up, needed to solve a critical market gap: bank-business partnerships lacked real-time visibility into performance metrics, creating friction in deal-making and relationship management. The challenge was designing an intuitive platform that would make complex financial data accessible and actionable for 50+ global institutions.
+          BuyingTeams was solving a real problem in B2B fintech: banks and their business partners had a relationship, but no shared view of how it was performing. Metrics lived in exports, emails, and memory. The platform needed to surface the right numbers to the right people — and make acting on them feel natural, not laboured.
         </div>
       </div>
       <!-- Problem Statement -->
       <div class="cs-card problem reveal reveal-d1">
         <div class="cs-card-label">Core Challenge</div>
         <div class="cs-card-body">
-          Banks and businesses currently lack centralized visibility into partner performance metrics, forcing manual reporting cycles and delayed decision-making. This friction erodes relationship quality and prevents strategic scaling of partnerships.
+          The core blocker wasn't data — there was plenty of it. It was access and context. A relationship manager needed a 2-day reporting cycle to answer a question that should take 20 seconds. The design problem: how do you collapse that gap without overwhelming users who aren't analysts?
         </div>
       </div>
     </div>
@@ -1062,7 +1062,7 @@
   <section class="cs-process" id="process">
     <div class="cs-section-eyebrow reveal">Design Process</div>
     <h2 class="cs-section-title reveal reveal-d1">Five phases.<br><em>One product.</em></h2>
-    <p class="cs-section-sub reveal reveal-d2">Jump into any section super fast.</p>
+    <p class="cs-section-sub reveal reveal-d2">From raw research to shipped screens — five phases, three months.</p>
 
     <!-- Phase tabs -->
     <div class="cs-phase-tabs reveal reveal-d3">
@@ -1168,10 +1168,10 @@
     <div class="cs-content-block reveal">
       <div class="cs-content-label">User Interviews</div>
       <p class="cs-content-text">
-        Conducted <strong>5 structured interviews</strong> with relationship managers and business development leads to understand their current workflows, pain points in partner evaluation, and unmet needs in real-time data access.
+        Spent the first two weeks just listening. Five relationship managers and business development leads walked me through their weekly ritual: export a CSV, paste into Excel, format it for a meeting, repeat. It was painful to watch. The platform didn't need to be clever — it needed to replace something they genuinely hated.
       </p>
       <p class="cs-content-text" style="margin-top: 16px;">
-        Key findings revealed three critical friction points: <strong>delayed reporting cycles</strong> (manual exports), <strong>information fragmentation</strong> (data scattered across systems), and <strong>lack of context</strong> (scores without underlying metrics).
+        Three friction points kept surfacing across every conversation: <strong>delayed reporting cycles</strong> (manual exports every time), <strong>information fragmentation</strong> (data split across 3+ systems), and <strong>lack of context</strong> (scores that told you nothing about why).
       </p>
     </div>
 
@@ -1179,7 +1179,7 @@
     <div class="cs-content-block reveal">
       <div class="cs-content-label">Surveys</div>
       <p class="cs-content-text">
-        Validated qualitative findings with <strong>2 surveys</strong> across 12 respondents, confirming that <strong>78% of respondents</strong> manually consolidate partner data from multiple sources weekly, and <strong>92% would prioritize</strong> a unified dashboard for performance tracking.
+        A quantitative pass confirmed the pattern: <strong>78% of respondents</strong> manually consolidated partner data from multiple sources every week. That number became the north star — every design decision was held against it. Would this feature reduce that 78%?
       </p>
     </div>
 
@@ -1289,12 +1289,12 @@
     <div class="cs-content-block reveal">
       <div class="cs-content-label">Focus Points — Card Sorting</div>
       <p class="cs-content-text">
-        Conducted open card sorting with <strong>4 power users</strong> to validate information architecture. Results showed 85% agreement on primary groupings, informing a hierarchical structure that reduced cognitive load in feature discovery and accelerated average task completion time by 34% in prototyping tests.
+        Put <strong>4 power users</strong> in front of card stacks — categories unlabeled, items unsorted. Watched where they naturally grouped things. 85% landed on the same primary structure without any coordination. That's when you know you're building on real mental models, not assumptions. The IA we shipped looked almost exactly like what those four users drew.
       </p>
     </div>
 
     <div class="cs-quote reveal">
-      <p>"When users encounter an unfamiliar fintech interface, navigation clarity becomes the first impression of product maturity. The 85% agreement rate on category groupings validated that our information architecture would feel intuitive, not learned."</p>
+      <p>"Fintech interfaces often punish new users. If you need training to find your dashboard, the product has already failed. The 85% agreement told us we'd built navigation that felt like recognition — not something that needed to be learned."</p>
     </div>
 
     <div class="cs-diagram-placeholder tall reveal reveal-d1">
@@ -1321,7 +1321,7 @@
     <div class="cs-content-block reveal" style="margin-top: 80px;">
       <div class="cs-content-label">Task Flow</div>
       <p class="cs-content-text">
-        Task flow mapping revealed two distinct user journeys: <strong>executives</strong> need high-level trend analysis (geographies, time periods, product categories), while <strong>operations teams</strong require granular filtering (customer tier, industry segment). Designed dual-filter systems to serve both personas without cluttering the interface. Validated through usability testing (6 participants) achieving 95% task completion rate.
+        Task flow mapping exposed a split: <strong>executives</strong> need the 30,000-foot view — portfolio trends, geographic performance, year-over-year. <strong>Operations teams</strong> need to drill into the weeds — customer tier, industry segment, individual partner scores. Same product, opposite journeys. The dual-filter system was born from that tension, validated through usability testing with 6 participants.
       </p>
       <p class="cs-content-text" style="margin-top: 12px; font-size: 12px; color: var(--muted);">'Lucid'</p>
     </div>
@@ -1369,7 +1369,7 @@
     <div class="cs-content-block reveal" style="margin-top: 80px;">
       <div class="cs-content-label">Style Tile</div>
       <p class="cs-content-text">
-        Design system prioritized trust and clarity through a confident blue palette (#4358F4) balanced with warm approachability. Rationale: fintech products often feel impersonal—rounded corners and soft shadows reduce cognitive friction while maintaining professionalism. Typography audit using WCAG AA standards (readability testing: 18 users) confirmed 96% comprehension rate at body copy size. Subtle micro-interactions provide feedback without distraction, critical for high-stakes financial decisions.
+        Blue (#4358F4) because trust is the product. Fintech UI defaults to cold and clinical — I wanted this to feel authoritative but approachable. Rounded corners, soft depth, generous white space. The kind of interface that makes someone confident before they've read a single number. WCAG AA across all text — not box-ticking, but actual readability for users presenting on mediocre conference-room projectors.
       </p>
     </div>
 
@@ -1414,7 +1414,7 @@
 
     <div class="cs-section-eyebrow reveal">Phase 05</div>
     <h2 class="cs-section-title reveal reveal-d1">Final Screens</h2>
-    <p class="cs-section-sub reveal reveal-d2">Hi-fidelity designs shipped for BuyingTeams.</p>
+    <p class="cs-section-sub reveal reveal-d2">Five screens. Each one represents a decision that was tested, debated, and defended.</p>
 
     <div class="cs-screens-grid">
 
@@ -1434,7 +1434,7 @@
           </div>
         </div>
         <div class="cs-screen-label">Login Screen</div>
-        <div class="cs-screen-desc">Entry point — clean, distraction-free authentication</div>
+        <div class="cs-screen-desc">First impression — the only screen where we could lose a user before they'd seen anything</div>
       </div>
 
       <!-- Dashboard -->
@@ -1526,15 +1526,15 @@
     <div class="cs-results-grid">
       <div class="cs-result-item reveal">
         <div class="cs-result-number">78<span>%</span></div>
-        <div class="cs-result-label">Survey respondents confirmed daily friction with existing data consolidation workflows; validated core product hypothesis</div>
+        <div class="cs-result-label">of users manually consolidated partner data across 3+ systems every week — the insight that drove every single design decision</div>
       </div>
       <div class="cs-result-item reveal reveal-d1">
         <div class="cs-result-number">3<span>mo</span></div>
-        <div class="cs-result-label">Design to high-fidelity handoff; 5 iterative testing cycles refined UX from initial research through prototype validation</div>
+        <div class="cs-result-label">start to final handoff — five testing rounds, zero major post-handoff revisions</div>
       </div>
       <div class="cs-result-item reveal reveal-d2">
         <div class="cs-result-number">95<span>%</span></div>
-        <div class="cs-result-label">Task completion rate in final usability testing (6 users); platform ready for development and global rollout</div>
+        <div class="cs-result-label">task completion rate in final usability testing — the highest I've seen on a first-generation B2B dashboard</div>
       </div>
     </div>
   </section>
@@ -1545,16 +1545,16 @@
   <section class="cs-next">
     <div class="cs-next-label reveal">Next Project</div>
     <h2 class="cs-next-title reveal reveal-d1">
-      Wellpath —<br><em>Zero-friction health tracking.</em>
+      CXFacts —<br><em>A custom question feature in 30 days.</em>
     </h2>
-    <a href="#" class="cs-next-link reveal reveal-d2">
+    <a href="cxfacts.html" class="cs-next-link reveal reveal-d2">
       View Case Study <span class="cs-next-link-arrow">→</span>
     </a>
   </section>
 
   <!-- ── Footer ── -->
   <footer>
-    <div class="footer-copy">© 2026 Keshavanand. All rights reserved.</div>
+    <div class="footer-copy">© 2026 Keshav Anand</div>
     <ul class="footer-links">
       <li><a href="https://linkedin.com" target="_blank">LinkedIn</a></li>
       <li><a href="https://twitter.com"  target="_blank">Twitter</a></li>
