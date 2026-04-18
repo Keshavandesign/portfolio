@@ -1355,12 +1355,17 @@
       .footer-nav { justify-content: flex-start; flex-wrap: wrap; gap: 16px; }
       .footer-links { justify-content: flex-start; }
 
-      /* Tools — clip overflow, hide outer ring, smaller stage */
-      .tools-section { overflow: hidden; }
-      .tools-stage { height: 360px; }
-      .tools-stage::before { width: 200px; height: 200px; }
-      .tools-stage::after  { width: 310px; height: 310px; }
+      /* Tools — clip overflow, hide outer + middle rings, show only inner AI ring */
+      .tools-section { overflow: hidden; padding: 48px 24px 56px; }
+      .tools-stage { height: 280px; }
+      .tools-stage::before { width: 160px; height: 160px; }
+      .tools-stage::after  { display: none; }
+      /* Outer ring (r=290) and middle ring (r=200) hidden on mobile */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
+      .tool-chip[data-radius="200"] { opacity: 0; pointer-events: none; }
+      /* Inner AI ring only — 6 chips on a 110 orbit, comfortably visible */
+      .tools-header { margin-bottom: 20px; }
+      .tools-heading { font-size: clamp(28px, 7vw, 48px); }
 
       /* Scroll badge */
       .scroll-badge { width: 68px; height: 68px; bottom: 36px; }
@@ -1381,6 +1386,85 @@
       .testimonials { padding: 60px 20px; }
       .tools-section { padding: 52px 20px; }
     }
+
+    /* ─── Mobile notice bottom sheet ─── */
+    .m-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 9990;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .m-backdrop.open { opacity: 1; }
+
+    .m-sheet {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--bg);
+      border-radius: 22px 22px 0 0;
+      padding: 14px 24px max(40px, calc(env(safe-area-inset-bottom) + 28px));
+      z-index: 9991;
+      transform: translateY(100%);
+      transition: transform 0.45s var(--ease);
+      box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.14);
+    }
+    .m-sheet.open { transform: translateY(0); }
+
+    /* Never show on desktop */
+    @media (min-width: 769px) {
+      .m-sheet, .m-backdrop { display: none !important; }
+    }
+
+    .m-handle {
+      width: 36px; height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      margin: 0 auto 28px;
+    }
+    .m-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .m-heading {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+    .m-body {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .m-cta {
+      display: block;
+      width: 100%;
+      min-height: 52px;
+      border-radius: 100px;
+      border: none;
+      background: var(--fg);
+      color: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      padding: 0;
+    }
+    .m-cta:active { opacity: 0.82; }
   </style>
 </head>
 <body>
@@ -1879,6 +1963,16 @@
 
   <a href="#" class="scroll-top" id="scrollTop">↑</a>
 
+  <!-- ── Mobile desktop notice ── -->
+  <div class="m-backdrop" id="mBackdrop"></div>
+  <div class="m-sheet" id="mSheet" role="dialog" aria-modal="true" aria-label="Desktop notice">
+    <div class="m-handle"></div>
+    <div class="m-icon">🖥️</div>
+    <p class="m-heading">Better on a bigger screen</p>
+    <p class="m-body">This portfolio is designed for desktop — wider canvas, richer details, the full picture. You're welcome to explore here, but the real experience is waiting at your laptop.</p>
+    <button class="m-cta" id="mCta">Got it, show me the work</button>
+  </div>
+
   <!-- ── Resume fullscreen overlay ── -->
   <div class="resume-overlay" id="resumeOverlay" role="dialog" aria-modal="true" aria-label="Resume">
     <button class="resume-close" id="resumeClose" aria-label="Close resume">×</button>
@@ -2033,6 +2127,39 @@
     /* ═══════════════════════════════════════════
        THEME TOGGLE light / dark
     ═══════════════════════════════════════════ */
+    /* ── Mobile desktop notice ── */
+    (function initMobileNotice() {
+      if (window.innerWidth > 768) return;
+      if (sessionStorage.getItem('mnDismissed')) return;
+
+      const backdrop = document.getElementById('mBackdrop');
+      const sheet    = document.getElementById('mSheet');
+      const cta      = document.getElementById('mCta');
+      if (!sheet || !backdrop || !cta) return;
+
+      backdrop.style.display = 'block';
+      sheet.style.display    = 'block';
+
+      // Double rAF ensures display:block is painted before transition starts
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        backdrop.classList.add('open');
+        sheet.classList.add('open');
+      }));
+
+      function dismiss() {
+        backdrop.classList.remove('open');
+        sheet.classList.remove('open');
+        sessionStorage.setItem('mnDismissed', '1');
+        setTimeout(() => {
+          backdrop.style.display = 'none';
+          sheet.style.display    = 'none';
+        }, 450);
+      }
+
+      cta.addEventListener('click', dismiss);
+      backdrop.addEventListener('click', dismiss);
+    })();
+
     (function initThemeToggle() {
       const btn = document.getElementById('themeToggle');
       if (!btn) return;
