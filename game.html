@@ -133,7 +133,7 @@
       <div class="card-score" id="cardScore"></div>
       <div class="card-body" id="cardBody"></div>
       <p class="card-screenshot-hint" id="cardHint"></p>
-      <a class="card-cta" id="cardCta" href="#">Claim your free audit →</a>
+      <a class="card-cta" id="cardCta" href="">Claim your free audit →</a>
       <button class="card-secondary" id="cardBack">Back to portfolio</button>
     </div>
   </div>
@@ -166,6 +166,7 @@
 
   /* ── COLORS ── */
   const C = {
+    gameBg: '#1a1a2e',
     sky1: '#74B9FF', sky2: '#A29BFE',
     ground: '#2A2535',
     p1: ['#4CAF50','#FF9800','#E040FB','#FF5252','#26C6DA'],
@@ -198,6 +199,7 @@
   let audioCtx = null;
   function getAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
   }
   function beep(freq, dur, type='square', vol=0.18, slide=0) {
@@ -247,14 +249,23 @@
     return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
   }
 
+  /* ── INPUT ── */
+  const keys = {};
+  window.addEventListener('keydown', e => {
+    keys[e.code] = true;
+    if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+  });
+  window.addEventListener('keyup', e => { keys[e.code] = false; });
+
   /* ── GAME LOOP STUB ── */
   function update() { frame++; }
   function render() {
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = C.gameBg;
+    ctx.fillRect(0, 0, vw, vh);
   }
-  function loop() { update(); render(); requestAnimationFrame(loop); }
-  requestAnimationFrame(loop);
+  let rafId;
+  function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
+  rafId = requestAnimationFrame(loop);
   </script>
 </body>
 </html>
