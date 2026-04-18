@@ -472,6 +472,127 @@
     });
   }
 
+  /* ── COLLECTIBLES ── */
+  const coinDefs = [
+    60,120,180,240,420,460,500,600,640,680,
+    900,950,1090,1140,1270,1320,1450,1500,1630,1680,1790,
+    2110,2160,2310,2570,2760,2970,3110,
+    3270,3320,3490,3650,3810,3870,3970,
+    4070,4120,4270,4410,4570,4640,4720,
+  ].map(x => {
+    const plat = platforms.find(p => x >= p.x && x <= p.x + p.w);
+    return { x, y: plat ? plat.y - 22 : GROUND - 22, w:10, h:10, alive:true };
+  });
+
+  const artifactDefs = [
+    { x:560,  label:'F', col:C.artifact[0] },
+    { x:1440, label:'P', col:C.artifact[1] },
+    { x:2960, label:'G', col:C.artifact[2] },
+    { x:4400, label:'C', col:C.artifact[3] },
+  ].map(a => {
+    const plat = platforms.find(p => a.x >= p.x && a.x <= p.x + p.w);
+    return { ...a, y: plat ? plat.y - 26 : GROUND - 26, w:16, h:16, alive:true };
+  });
+
+  const powerupDefs = [
+    { x:1780, type:'bolt' },
+    { x:3260, type:'shield' },
+    { x:4260, type:'bolt' },
+  ].map(p => {
+    const plat = platforms.find(pl => p.x >= pl.x && p.x <= pl.x + pl.w);
+    return { ...p, y: plat ? plat.y - 24 : GROUND - 24, w:16, h:16, alive:true };
+  });
+
+  const projectiles = [];
+
+  function throwProjectile() {
+    if (powerup && powerup.type === 'bolt') {
+      sfxThrow();
+      projectiles.push({ x: player.x + player.w/2, y: player.y + 8, w:8, h:8, vx: player.facing * 7, alive:true });
+    }
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.code === 'KeyX') throwProjectile();
+  });
+
+  function updateCollectibles() {
+    if (state !== 'PLAY') return;
+    coinDefs.forEach(c => {
+      if (!c.alive) return;
+      if (hit(player, c)) { c.alive = false; score++; coins++; sfxCoin(); }
+    });
+    artifactDefs.forEach(a => {
+      if (!a.alive) return;
+      if (hit(player, a)) { a.alive = false; score += 5; sfxArtifact(); }
+    });
+    powerupDefs.forEach(p => {
+      if (!p.alive) return;
+      if (hit(player, p)) {
+        p.alive = false;
+        powerup = { type: p.type, timer: p.type === 'bolt' ? 8 : 5, maxTimer: p.type === 'bolt' ? 8 : 5 };
+        score += 2; sfxPowerup();
+      }
+    });
+    if (powerup) {
+      powerup.timer -= 1/60;
+      if (powerup.timer <= 0) powerup = null;
+    }
+  }
+
+  function updateProjectiles() {
+    for (let i = projectiles.length - 1; i >= 0; i--) {
+      const p = projectiles[i];
+      if (!p.alive) { projectiles.splice(i, 1); continue; }
+      p.x += p.vx;
+      if (p.x < cam - 20 || p.x > cam + vw/scale + 20) { p.alive = false; continue; }
+      enemies.forEach(e => { if (hit(p, e)) { p.alive = false; sfxHit(); score += 3; } });
+      spikes.forEach(s => { if (hit(p, s)) p.alive = false; });
+    }
+  }
+
+  function drawCollectibles() {
+    const bob = Math.sin(frame * 0.07) * 3 * scale;
+    coinDefs.forEach(c => {
+      if (!c.alive) return;
+      ctx.fillStyle = C.coin;
+      const r = Math.ceil(5*scale);
+      ctx.beginPath();
+      ctx.arc(sx(c.x+5), sy(c.y+5) + bob, r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.beginPath();
+      ctx.arc(sx(c.x+3), sy(c.y+3) + bob, Math.ceil(2*scale), 0, Math.PI*2);
+      ctx.fill();
+    });
+    artifactDefs.forEach(a => {
+      if (!a.alive) return;
+      ctx.fillStyle = a.col;
+      ctx.fillRect(sx(a.x), sy(a.y) + bob, sw(a.w), sh(a.h));
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${Math.ceil(10*scale)}px monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(a.label, sx(a.x+8), sy(a.y+8) + bob);
+    });
+    powerupDefs.forEach(p => {
+      if (!p.alive) return;
+      ctx.fillStyle = p.type === 'bolt' ? C.bolt : C.shield;
+      ctx.fillRect(sx(p.x), sy(p.y) + bob, sw(p.w), sh(p.h));
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${Math.ceil(10*scale)}px monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(p.type === 'bolt' ? '⚡' : '★', sx(p.x+8), sy(p.y+8) + bob);
+    });
+  }
+
+  function drawProjectiles() {
+    ctx.fillStyle = C.proj;
+    projectiles.forEach(p => {
+      if (!p.alive) return;
+      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
+    });
+  }
+
   /* ── DRAW: SKY ── */
   function drawSky() {
     const grad = ctx.createLinearGradient(0, offY, 0, offY + H * scale);
@@ -524,6 +645,8 @@
 
     updatePlayer();
     updateEnemies();
+    updateCollectibles();
+    updateProjectiles();
     if (state === 'DYING') {
       deathTimer--;
       if (deathTimer <= 0) { spawnPlayer(); state = 'PLAY'; }
@@ -538,6 +661,8 @@
     drawPlatforms();
     drawSpikes();
     drawEnemies();
+    drawCollectibles();
+    drawProjectiles();
     drawPlayer();
   }
   let rafId;
