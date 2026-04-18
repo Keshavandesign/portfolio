@@ -880,23 +880,50 @@
       flex-direction: column;
       justify-content: center;
     }
-    .tools-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: lowercase;
-      color: var(--muted);
-      opacity: 0.7;
-      margin-bottom: 24px;
-      text-align: left;
-      font-style: italic;
-      font-family: var(--serif);
+    .tools-header {
+      max-width: 780px;
+      margin: 0 auto 44px;
+      text-align: center;
     }
-    .tools-label::before {
+    .tools-eyebrow {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0.8;
+      letter-spacing: 0.02em;
+      margin-bottom: 18px;
+    }
+    .tools-eyebrow::before {
       content: '— ';
       color: var(--accent);
-      opacity: 0.6;
+      opacity: 0.75;
       font-style: normal;
+    }
+    .tools-heading {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(40px, 7vw, 68px);
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      margin: 0;
+    }
+    .tools-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .tools-sub {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin: 22px auto 0;
+      max-width: 540px;
+    }
+    .tools-sub strong {
+      color: var(--fg);
+      font-weight: 500;
     }
     .tools-stage {
       position: relative;
@@ -947,6 +974,21 @@
       color: var(--fg);
       letter-spacing: -0.02em;
     }
+    .tool-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      opacity: 0.88;
+      transition: opacity 0.25s var(--ease);
+    }
+    .tool-logo.dark { display: none; }
+    [data-theme="dark"] .tool-logo.light { display: none; }
+    [data-theme="dark"] .tool-logo.dark  { display: block; }
+    .tool-chip:hover .tool-logo { opacity: 1; }
+    /* Fallback: hide letter when a logo is present and loaded */
+    .tool-chip .tool-fallback { display: none; }
+    .tool-chip.no-logo .tool-fallback { display: inline-block; }
+    .tool-chip.no-logo .tool-logo { display: none !important; }
     .tool-chip-label {
       position: absolute;
       top: calc(100% + 10px);
@@ -977,6 +1019,8 @@
       .tools-stage::after  { width: 360px; height: 360px; }
       .tool-chip { width: 48px; height: 48px; margin-top: -24px; margin-left: -24px; }
       .tool-chip-inner { font-size: 14px; }
+      .tool-logo { width: 22px; height: 22px; }
+      .tools-header { margin-bottom: 28px; }
     }
 
     /* ─── RESUME FULLSCREEN OVERLAY ─── */
@@ -1393,29 +1437,127 @@
 
   <!-- ── Tools ── -->
   <section class="tools-section" id="tools" aria-label="Tools I use">
-    <div class="tools-label reveal">tools of the trade</div>
+    <div class="tools-header">
+      <div class="tools-eyebrow reveal">tools of the trade</div>
+      <h2 class="tools-heading reveal reveal-d1">
+        I design. I <em>build.</em> I ship.
+      </h2>
+      <p class="tools-sub reveal reveal-d2">
+        Every tool in this orbit is one I've shipped real work with — from <strong>pixel craft</strong> to <strong>production code</strong>.
+      </p>
+    </div>
     <div class="tools-stage" id="toolsStage">
       <!-- Outer ring — Ops / Thinking -->
-      <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3"><span class="tool-chip-inner">Li</span><span class="tool-chip-label">Linear</span></div>
-      <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4"><span class="tool-chip-inner">No</span><span class="tool-chip-label">Notion</span></div>
-      <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3"><span class="tool-chip-inner">Lm</span><span class="tool-chip-label">Loom</span></div>
-      <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4"><span class="tool-chip-inner">Dv</span><span class="tool-chip-label">Dovetail</span></div>
-      <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3"><span class="tool-chip-inner">Mi</span><span class="tool-chip-label">Miro</span></div>
-      <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4"><span class="tool-chip-inner">Sl</span><span class="tool-chip-label">Slack</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/linear/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Li</span>
+        <span class="tool-chip-label">Linear</span>
+      </div>
+      <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/notion/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/notion/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">No</span>
+        <span class="tool-chip-label">Notion</span>
+      </div>
+      <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/loom/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/loom/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Lm</span>
+        <span class="tool-chip-label">Loom</span>
+      </div>
+      <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/dovetail/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/dovetail/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Dv</span>
+        <span class="tool-chip-label">Dovetail</span>
+      </div>
+      <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/miro/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/miro/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Mi</span>
+        <span class="tool-chip-label">Miro</span>
+      </div>
+      <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/slack/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/slack/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Sl</span>
+        <span class="tool-chip-label">Slack</span>
+      </div>
       <!-- Middle ring — Design craft -->
-      <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4"><span class="tool-chip-inner">Fg</span><span class="tool-chip-label">Figma</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="90"  data-speed="-7" data-bob="5"><span class="tool-chip-inner">Fr</span><span class="tool-chip-label">Framer</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="150" data-speed="-7" data-bob="3"><span class="tool-chip-inner">Pp</span><span class="tool-chip-label">Protopie</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="210" data-speed="-7" data-bob="4"><span class="tool-chip-inner">Sp</span><span class="tool-chip-label">Spline</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="270" data-speed="-7" data-bob="5"><span class="tool-chip-inner">Ri</span><span class="tool-chip-label">Rive</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="330" data-speed="-7" data-bob="3"><span class="tool-chip-inner">Ae</span><span class="tool-chip-label">After Effects</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Fg</span>
+        <span class="tool-chip-label">Figma</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="90"  data-speed="-7" data-bob="5">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/framer/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/framer/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Fr</span>
+        <span class="tool-chip-label">Framer</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="150" data-speed="-7" data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/protopie/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/protopie/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Pp</span>
+        <span class="tool-chip-label">Protopie</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="210" data-speed="-7" data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/spline/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/spline/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Sp</span>
+        <span class="tool-chip-label">Spline</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="270" data-speed="-7" data-bob="5">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/rive/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/rive/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Ri</span>
+        <span class="tool-chip-label">Rive</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="330" data-speed="-7" data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/adobeaftereffects/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/adobeaftereffects/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Ae</span>
+        <span class="tool-chip-label">After Effects</span>
+      </div>
       <!-- Inner ring — AI builders -->
-      <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3"><span class="tool-chip-inner">Cc</span><span class="tool-chip-label">Claude Code</span></div>
-      <div class="tool-chip" data-radius="110" data-angle="60"  data-speed="10" data-bob="4"><span class="tool-chip-inner">Cx</span><span class="tool-chip-label">Codex</span></div>
-      <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3"><span class="tool-chip-inner">Cu</span><span class="tool-chip-label">Cursor</span></div>
-      <div class="tool-chip" data-radius="110" data-angle="180" data-speed="10" data-bob="4"><span class="tool-chip-inner">v0</span><span class="tool-chip-label">v0</span></div>
-      <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="3"><span class="tool-chip-inner">Lv</span><span class="tool-chip-label">Lovable</span></div>
-      <div class="tool-chip" data-radius="110" data-angle="300" data-speed="10" data-bob="4"><span class="tool-chip-inner">Ws</span><span class="tool-chip-label">Windsurf</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Cc</span>
+        <span class="tool-chip-label">Claude Code</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="60"  data-speed="10" data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/openai/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/openai/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Cx</span>
+        <span class="tool-chip-label">Codex</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/cursor/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/cursor/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Cu</span>
+        <span class="tool-chip-label">Cursor</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="180" data-speed="10" data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/vercel/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/vercel/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">v0</span>
+        <span class="tool-chip-label">v0</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="3">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/lovable/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/lovable/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Lv</span>
+        <span class="tool-chip-label">Lovable</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="300" data-speed="10" data-bob="4">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/codeium/2A2535" alt="" loading="lazy" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/codeium/F0EBE3" alt="" loading="lazy" />
+        <span class="tool-chip-inner tool-fallback">Ws</span>
+        <span class="tool-chip-label">Windsurf</span>
+      </div>
     </div>
   </section>
 
@@ -1590,6 +1732,20 @@
   </div>
 
   <script>
+    /* ═══════════════════════════════════════════
+       TOOL LOGOS — graceful fallback to letter chip on 404
+    ═══════════════════════════════════════════ */
+    (function initToolLogoFallback() {
+      document.querySelectorAll('.tool-logo').forEach(img => {
+        const markFallback = () => {
+          const chip = img.closest('.tool-chip');
+          if (chip) chip.classList.add('no-logo');
+        };
+        if (img.complete && img.naturalWidth === 0) markFallback();
+        img.addEventListener('error', markFallback);
+      });
+    })();
+
     /* ═══════════════════════════════════════════
        TOOLS — ORBITAL + FLOATING MOTION
        - degPerSec: rotation in degrees per second
