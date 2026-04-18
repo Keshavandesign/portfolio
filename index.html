@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keshavanand — Product Designer</title>
+  <title>Keshavanand Product Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -36,7 +36,7 @@
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* Dark mode — inspired by Claude desktop: warm near-black + off-white */
+    /* Dark mode inspired by Claude desktop: warm near-black + off-white */
     [data-theme="dark"] {
       --bg: #1F1E1B;
       --fg: #F0EBE3;
@@ -68,7 +68,7 @@
     }
 
     /* ─────────────────────────────────────────
-       NAVBAR — smart hide/show
+       NAVBAR smart hide/show
     ───────────────────────────────────────── */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
@@ -92,7 +92,7 @@
       background: var(--nav-bg);
     }
 
-    /* ── Logo — serif italic wordmark with accent dot ── */
+    /* ── Logo serif italic wordmark with accent dot ── */
     .nav-logo {
       display: inline-flex;
       align-items: baseline;
@@ -381,7 +381,7 @@
       50%       { opacity: 0; }
     }
 
-    /* Rotating scroll badge — no dot */
+    /* Rotating scroll badge no dot */
     .scroll-badge {
       position: absolute;
       bottom: 52px;
@@ -588,7 +588,7 @@
     }
 
     /* Tagline: muted base, bold emphasis on "Art & Psychology."
-       DM Serif Display has no bold — use Inter so <strong> has real weight */
+       DM Serif Display has no bold use Inter so <strong> has real weight */
     .about-tagline {
       font-family: var(--sans);
       font-size: clamp(18px, 2vw, 26px);
@@ -675,7 +675,7 @@
         0 32px 64px rgba(42,37,53,0.07);
     }
 
-    /* Visual area — lives at top of card */
+    /* Visual area lives at top of card */
     .card-visual {
       position: relative;
       overflow: hidden;
@@ -921,7 +921,7 @@
       margin-bottom: 18px;
     }
     .tools-eyebrow::before {
-      content: '— ';
+      content: ' ';
       color: var(--accent);
       opacity: 0.75;
       font-style: normal;
@@ -1134,7 +1134,7 @@
     .scroll-top:hover { transform: translateY(-3px); color: var(--fg); }
 
     /* ─────────────────────────────────────────
-       TESTIMONIALS — hero-style full-viewport carousel
+       TESTIMONIALS hero-style full-viewport carousel
     ───────────────────────────────────────── */
     .testimonials {
       padding: 100px 52px;
@@ -1242,7 +1242,7 @@
     }
 
     /* ─────────────────────────────────────────
-       REVEAL — silky smooth
+       REVEAL silky smooth
        Uses transition (not animation) + will-change
     ───────────────────────────────────────── */
     .reveal {
@@ -1355,7 +1355,7 @@
   <!-- ── Nav ── -->
   <nav id="nav">
     <!-- Logo: mark + wordmark -->
-    <a href="/" class="nav-logo" aria-label="Keshav Anand — home">
+    <a href="/" class="nav-logo" aria-label="Keshav Anand home">
       <span class="logo-word">Keshav<span class="logo-dot">.</span></span>
     </a>
 
@@ -1403,7 +1403,7 @@
       </h1>
     </div>
 
-    <!-- Rotating scroll badge — no dot -->
+    <!-- Rotating scroll badge no dot -->
     <div class="scroll-badge" id="scrollBadge">
       <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1457,7 +1457,7 @@
       <span class="client-sep">·</span>
       <span class="client no-logo" data-label="Excytech"><span class="client-text">Excytech</span></span>
       <span class="client-sep">·</span>
-      <!-- Set B — duplicate for seamless loop -->
+      <!-- Set B duplicate for seamless loop -->
       <span class="client" data-slug="microsoft" data-label="MSN">
         <img class="client-logo light" src="https://cdn.simpleicons.org/microsoft/2A2535" alt="" loading="lazy" />
         <img class="client-logo dark"  src="https://cdn.simpleicons.org/microsoft/F0EBE3" alt="" loading="lazy" />
@@ -1504,7 +1504,7 @@
         <img
           id="sculptureEgg"
           src="assets/sculpture.png"
-          alt="Classical sculpture — Keshav Anand"
+          alt="Classical sculpture Keshav Anand"
           class="sculpture-img"
           style="cursor: pointer;"
         />
@@ -1512,7 +1512,7 @@
     </div>
 
     <p class="about-tagline reveal reveal-d2">
-      A product designer mad for <strong>Art &amp; Psychology</strong> — building AI-native products with <strong>measurable impact.</strong>
+      A product designer mad for <strong>Art &amp; Psychology</strong> building AI-native products with <strong>measurable impact.</strong>
     </p>
 
     <a href="#" class="about-btn reveal reveal-d3">About me</a>
@@ -1526,11 +1526,11 @@
         I design. I <em>build.</em> I ship.
       </h2>
       <p class="tools-sub reveal reveal-d2">
-        Every tool in this orbit is one I've shipped real work with — from <strong>pixel craft</strong> to <strong>production code</strong>.
+        Every tool in this orbit is one I've shipped real work with from <strong>pixel craft</strong> to <strong>production code</strong>.
       </p>
     </div>
     <div class="tools-stage" id="toolsStage">
-      <!-- Outer ring — Ops / Thinking -->
+      <!-- Outer ring Ops / Thinking -->
       <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" loading="lazy" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/linear/F0EBE3" alt="" loading="lazy" />
@@ -1573,7 +1573,7 @@
         <span class="tool-chip-inner tool-fallback">Sl</span>
         <span class="tool-chip-label">Slack</span>
       </div>
-      <!-- Middle ring — Design craft -->
+      <!-- Middle ring Design craft -->
       <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" loading="lazy" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" loading="lazy" />
@@ -1616,7 +1616,7 @@
         <span class="tool-chip-inner tool-fallback">Ae</span>
         <span class="tool-chip-label">After Effects</span>
       </div>
-      <!-- Inner ring — AI builders -->
+      <!-- Inner ring AI builders -->
       <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" loading="lazy" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" loading="lazy" />
@@ -1668,7 +1668,7 @@
 
     <div class="projects-grid">
 
-      <!-- Card 1 — BuyingTeams -->
+      <!-- Card 1 BuyingTeams -->
       <div class="project-card reveal">
         <div class="card-visual" style="background: linear-gradient(145deg, #DEDAD4 0%, #C9C2DC 100%);">
           <div class="card-visual-inner">
@@ -1708,13 +1708,13 @@
             <span class="project-tag">UI/UX</span>
           </div>
           <h3 class="project-name">BuyingTeams</h3>
-          <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks — simplifying complex financial workflows into intuitive interfaces.</p>
+          <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks simplifying complex financial workflows into intuitive interfaces.</p>
           <div class="project-metric">6× login conversion · 50+ features shipped</div>
           <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
         </div>
       </div>
 
-      <!-- Card 2 — CXFacts -->
+      <!-- Card 2 CXFacts -->
       <div class="project-card reveal reveal-d1">
         <div class="card-visual" style="background: linear-gradient(145deg, #D4DDE4 0%, #B4C4D4 100%);">
           <div class="card-visual-inner">
@@ -1753,7 +1753,7 @@
             <span class="project-tag">30 Days</span>
           </div>
           <h3 class="project-name">CXFacts</h3>
-          <p class="project-desc">Designed the Custom Question feature — giving bank-business users the freedom to build their own survey questions. Attracted 2 Major Nordic Banks.</p>
+          <p class="project-desc">Designed the Custom Question feature giving bank-business users the freedom to build their own survey questions. Attracted 2 Major Nordic Banks.</p>
           <div class="project-metric">2 Nordic banks · 30-day sprint</div>
           <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
         </div>
@@ -1778,7 +1778,7 @@
 
       <!-- Slide 2 -->
       <div class="testimonial-slide">
-        <p class="testimonial-quote">"Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief — a combination that's genuinely hard to find."</p>
+        <p class="testimonial-quote">"Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief a combination that's genuinely hard to find."</p>
         <div class="testimonial-attribution">
           <span class="attribution-name">Priya Menon</span>
           <span class="attribution-sep">·</span>
@@ -1788,7 +1788,7 @@
 
       <!-- Slide 3 -->
       <div class="testimonial-slide">
-        <p class="testimonial-quote">"The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems — which is exactly what we needed at scale."</p>
+        <p class="testimonial-quote">"The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems which is exactly what we needed at scale."</p>
         <div class="testimonial-attribution">
           <span class="attribution-name">Daniel Lee</span>
           <span class="attribution-sep">·</span>
@@ -1834,7 +1834,7 @@
 
   <script>
     /* ═══════════════════════════════════════════
-       LOGO FALLBACKS — graceful text fallback on 404
+       LOGO FALLBACKS graceful text fallback on 404
        - Require BOTH mono imgs (light + dark) to fail before dropping to letter
        - Brand (hover) img failure only disables the color-splash, keeps mono
     ═══════════════════════════════════════════ */
@@ -1861,7 +1861,7 @@
           img.addEventListener('error', mark);
         });
 
-        // Brand: mark .no-brand on failure — mono stays visible on hover
+        // Brand: mark .no-brand on failure mono stays visible on hover
         document.querySelectorAll(brandSel).forEach(img => {
           const parent = img.closest(parentSel);
           if (!parent) return;
@@ -1873,7 +1873,7 @@
     })();
 
     /* ═══════════════════════════════════════════
-       TOOLS — ORBITAL + FLOATING MOTION
+       TOOLS ORBITAL + FLOATING MOTION
        - degPerSec: rotation in degrees per second
        - hover anywhere on stage → ease to a full stop
     ═══════════════════════════════════════════ */
@@ -1942,7 +1942,7 @@
     })();
 
     /* ═══════════════════════════════════════════
-       RESUME — fullscreen overlay
+       RESUME fullscreen overlay
     ═══════════════════════════════════════════ */
     (function initResumeOverlay() {
       const overlay = document.getElementById('resumeOverlay');
@@ -1975,7 +1975,7 @@
     })();
 
     /* ═══════════════════════════════════════════
-       THEME TOGGLE — light / dark
+       THEME TOGGLE light / dark
     ═══════════════════════════════════════════ */
     (function initThemeToggle() {
       const btn = document.getElementById('themeToggle');
@@ -1989,7 +1989,7 @@
     })();
 
     /* ═══════════════════════════════════════════
-       SMART NAVBAR — hide on scroll down, show on up
+       SMART NAVBAR hide on scroll down, show on up
     ═══════════════════════════════════════════ */
     const nav = document.getElementById('nav');
     const scrollTopBtn = document.getElementById('scrollTop');
@@ -2008,7 +2008,7 @@
           // Scrolled background
           nav.classList.toggle('scrolled', y > 48);
 
-          // Hide/show logic — only after 80px from top
+          // Hide/show logic only after 80px from top
           if (y < 80) {
             if (!navVisible) { nav.classList.remove('hide'); navVisible = true; }
           } else if (y > lastY + 4) {
@@ -2048,7 +2048,7 @@
     });
 
     /* ═══════════════════════════════════════════
-       ONE-SHOT TYPING — "Experience"
+       ONE-SHOT TYPING "Experience"
     ═══════════════════════════════════════════ */
     (function typeWord() {
       const word   = 'Experience';
@@ -2086,13 +2086,13 @@
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
     /* ═══════════════════════════════════════════
-       EASTER EGG — Click sculpture to play game
+       EASTER EGG Click sculpture to play game
     ═══════════════════════════════════════════ */
     const sculptureEl = document.getElementById('sculptureEgg');
     const meow = new Audio('Assets/Game_Enter.wav');
     meow.preload = 'auto';
 
-    // Hover to play sound — browser allows audio from user interactions (no unlock needed)
+    // Hover to play sound browser allows audio from user interactions (no unlock needed)
     sculptureEl.addEventListener('mouseenter', () => {
       meow.currentTime = 0;
       meow.play().catch(() => {}); // Graceful fallback if browser blocks
@@ -2108,7 +2108,7 @@
     });
 
     /* ═══════════════════════════════════════════
-       TESTIMONIALS — simple fade carousel
+       TESTIMONIALS simple fade carousel
     ═══════════════════════════════════════════ */
     (function () {
       const slides   = Array.from(document.querySelectorAll('.testimonial-slide'));
@@ -2132,7 +2132,7 @@
     })();
 
     /* ═══════════════════════════════════════════
-       SCROLL BADGE — Click to next section
+       SCROLL BADGE Click to next section
     ═══════════════════════════════════════════ */
     const scrollBadge = document.getElementById('scrollBadge');
     const sections = [
