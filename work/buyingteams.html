@@ -1180,6 +1180,54 @@
       .cs-learnings { padding: 52px 20px; }
       .cs-finale { padding: 52px 20px; }
     }
+
+    /* ── 5-col phase overview grid ── */
+    .cs-process-overview {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .cs-phase-card {
+      padding: 32px 24px 28px;
+      border-right: 1px solid var(--border);
+      cursor: default;
+      transition: background 0.2s;
+    }
+    .cs-phase-card:last-child { border-right: none; }
+    .cs-phase-card:hover { background: color-mix(in srgb, var(--fg) 3%, transparent); }
+    .cs-phase-card-num {
+      font-family: var(--serif); font-style: italic;
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 0.04em; margin-bottom: 10px;
+    }
+    .cs-phase-card-name {
+      font-family: var(--serif); font-size: 22px; font-weight: 400;
+      letter-spacing: -0.02em; color: var(--fg); line-height: 1.1; margin-bottom: 14px;
+    }
+    .cs-phase-card-desc {
+      font-size: 12px; line-height: 1.65; color: var(--muted); margin-bottom: 20px;
+    }
+    .cs-phase-card-tags { display: flex; flex-direction: column; gap: 5px; }
+    .cs-phase-card-tag {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); opacity: 0.65;
+    }
+    @media (max-width: 1024px) {
+      .cs-process-overview { grid-template-columns: 1fr 1fr; }
+      .cs-phase-card { border-bottom: 1px solid var(--border); }
+      .cs-phase-card:nth-child(2n) { border-right: none; }
+      .cs-phase-card:nth-child(5) { grid-column: span 2; }
+    }
+    @media (max-width: 768px) {
+      .cs-process-overview { grid-template-columns: 1fr; border-radius: 14px; }
+      .cs-phase-card { border-right: none; }
+      .cs-phase-card:nth-child(5) { grid-column: span 1; }
+      .cs-phase-card:last-child { border-bottom: none; }
+    }
   </style>
 </head>
 <body>
@@ -1246,7 +1294,7 @@
       CXFacts
     </h1>
     <p class="cs-hero-sub">
-      Banks and their business partners were drowning in data and still flying blind. Three months, five phases, one mandate: make complex performance metrics feel like a conversation not a spreadsheet.
+      CXFacts connects banks and their business partners — surfacing performance data that used to live in exports and emails. I redesigned the platform from the ground up over three months. Then spent 30 more days shipping the one feature that brought two Nordic banks in the door.
     </p>
     <div class="cs-hero-scroll">
       <span>
@@ -1264,7 +1312,7 @@
     <div class="cs-overview-grid">
       <!-- Overview -->
       <div class="cs-card reveal">
-        <div class="cs-card-label">Overview</div>
+        <div class="cs-card-label">The Platform</div>
         <div class="cs-card-body">
           CXFacts was solving a real problem in B2B fintech: banks and their business partners had a relationship, but no shared view of how it was performing. Metrics lived in exports, emails, and memory. The platform needed to surface the right numbers to the right people and make acting on them feel natural, not laboured.
         </div>
@@ -1273,7 +1321,7 @@
       <div class="cs-card problem reveal reveal-d1">
         <div class="cs-card-label">Core Challenge</div>
         <div class="cs-card-body">
-          The core blocker wasn't data there was plenty of it. It was access and context. A relationship manager needed a 2-day reporting cycle to answer a question that should take 20 seconds. The design problem: how do you collapse that gap without overwhelming users who aren't analysts?
+          The core blocker wasn't data. There was plenty of it. It was access and context. A relationship manager needed a 2-day reporting cycle to answer a question that should take 20 seconds. The design problem: how do you collapse that gap without overwhelming users who aren't analysts?
         </div>
       </div>
     </div>
@@ -1284,12 +1332,11 @@
       <div class="cs-meta-card reveal">
         <div class="cs-meta-label">Role</div>
         <ul class="cs-role-list">
-          <li>UX / UI Designer</li>
+          <li>Lead Product Designer</li>
           <li>UX Research</li>
-          <li>Web App Design</li>
           <li>Interaction Design</li>
-          <li>Graphics Design</li>
-          <li>First-time UX (FTUX)</li>
+          <li>Visual Design</li>
+          <li>Dev Handoff</li>
         </ul>
       </div>
       <!-- Tools -->
@@ -1323,86 +1370,58 @@
   <section class="cs-process" id="process">
     <div class="cs-section-eyebrow reveal">Design Process</div>
     <h2 class="cs-section-title reveal reveal-d1">Five phases.<br><em>One product.</em></h2>
-    <p class="cs-section-sub reveal reveal-d2">From raw research to shipped screens five phases, three months.</p>
+    <p class="cs-section-sub reveal reveal-d2">From first interview to final screens. Three months, five phases. Everything below is the full story.</p>
 
-    <!-- Phase tabs -->
-    <div class="cs-phase-tabs reveal reveal-d3">
-      <button class="cs-phase-tab active" data-phase="research">Research</button>
-      <button class="cs-phase-tab" data-phase="synthesize">Synthesize</button>
-      <button class="cs-phase-tab" data-phase="ideate">Ideate</button>
-      <button class="cs-phase-tab" data-phase="uidesign">UI Design</button>
-      <button class="cs-phase-tab" data-phase="test">Test</button>
-    </div>
-
-    <!-- Research -->
-    <div class="cs-phase-content active" id="phase-research">
-      <div class="cs-phase-cols">
-        <div class="cs-phase-col">
-          <div class="cs-phase-col-title">Research</div>
-          <ul>
-            <li>Brainstorm</li>
-            <li>Interviews</li>
-            <li>Surveys</li>
-            <li>User Goals</li>
-            <li>User Painpoints</li>
-          </ul>
+    <!-- 5-column phase overview grid — replaces tab list panels -->
+    <div class="cs-process-overview reveal reveal-d3">
+      <div class="cs-phase-card">
+        <div class="cs-phase-card-num">01</div>
+        <div class="cs-phase-card-name">Research</div>
+        <div class="cs-phase-card-desc">5 interviews. Watched people export CSVs into Excel every week for meetings they could have skipped. 78% of respondents lived this ritual.</div>
+        <div class="cs-phase-card-tags">
+          <span class="cs-phase-card-tag">User Interviews</span>
+          <span class="cs-phase-card-tag">Surveys</span>
+          <span class="cs-phase-card-tag">Jobs-to-be-Done</span>
         </div>
       </div>
-    </div>
-
-    <!-- Synthesize -->
-    <div class="cs-phase-content" id="phase-synthesize">
-      <div class="cs-phase-cols">
-        <div class="cs-phase-col">
-          <div class="cs-phase-col-title">Synthesize</div>
-          <ul>
-            <li>Design Goals</li>
-            <li>Key Features</li>
-            <li>Key Motivations</li>
-          </ul>
+      <div class="cs-phase-card">
+        <div class="cs-phase-card-num">02</div>
+        <div class="cs-phase-card-name">Synthesize</div>
+        <div class="cs-phase-card-desc">Three friction points became five core features. Every design goal tied directly to something a user said, not something a stakeholder assumed.</div>
+        <div class="cs-phase-card-tags">
+          <span class="cs-phase-card-tag">Design Goals</span>
+          <span class="cs-phase-card-tag">Feature Mapping</span>
+          <span class="cs-phase-card-tag">Prioritisation</span>
         </div>
       </div>
-    </div>
-
-    <!-- Ideate -->
-    <div class="cs-phase-content" id="phase-ideate">
-      <div class="cs-phase-cols">
-        <div class="cs-phase-col">
-          <div class="cs-phase-col-title">Ideate</div>
-          <ul>
-            <li>Card Sorting</li>
-            <li>Site Map</li>
-            <li>Task Flow</li>
-          </ul>
+      <div class="cs-phase-card">
+        <div class="cs-phase-card-num">03</div>
+        <div class="cs-phase-card-name">Ideate</div>
+        <div class="cs-phase-card-desc">Card sorting with 4 power users — 85% agreement on structure without any prompting. Built the IA from what they drew, not what I assumed.</div>
+        <div class="cs-phase-card-tags">
+          <span class="cs-phase-card-tag">Card Sorting</span>
+          <span class="cs-phase-card-tag">Site Map</span>
+          <span class="cs-phase-card-tag">Task Flow</span>
         </div>
       </div>
-    </div>
-
-    <!-- UI Design -->
-    <div class="cs-phase-content" id="phase-uidesign">
-      <div class="cs-phase-cols">
-        <div class="cs-phase-col">
-          <div class="cs-phase-col-title">UI Design</div>
-          <ul>
-            <li>Wireframes</li>
-            <li>Style Tile</li>
-            <li>Launch Graphics</li>
-          </ul>
+      <div class="cs-phase-card">
+        <div class="cs-phase-card-num">04</div>
+        <div class="cs-phase-card-name">UI Design</div>
+        <div class="cs-phase-card-desc">Blue (#4358F4) for trust, soft radius for approachability. A fintech dashboard built to feel like a product, not a spreadsheet.</div>
+        <div class="cs-phase-card-tags">
+          <span class="cs-phase-card-tag">Wireframes</span>
+          <span class="cs-phase-card-tag">Style System</span>
+          <span class="cs-phase-card-tag">Hi-Fi Screens</span>
         </div>
       </div>
-    </div>
-
-    <!-- Test -->
-    <div class="cs-phase-content" id="phase-test">
-      <div class="cs-phase-cols">
-        <div class="cs-phase-col">
-          <div class="cs-phase-col-title">Test</div>
-          <ul>
-            <li>Usability Test</li>
-            <li>Iterations</li>
-            <li>Hi-Fi Prototypes</li>
-            <li>Final Screens</li>
-          </ul>
+      <div class="cs-phase-card">
+        <div class="cs-phase-card-num">05</div>
+        <div class="cs-phase-card-name">Test</div>
+        <div class="cs-phase-card-desc">6 users. 95% task completion. Three rounds of iteration before calling it done. Shipped when it felt right, not just when it was due.</div>
+        <div class="cs-phase-card-tags">
+          <span class="cs-phase-card-tag">Usability Testing</span>
+          <span class="cs-phase-card-tag">3 Rounds</span>
+          <span class="cs-phase-card-tag">Final Screens</span>
         </div>
       </div>
     </div>
@@ -1418,7 +1437,7 @@
       <div class="cs-phase-header-left">
         <div class="cs-phase-number reveal">Phase 01</div>
         <h2 class="cs-phase-title reveal reveal-d1">Research</h2>
-        <p class="cs-phase-subtitle reveal reveal-d2">Identifying friction points &amp; validating hypotheses</p>
+        <p class="cs-phase-subtitle reveal reveal-d2">What five users showed me in two weeks</p>
       </div>
       <div class="cs-phase-nav reveal">
         <a href="#synthesize" class="cs-phase-nav-btn next">Synthesize →</a>
@@ -1489,7 +1508,7 @@
       <div class="cs-phase-header-left">
         <div class="cs-phase-number reveal">Phase 02</div>
         <h2 class="cs-phase-title reveal reveal-d1">Synthesize</h2>
-        <p class="cs-phase-subtitle reveal reveal-d2">Translating insights into strategic features</p>
+        <p class="cs-phase-subtitle reveal reveal-d2">Turning user complaints into a design brief</p>
       </div>
       <div class="cs-phase-nav reveal">
         <a href="#research" class="cs-phase-nav-btn prev">← Research</a>
@@ -1516,13 +1535,13 @@
         </ul>
       </div>
       <div class="cs-feature-card reveal reveal-d1">
-        <div class="cs-feature-card-title">Business Impact</div>
+        <div class="cs-feature-card-title">What It Unlocks</div>
         <ul>
-          <li><strong>Relationship Acceleration:</strong> Data-driven meetings reduce negotiation cycles</li>
-          <li><strong>Risk Mitigation:</strong> Early warning signals on partner health prevent sudden disruptions</li>
-          <li><strong>Revenue Opportunity:</strong> Cross-sell potential identified through performance trends</li>
-          <li><strong>Competitive Intelligence:</strong> Peer benchmarking reveals market positioning gaps</li>
-          <li><strong>Customer Insight:</strong> Consolidated feedback drives product development priorities</li>
+          <li><strong>Faster meetings:</strong> Data-backed conversations replace memory-backed ones</li>
+          <li><strong>Early warnings:</strong> Catch a slipping partnership before it becomes a problem</li>
+          <li><strong>Cross-sell signals:</strong> Performance trends reveal the next conversation to have</li>
+          <li><strong>Benchmarking:</strong> Know where you stand relative to peers, without asking</li>
+          <li><strong>Feedback loops:</strong> User responses feed directly into product decisions</li>
         </ul>
       </div>
     </div>
@@ -1538,7 +1557,7 @@
       <div class="cs-phase-header-left">
         <div class="cs-phase-number reveal">Phase 03</div>
         <h2 class="cs-phase-title reveal reveal-d1">Ideate</h2>
-        <p class="cs-phase-subtitle reveal reveal-d2">Validating mental models &amp; IA through user research</p>
+        <p class="cs-phase-subtitle reveal reveal-d2">Let the users draw the map</p>
       </div>
       <div class="cs-phase-nav reveal">
         <a href="#synthesize" class="cs-phase-nav-btn prev">← Synthesize</a>
@@ -1604,7 +1623,7 @@
       <div class="cs-phase-header-left">
         <div class="cs-phase-number reveal">Phase 04</div>
         <h2 class="cs-phase-title reveal reveal-d1">UI Design</h2>
-        <p class="cs-phase-subtitle reveal reveal-d2">Iterative testing &amp; refinement for clarity &amp; trust</p>
+        <p class="cs-phase-subtitle reveal reveal-d2">From sketch to system to screen</p>
       </div>
       <div class="cs-phase-nav reveal">
         <a href="#ideate"    class="cs-phase-nav-btn prev">← Ideate</a>
@@ -1782,7 +1801,7 @@
   ══════════════════════════════════════════ -->
   <section class="cs-results" id="results">
     <div class="cs-section-eyebrow reveal">Outcomes</div>
-    <h2 class="cs-section-title reveal reveal-d1">One platform. One feature.<br><em>All shipped.</em></h2>
+    <h2 class="cs-section-title reveal reveal-d1">Two stories.<br><em>One set of numbers.</em></h2>
 
     <div class="cs-results-grid" style="grid-template-columns: repeat(3,1fr);">
       <div class="cs-result-item reveal">
@@ -2118,7 +2137,7 @@
   ══════════════════════════════════════════ -->
   <section class="cs-learnings" id="learnings">
     <p class="cs-learnings-quote reveal">
-      "Sprint design teaches you to trust incomplete information. Perfect research is a luxury — good <span>judgment</span> is a skill."
+      "Sprint design teaches you to trust incomplete information. Perfect research is a luxury. Good <span>judgment</span> is a skill."
     </p>
     <div class="cs-learnings-grid">
       <div class="cs-learning-card reveal">
