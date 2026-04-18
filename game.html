@@ -351,6 +351,12 @@
     });
 
     if (player.y > H + 40) die();
+
+    CHECKPOINTS.forEach(cx => { if (player.x > cx && cx > checkpointX) checkpointX = cx; });
+    if (player.x + player.w > FLAG.x && player.x < FLAG.x + 20 &&
+        player.y + player.h > FLAG.y && player.y < FLAG.y + 60) {
+      endGame(true);
+    }
   }
 
   function drawPlayer() {
@@ -593,6 +599,64 @@
     });
   }
 
+  /* ── FLAG + CHECKPOINTS ── */
+  const FLAG = { x:4740, y:520 };
+  const CHECKPOINTS = [0, 840, 2100, 3260, 4060];
+
+  function drawFlag() {
+    const fx = sx(FLAG.x), fy = sy(FLAG.y);
+    const wave = Math.sin(frame * 0.06) * Math.ceil(3*scale);
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.ceil(2.5*scale); ctx.lineCap = 'square';
+    ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - Math.ceil(50*scale)); ctx.stroke();
+    ctx.fillStyle = C.accent;
+    ctx.beginPath();
+    ctx.moveTo(fx, fy - Math.ceil(50*scale));
+    ctx.lineTo(fx + Math.ceil(32*scale), fy - Math.ceil(38*scale) + wave);
+    ctx.lineTo(fx, fy - Math.ceil(26*scale));
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawHeart(cx, cy, r) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + r*0.4);
+    ctx.bezierCurveTo(cx, cy-r*0.4, cx-r, cy-r*0.6, cx-r, cy);
+    ctx.bezierCurveTo(cx-r, cy+r*0.5, cx, cy+r*0.8, cx, cy+r);
+    ctx.bezierCurveTo(cx, cy+r*0.8, cx+r, cy+r*0.5, cx+r, cy);
+    ctx.bezierCurveTo(cx+r, cy-r*0.6, cx, cy-r*0.4, cx, cy+r*0.4);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawHUD() {
+    const m = Math.ceil(14*scale);
+    const bw = Math.ceil(150*scale), bh = Math.ceil(28*scale);
+    const bx = offX + m, by = offY + m;
+    ctx.fillStyle = C.hudBg;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, Math.ceil(6*scale));
+    else ctx.rect(bx, by, bw, bh);
+    ctx.fill();
+
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = i < lives ? C.heart : 'rgba(42,37,53,0.15)';
+      drawHeart(bx + Math.ceil((10 + i*22)*scale), by + bh/2, Math.ceil(6*scale));
+    }
+
+    ctx.fillStyle = C.fg;
+    ctx.font = `600 ${Math.ceil(10*scale)}px Inter, sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(`${score} pts · ${coins} coins`, bx + Math.ceil(82*scale), by + bh/2);
+
+    if (powerup) {
+      const bx2 = offX + m, by2 = by + bh + Math.ceil(5*scale);
+      const maxW = Math.ceil(150*scale);
+      const fillW = Math.ceil(maxW * (powerup.timer / powerup.maxTimer));
+      ctx.fillStyle = 'rgba(237,234,227,0.5)';
+      ctx.fillRect(bx2, by2, maxW, Math.ceil(4*scale));
+      ctx.fillStyle = powerup.type === 'bolt' ? C.bolt : C.shield;
+      ctx.fillRect(bx2, by2, fillW, Math.ceil(4*scale));
+    }
+  }
+
   /* ── DRAW: SKY ── */
   function drawSky() {
     const grad = ctx.createLinearGradient(0, offY, 0, offY + H * scale);
@@ -663,7 +727,9 @@
     drawEnemies();
     drawCollectibles();
     drawProjectiles();
+    drawFlag();
     drawPlayer();
+    drawHUD();
   }
   let rafId;
   function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
