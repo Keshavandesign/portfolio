@@ -987,17 +987,54 @@
       align-items: center;
       justify-content: center;
     }
-    /* Three explicit guide rings — one per orbit, aligned exactly */
+    /* ─── Orbit guide rings ─── */
     .tools-orbit-guide {
       position: absolute;
       inset: 0; margin: auto;
       border-radius: 50%;
-      border: 1px dashed rgba(155, 45, 122, 0.10);
       pointer-events: none;
     }
-    .tools-orbit-guide:nth-child(2) { width: 400px; height: 400px; }  /* middle r=200 */
-    .tools-orbit-guide:nth-child(3) { width: 220px; height: 220px; }  /* inner  r=110 */
-    .tools-orbit-guide:nth-child(4) { width: 580px; height: 580px; opacity: 0.6; } /* outer r=290 */
+    /* Each ring has its own color character */
+    .tools-ring-inner  { width: 220px; height: 220px; border: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent); }
+    .tools-ring-middle { width: 400px; height: 400px; border: 1px dashed rgba(67, 88, 244, 0.18); }
+    .tools-ring-outer  { width: 580px; height: 580px; border: 1px dashed color-mix(in srgb, var(--accent) 8%, transparent); }
+
+    /* Center dot — the gravitational anchor */
+    .tools-center-dot {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: centerPulse 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes centerPulse {
+      0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); transform: scale(1); }
+      50%       { box-shadow: 0 0 18px 6px color-mix(in srgb, var(--accent) 15%, transparent); transform: scale(1.35); }
+    }
+
+    /* Ambient color bloom — soft light source behind the orbital */
+    .tools-bloom {
+      position: absolute;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--accent) 9%, transparent) 0%,
+        transparent 65%
+      );
+      pointer-events: none;
+      animation: bloomBreathe 9s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes bloomBreathe {
+      0%, 100% { transform: scale(0.82); opacity: 0.55; }
+      50%       { transform: scale(1.08); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tools-center-dot, .tools-bloom { animation: none; }
+    }
     .tool-chip {
       position: absolute;
       width: 64px; height: 64px;
@@ -1079,9 +1116,9 @@
     @media (max-width: 768px) {
       .tools-section { padding: 60px 24px; min-height: auto; }
       .tools-stage { height: 440px; }
-      .tools-orbit-guide:nth-child(2) { width: 240px; height: 240px; }
-      .tools-orbit-guide:nth-child(3) { width: 144px; height: 144px; }
-      .tools-orbit-guide:nth-child(4) { width: 360px; height: 360px; }
+      .tools-ring-middle { width: 240px; height: 240px; }
+      .tools-ring-inner  { width: 144px; height: 144px; }
+      .tools-ring-outer  { width: 360px; height: 360px; }
       .tool-chip { width: 48px; height: 48px; margin-top: -24px; margin-left: -24px; }
       .tool-chip-inner { font-size: 14px; }
       .tool-logo { width: 22px; height: 22px; }
@@ -1368,9 +1405,9 @@
       .tools-section { overflow: hidden; padding: 48px 24px 56px; }
       .tools-stage { height: 400px; }
       /* Guide rings matched to JS mobile radii (inner:65→28px, middle:225→98px) at scale≈0.43 */
-      .tools-orbit-guide:nth-child(2) { width: 196px; height: 196px; }
-      .tools-orbit-guide:nth-child(3) { width: 58px;  height: 58px; }
-      .tools-orbit-guide:nth-child(4) { display: none; }
+      .tools-ring-middle { width: 196px; height: 196px; }
+      .tools-ring-inner  { width: 58px;  height: 58px; }
+      .tools-ring-outer  { display: none; }
       /* Outer ring (r=290) hidden — too wide at mobile scale */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
       /* Middle ring (r=200) visible — all 6 chips including Figma */
@@ -1390,8 +1427,8 @@
       .hero-headline { font-size: clamp(34px, 9.5vw, 44px); }
       .hero-eyebrow { font-size: 8.5px; margin-bottom: 10px; }
       .tools-stage { height: 360px; }
-      .tools-orbit-guide:nth-child(2) { width: 170px; height: 170px; }
-      .tools-orbit-guide:nth-child(3) { width: 50px;  height: 50px; }
+      .tools-ring-middle { width: 170px; height: 170px; }
+      .tools-ring-inner  { width: 50px;  height: 50px; }
       .about-intro { padding: 60px 20px; }
       .about-tagline { font-size: clamp(17px, 5vw, 22px); }
       .about-tagline .tagline-second { font-size: 13px; }
@@ -1677,10 +1714,13 @@
       </p>
     </div>
     <div class="tools-stage" id="toolsStage">
+      <!-- Center bloom + dot -->
+      <div class="tools-bloom"></div>
+      <div class="tools-center-dot"></div>
       <!-- Orbit guide rings — one per orbit radius -->
-      <div class="tools-orbit-guide"></div>
-      <div class="tools-orbit-guide"></div>
-      <div class="tools-orbit-guide"></div>
+      <div class="tools-orbit-guide tools-ring-inner"></div>
+      <div class="tools-orbit-guide tools-ring-middle"></div>
+      <div class="tools-orbit-guide tools-ring-outer"></div>
       <!-- Outer ring Ops / Thinking -->
       <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" />
@@ -2140,86 +2180,6 @@
 
       cta.addEventListener('click', dismiss);
       backdrop.addEventListener('click', dismiss);
-    })();
-
-    /* ═══════════════════════════════════════════
-       AMBIENT BRAND COLOR FLASH
-       Up to 3 chips at a time drift to brand color
-    ═══════════════════════════════════════════ */
-    (function initAmbientFlash() {
-      const stage = document.getElementById('toolsStage');
-      if (!stage) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      const FADE   = 900;   // ms in/out transition
-      const HOLD   = 3000;  // ms brand color stays visible
-      const MIN    = 4000;  // ms min between batches
-      const MAX    = 8000;  // ms max between batches
-      const LIMIT  = 3;     // max chips flashing at once
-
-      const active = new Set();
-
-      function eligible(chip) {
-        return !chip.classList.contains('no-logo')
-            && !chip.classList.contains('no-brand')
-            && !active.has(chip)
-            && !chip.matches(':hover')
-            && getComputedStyle(chip).opacity !== '0'; // skip hidden mobile chips
-      }
-
-      function flash(chip) {
-        const brand = chip.querySelector('.tool-logo.brand');
-        if (!brand || !brand.complete || brand.naturalWidth === 0) return;
-        const monos = Array.from(chip.querySelectorAll('.tool-logo.light, .tool-logo.dark'));
-
-        active.add(chip);
-
-        // Show brand at opacity 0, fade mono out
-        brand.style.transition = `opacity ${FADE}ms ease-out`;
-        brand.style.display    = 'block';
-        brand.style.opacity    = '0';
-        monos.forEach(m => {
-          m.style.transition = `opacity ${FADE}ms ease-out`;
-          m.style.opacity    = '0';
-        });
-
-        // Next frame: fade brand in
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          brand.style.opacity = '1';
-        }));
-
-        // After HOLD: fade brand out, mono back in
-        setTimeout(() => {
-          brand.style.opacity = '0';
-          monos.forEach(m => { m.style.opacity = '0.88'; });
-
-          // Clean up after transition
-          setTimeout(() => {
-            brand.style.display    = '';
-            brand.style.opacity    = '';
-            brand.style.transition = '';
-            monos.forEach(m => {
-              m.style.opacity    = '';
-              m.style.transition = '';
-            });
-            active.delete(chip);
-          }, FADE);
-        }, HOLD);
-      }
-
-      function batch() {
-        const pool = Array.from(stage.querySelectorAll('.tool-chip')).filter(eligible);
-        const n    = Math.min(1 + Math.floor(Math.random() * LIMIT), pool.length);
-        // Fisher-Yates shuffle then take first n
-        for (let i = pool.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
-        pool.slice(0, n).forEach(flash);
-        setTimeout(batch, MIN + Math.random() * (MAX - MIN));
-      }
-
-      setTimeout(batch, 3000); // first flash after page settles
     })();
 
     (function initThemeToggle() {
