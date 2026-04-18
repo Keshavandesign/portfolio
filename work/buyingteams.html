@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BuyingTeams Keshav Anand</title>
+  <title>BuyingTeams · Keshav Anand</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -940,6 +940,247 @@
       .cs-insight-card { padding: 24px 22px; }
       .cs-feature-card { padding: 24px 22px; }
     }
+
+    /* ══════════════════════════════════════════════════════
+       MERGED — PART ONE/TWO LABELS + BRIDGE + PROCESS ASSETS
+    ══════════════════════════════════════════════════════ */
+
+    /* Part eyebrow */
+    .cs-part-label {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 24px;
+    }
+    .cs-part-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+
+    /* Bridge section */
+    .cs-bridge {
+      padding: 100px 52px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      position: relative;
+      scroll-snap-align: start;
+    }
+    .cs-bridge-eyebrow {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .cs-bridge-title {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(26px, 3.2vw, 46px);
+      letter-spacing: -0.03em; line-height: 1.15;
+      color: var(--fg); max-width: 640px; margin: 0 auto 20px;
+    }
+    .cs-bridge-body {
+      font-size: 15px; line-height: 1.72; color: var(--muted);
+      max-width: 460px; margin: 0 auto;
+    }
+
+    /* Process rows (vertical — used in Part Two) */
+    .cs-process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0 52px;
+      position: relative;
+      min-height: 480px;
+      align-items: center;
+    }
+    .cs-process-row.flip { direction: rtl; }
+    .cs-process-row.flip > * { direction: ltr; }
+    .cs-process-text { padding: 80px 52px; }
+    .cs-process-stage {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .cs-process-heading {
+      font-family: var(--serif); font-size: clamp(24px, 2.4vw, 36px);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      color: var(--fg); margin-bottom: 20px;
+    }
+    .cs-process-body { font-size: 14px; line-height: 1.85; color: var(--fg); margin-bottom: 28px; max-width: 520px; }
+    .cs-pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cs-pill {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+      background: color-mix(in srgb, var(--fg) 5%, transparent);
+      border: 1px solid var(--border); padding: 5px 13px; border-radius: 100px;
+      color: var(--muted);
+    }
+    .cs-illus-zone {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      min-height: 480px; background: color-mix(in srgb, var(--fg) 2%, transparent);
+    }
+    .cs-ghost-num {
+      position: absolute; bottom: 20px; right: 32px;
+      font-family: var(--serif); font-size: clamp(100px, 14vw, 180px); font-weight: 400;
+      line-height: 1; letter-spacing: -0.06em;
+      color: var(--fg); opacity: 0.04; pointer-events: none; user-select: none;
+    }
+
+    /* Stepper */
+    .cs-stepper {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 52px 48px; overflow-x: auto;
+    }
+    .cs-step {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      text-decoration: none; opacity: 0.5; transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .cs-step.active, .cs-step:hover { opacity: 1; }
+    .cs-step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .cs-step.active .cs-step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .cs-step-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .cs-step-connector { flex: 1; height: 1px; background: var(--border); min-width: 20px; }
+
+    /* Process asset CSS (brief, personas, question builder, handoff) */
+    .asset-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 16px 0; }
+    .asset-brief { width: 100%; max-width: 400px; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px 28px 22px; font-family: var(--sans); }
+    .brief-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .brief-overline { font-size: 9px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .brief-badge { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #22C55E; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); padding: 3px 10px; border-radius: 100px; }
+    .brief-title { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--fg); letter-spacing: -.02em; margin-bottom: 18px; }
+    .brief-hr { height: 1px; background: var(--border); margin-bottom: 12px; }
+    .brief-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 10px 10px; border-radius: 8px; cursor: default; transition: background .2s; }
+    .brief-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+    .brief-row:hover .brief-k { color: var(--accent); }
+    .brief-k { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 72px; transition: color .2s; }
+    .brief-v { font-size: 12px; color: var(--fg); text-align: right; line-height: 1.45; }
+    .brief-footer { display: flex; gap: 14px; padding-top: 18px; margin-top: 12px; border-top: 1px solid var(--border); }
+    .brief-signer { display: flex; align-items: center; gap: 8px; }
+    .brief-av { width: 26px; height: 26px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 10%, var(--bg)); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--accent); }
+    .brief-sname { font-size: 10px; color: var(--muted); }
+    .asset-personas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+    .persona-card { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px; transition: border-color .25s, transform .25s; cursor: default; }
+    .persona-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, transparent); transform: translateY(-3px); }
+    .persona-card:hover .pjourney-exit { background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: var(--accent); color: var(--accent); }
+    .persona-card:hover .persona-iq { border-left-color: var(--accent); }
+    .persona-av-ring { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-size: 16px; margin-bottom: 12px; }
+    .persona-av-ring.c { background: color-mix(in srgb, var(--accent) 10%, var(--bg)); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); }
+    .persona-av-ring.v { background: color-mix(in srgb, #4358F4 10%, var(--bg)); color: #4358F4; border: 1px solid color-mix(in srgb, #4358F4 20%, transparent); }
+    .persona-pname { font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 1px; }
+    .persona-prole { font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .persona-iq { font-family: var(--serif); font-style: italic; font-size: 11px; color: var(--muted); line-height: 1.5; padding: 8px 10px; border-left: 2px solid var(--border); margin-bottom: 16px; transition: border-left-color .25s; }
+    .persona-journey { display: flex; align-items: center; gap: 0; margin-bottom: 16px; flex-wrap: wrap; }
+    .pjourney-node { font-size: 8px; letter-spacing: .04em; padding: 4px 8px; border-radius: 100px; background: color-mix(in srgb, var(--fg) 5%, transparent); border: 1px solid var(--border); color: var(--muted); }
+    .pjourney-arrow { font-size: 8px; color: var(--border); padding: 0 3px; }
+    .pjourney-exit { font-size: 8px; letter-spacing: .04em; padding: 4px 8px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); transition: all .25s; }
+    .persona-stat { display: flex; align-items: baseline; gap: 7px; }
+    .pstat-n { font-family: var(--serif); font-size: 26px; color: var(--fg); letter-spacing: -.03em; line-height: 1; }
+    .pstat-l { font-size: 9px; color: var(--muted); line-height: 1.35; }
+    .asset-qbuilder { width: 100%; max-width: 440px; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .qb-topbar { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+    .qb-topbar-label { font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .qb-type-btns { display: flex; gap: 5px; padding: 14px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .qb-type-btn { font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 100px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: var(--sans); transition: all .18s; }
+    .qb-type-btn:hover { color: var(--fg); border-color: var(--fg); }
+    .qb-type-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .qb-body { padding: 20px; }
+    .qb-preview { display: none; }
+    .qb-preview.active { display: block; }
+    .qb-q { font-size: 12px; font-weight: 500; color: var(--fg); margin-bottom: 14px; line-height: 1.4; }
+    .qb-option { display: flex; align-items: center; gap: 9px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 7px; margin-bottom: 5px; cursor: default; transition: border-color .18s, background .18s; }
+    .qb-option:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+    .qb-option-radio { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; transition: border-color .18s; }
+    .qb-option:hover .qb-option-radio { border-color: var(--accent); }
+    .qb-option-label { font-size: 11px; color: var(--fg); }
+    .qb-add-opt { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--accent); padding: 7px 11px; cursor: pointer; border-radius: 7px; transition: background .18s; margin-top: 4px; }
+    .qb-add-opt:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+    .qb-scale-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .qb-scale-pt { flex: 1; aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); cursor: pointer; transition: all .18s; }
+    .qb-scale-pt:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); }
+    .qb-scale-labs { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); letter-spacing: .04em; margin-bottom: 14px; }
+    .qb-textarea-mock { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: transparent; font-size: 11px; color: var(--muted); min-height: 72px; font-family: var(--sans); resize: none; transition: border-color .18s; }
+    .qb-textarea-mock:hover { border-color: var(--accent); }
+    .qb-char-ctr { text-align: right; font-size: 9px; color: var(--muted); margin-top: 4px; }
+    .asset-handoff { width: 100%; max-width: 440px; }
+    .hf-toggle { display: flex; gap: 3px; background: var(--bg); padding: 4px; border-radius: 100px; border: 1px solid var(--border); width: fit-content; margin-bottom: 18px; }
+    .hf-toggle-btn { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 7px 16px; border-radius: 100px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-family: var(--sans); transition: all .2s; }
+    .hf-toggle-btn.active { background: var(--fg); color: var(--bg); }
+    .hf-frame { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px; position: relative; }
+    .hf-fieldset { margin-bottom: 18px; }
+    .hf-flabel { font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .hf-finput { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px; background: color-mix(in srgb, var(--fg) 3%, transparent); font-size: 12px; color: var(--muted); font-family: var(--sans); position: relative; transition: border-color .2s; }
+    .hf-finput.placeholder { color: color-mix(in srgb, var(--fg) 28%, transparent); }
+    .hf-annot { display: none; position: absolute; right: -148px; top: 0; background: color-mix(in srgb, var(--accent) 8%, var(--bg)); border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); border-radius: 8px; padding: 7px 11px; font-size: 9px; color: var(--accent); white-space: nowrap; z-index: 4; }
+    .hf-annot::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 6px solid color-mix(in srgb, var(--accent) 28%, transparent); }
+    .hf-char-bar { display: none; text-align: right; font-size: 9px; color: var(--muted); margin-top: 4px; }
+    .hf-actions { display: flex; gap: 8px; justify-content: flex-end; position: relative; }
+    .hf-btn-c { padding: 8px 20px; border: 1.5px solid var(--border); border-radius: 100px; font-size: 10px; font-weight: 500; background: transparent; color: var(--muted); cursor: default; font-family: var(--sans); }
+    .hf-btn-s { padding: 8px 20px; border: none; border-radius: 100px; font-size: 10px; font-weight: 600; background: var(--accent); color: #fff; cursor: default; font-family: var(--sans); position: relative; }
+    .hf-btn-annot { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: color-mix(in srgb, var(--accent) 8%, var(--bg)); border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); border-radius: 8px; padding: 7px 11px; font-size: 9px; color: var(--accent); white-space: nowrap; z-index: 4; }
+    .hf-ruler { display: none; font-size: 9px; color: var(--accent); text-align: center; margin-top: 12px; letter-spacing: .06em; opacity: .55; }
+    .hf-frame.dev .hf-finput { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+    .hf-frame.dev .hf-annot { display: block; }
+    .hf-frame.dev .hf-char-bar { display: block; }
+    .hf-frame.dev .hf-btn-annot { display: block; }
+    .hf-frame.dev .hf-ruler { display: block; }
+
+    /* Challenges */
+    .cs-challenges { padding: 100px 52px; }
+    .cs-challenges-header { margin-bottom: 64px; }
+    .cs-challenges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .cs-challenge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+    .cs-challenge-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .cs-challenge-title { font-family: var(--serif); font-size: clamp(18px, 2vw, 26px); font-weight: 400; letter-spacing: -0.02em; color: var(--fg); margin-bottom: 16px; }
+    .cs-challenge-body { font-size: 14px; line-height: 1.8; color: var(--muted); }
+
+    /* Learnings */
+    .cs-learnings { padding: 100px 52px; }
+    .cs-learnings-quote {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(20px, 2.4vw, 32px); letter-spacing: -0.02em; line-height: 1.4;
+      color: var(--fg); max-width: 780px; margin: 0 auto 64px; text-align: center;
+    }
+    .cs-learnings-quote span { color: var(--accent); }
+    .cs-learnings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .cs-learning-card { padding: 32px 0; border-top: 1px solid var(--border); }
+    .cs-learning-num { font-family: var(--serif); font-size: 40px; font-weight: 400; letter-spacing: -0.04em; color: color-mix(in srgb, var(--fg) 12%, transparent); margin-bottom: 12px; }
+    .cs-learning-text { font-size: 14px; line-height: 1.8; color: var(--muted); }
+
+    /* Feature finale */
+    .cs-finale {
+      padding: 100px 52px; text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .cs-finale-quote {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(22px, 3vw, 44px);
+      letter-spacing: -0.03em; line-height: 1.15; color: var(--fg);
+      max-width: 640px; margin: 0 auto 32px;
+    }
+    .cs-finale-stats { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+    .cs-finale-stat { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); padding: 8px 20px; border-radius: 100px; }
+
+    /* Mobile responsive for Part Two sections */
+    @media (max-width: 1024px) {
+      .cs-process-row { grid-template-columns: 1fr; padding: 0 36px; min-height: auto; }
+      .cs-process-row.flip { direction: ltr; }
+      .cs-challenges-grid { grid-template-columns: 1fr; }
+      .cs-learnings-grid { grid-template-columns: 1fr 1fr; }
+      .cs-bridge { padding: 80px 36px; }
+    }
+    @media (max-width: 768px) {
+      .cs-bridge { padding: 64px 24px; }
+      .cs-process-text { padding: 44px 24px; }
+      .cs-challenges { padding: 64px 24px; }
+      .cs-learnings { padding: 64px 24px; }
+      .cs-learnings-grid { grid-template-columns: 1fr; }
+      .cs-finale { padding: 64px 24px; }
+      .cs-ghost-num { display: none; }
+      .asset-personas { grid-template-columns: 1fr; }
+      @media (max-width: 600px) { .hf-annot { display: none !important; } }
+    }
+    @media (max-width: 480px) {
+      .cs-bridge { padding: 52px 20px; }
+      .cs-challenges { padding: 52px 20px; }
+      .cs-learnings { padding: 52px 20px; }
+      .cs-finale { padding: 52px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -1075,6 +1316,11 @@
   <!-- ══════════════════════════════════════════
        DESIGN PROCESS
   ══════════════════════════════════════════ -->
+  <!-- ── Part One label ── -->
+  <div style="padding: 0 52px 8px;">
+    <span class="cs-part-label reveal">Part One · The Platform</span>
+  </div>
+
   <section class="cs-process" id="process">
     <div class="cs-section-eyebrow reveal">Design Process</div>
     <h2 class="cs-section-title reveal reveal-d1">Five phases.<br><em>One product.</em></h2>
@@ -1537,20 +1783,356 @@
   ══════════════════════════════════════════ -->
   <section class="cs-results" id="results">
     <div class="cs-section-eyebrow reveal">Outcomes</div>
-    <h2 class="cs-section-title reveal reveal-d1">Built with empathy.<br><em>Shipped with clarity.</em></h2>
+    <h2 class="cs-section-title reveal reveal-d1">One platform. One feature.<br><em>All shipped.</em></h2>
 
-    <div class="cs-results-grid">
+    <div class="cs-results-grid" style="grid-template-columns: repeat(3,1fr);">
       <div class="cs-result-item reveal">
         <div class="cs-result-number">78<span>%</span></div>
-        <div class="cs-result-label">of users manually consolidated partner data across 3+ systems every week the insight that drove every single design decision</div>
+        <div class="cs-result-label">of users manually consolidated partner data across 3+ systems weekly — the hypothesis that drove every design decision</div>
       </div>
       <div class="cs-result-item reveal reveal-d1">
-        <div class="cs-result-number">3<span>mo</span></div>
-        <div class="cs-result-label">start to final handoff five testing rounds, zero major post-handoff revisions</div>
+        <div class="cs-result-number">95<span>%</span></div>
+        <div class="cs-result-label">task completion rate in final usability testing — the highest I've seen on a first-generation B2B dashboard</div>
       </div>
       <div class="cs-result-item reveal reveal-d2">
-        <div class="cs-result-number">95<span>%</span></div>
-        <div class="cs-result-label">task completion rate in final usability testing the highest I've seen on a first-generation B2B dashboard</div>
+        <div class="cs-result-number">50<span>+</span></div>
+        <div class="cs-result-label">features shipped across the platform over 3 months, zero major post-handoff revisions</div>
+      </div>
+      <div class="cs-result-item reveal">
+        <div class="cs-result-number">30<span>d</span></div>
+        <div class="cs-result-label">kick-off to working prototype on the Custom Question sprint — delivered on schedule</div>
+      </div>
+      <div class="cs-result-item reveal reveal-d1">
+        <div class="cs-result-number">2</div>
+        <div class="cs-result-label">major Nordic banks signed on after the Custom Question feature shipped</div>
+      </div>
+      <div class="cs-result-item reveal reveal-d2">
+        <div class="cs-result-number">6<span>×</span></div>
+        <div class="cs-result-label">login conversion improvement — designed for relationship managers who aren't analysts</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       BRIDGE — connective tissue between parts
+  ══════════════════════════════════════════ -->
+  <section class="cs-bridge" id="feature">
+    <div class="cs-bridge-eyebrow reveal">Part Two</div>
+    <p class="cs-bridge-title reveal reveal-d1">
+      "The platform shipped. Then one gap became unmissable."
+    </p>
+    <p class="cs-bridge-body reveal reveal-d2">
+      Users had a powerful new dashboard. But they still couldn't ask the one question that mattered most to them. The platform gave visibility into partner performance. What it didn't give them was a voice. That became the next 30 days.
+    </p>
+  </section>
+
+  <!-- ── Part Two label ── -->
+  <div style="padding: 0 52px 8px;">
+    <span class="cs-part-label reveal">Part Two · The Feature</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FEATURE OVERVIEW
+  ══════════════════════════════════════════ -->
+  <section class="cs-overview" id="feature-overview">
+    <div class="cs-overview-grid">
+      <div class="cs-card reveal">
+        <div class="cs-card-label">The Gap</div>
+        <div class="cs-card-body">
+          The platform had quality questions vetted and ready. But that same rigour became a bottleneck. Users knew exactly what they needed to ask. The platform just wouldn't let them. Carl, a relationship manager, had been requesting the same three questions for six months. Vanessa had abandoned the platform entirely for manual email surveys.
+        </div>
+      </div>
+      <div class="cs-card problem reveal reveal-d1">
+        <div class="cs-card-label">The Feature</div>
+        <div class="cs-card-body">
+          A native question builder — multiple-choice, rating scale, open text — built directly into the platform users already trusted. Quality stays high. Control shifts to the user.
+        </div>
+        <div class="cs-stat-callout"><span>2</span> major Nordic banks signed on</div>
+      </div>
+    </div>
+    <div class="cs-meta-row">
+      <div class="cs-meta-card reveal">
+        <div class="cs-meta-label">Sprint Role</div>
+        <ul class="cs-role-list">
+          <li>Feature Design Lead</li>
+          <li>UX Research</li>
+          <li>Interaction Design</li>
+          <li>Design System Extension</li>
+          <li>Dev Handoff</li>
+        </ul>
+      </div>
+      <div class="cs-meta-card reveal reveal-d1">
+        <div class="cs-meta-label">Tools</div>
+        <div class="cs-tools-list">
+          <span class="cs-tool-pill">Figma</span>
+          <span class="cs-tool-pill">Jira</span>
+          <span class="cs-tool-pill">MS Planner</span>
+          <span class="cs-tool-pill">Lucid</span>
+        </div>
+      </div>
+      <div class="cs-meta-card reveal reveal-d2">
+        <div class="cs-meta-label">Timeline</div>
+        <div class="cs-time-display">30 Days</div>
+        <div class="cs-time-sub">Discover to Deliver</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FEATURE PROCESS INTRO
+  ══════════════════════════════════════════ -->
+  <section class="cs-process-intro" id="feature-process" style="padding: 100px 52px; text-align: center;">
+    <div class="cs-eyebrow reveal">Feature Design Process</div>
+    <h2 class="cs-section-title reveal reveal-d1">Four stages.<br><em>One sprint.</em></h2>
+    <p class="cs-section-sub reveal reveal-d2">A tight 30-day sprint. Double Diamond kept us honest. Here's what actually happened.</p>
+  </section>
+  <div class="cs-stepper reveal">
+    <a class="cs-step active" href="#f-discover"><span class="cs-step-num">01</span><span class="cs-step-label">Discover</span></a>
+    <div class="cs-step-connector"></div>
+    <a class="cs-step" href="#f-define"><span class="cs-step-num">02</span><span class="cs-step-label">Define</span></a>
+    <div class="cs-step-connector"></div>
+    <a class="cs-step" href="#f-design"><span class="cs-step-num">03</span><span class="cs-step-label">Design</span></a>
+    <div class="cs-step-connector"></div>
+    <a class="cs-step" href="#f-deliver"><span class="cs-step-num">04</span><span class="cs-step-label">Deliver</span></a>
+  </div>
+
+  <!-- Discover -->
+  <div class="cs-process-row" id="f-discover">
+    <div class="cs-process-text reveal">
+      <div class="cs-process-stage">01 Discover</div>
+      <h3 class="cs-process-heading">Project Brief &amp;<br>Understanding Needs</h3>
+      <p class="cs-process-body">The founders had clear priorities and one hard constraint: 30 days, no stretch. First session was about getting that on paper — a brief that named the feature, scoped it tightly, and gave both of us something to say no with when scope started creeping. (It always does.)</p>
+      <div class="cs-pill-row">
+        <span class="cs-pill">Kick-off Meeting</span>
+        <span class="cs-pill">MS Planner</span>
+        <span class="cs-pill">Project Brief</span>
+        <span class="cs-pill">Stakeholder Alignment</span>
+      </div>
+    </div>
+    <div class="cs-illus-zone">
+      <div class="asset-wrap">
+        <div class="asset-brief">
+          <div class="brief-top">
+            <span class="brief-overline">Project Brief</span>
+            <span class="brief-badge">&#x2713; Approved</span>
+          </div>
+          <div class="brief-title">Custom Question Builder</div>
+          <div class="brief-hr"></div>
+          <div class="brief-row"><span class="brief-k">Timeline</span><span class="brief-v">30 days, no stretch</span></div>
+          <div class="brief-row"><span class="brief-k">Types</span><span class="brief-v">MCQ · Rating · Open text</span></div>
+          <div class="brief-row"><span class="brief-k">Constraint</span><span class="brief-v">Extend system, don't redesign</span></div>
+          <div class="brief-row"><span class="brief-k">Success</span><span class="brief-v">Users create &amp; reuse their own questions</span></div>
+          <div class="brief-row"><span class="brief-k">Platform</span><span class="brief-v">Bank &amp; Business (2 boards)</span></div>
+          <div class="brief-footer">
+            <div class="brief-signer"><div class="brief-av">KA</div><span class="brief-sname">Keshav Anand</span></div>
+            <div class="brief-signer"><div class="brief-av">BT</div><span class="brief-sname">BuyingTeams Founders</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-ghost-num">01</div>
+  </div>
+
+  <!-- Define -->
+  <div class="cs-process-row flip" id="f-define">
+    <div class="cs-process-text reveal">
+      <div class="cs-process-stage">02 Define</div>
+      <h3 class="cs-process-heading">Personas &amp;<br>User Journey</h3>
+      <p class="cs-process-body">Carl was a relationship manager who'd been requesting the same three questions for six months. Vanessa was a business dev lead who'd abandoned the platform entirely for email surveys. They didn't know each other — but their frustrations rhymed. The journey map made the moment of departure unmissable: users left the platform exactly when they needed it most.</p>
+      <div class="cs-pill-row">
+        <span class="cs-pill">User Personas</span>
+        <span class="cs-pill">Journey Mapping</span>
+        <span class="cs-pill">Research Synthesis</span>
+        <span class="cs-pill">Empathy Mapping</span>
+      </div>
+    </div>
+    <div class="cs-illus-zone">
+      <div class="asset-wrap">
+        <div class="asset-personas">
+          <div class="persona-card">
+            <div class="persona-av-ring c">C</div>
+            <div class="persona-pname">Carl</div>
+            <div class="persona-prole">Relationship Manager</div>
+            <div class="persona-iq">"The question I need isn't in the system. Again."</div>
+            <div class="persona-journey">
+              <div class="pjourney-node">Opens survey</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-node">Adds questions</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-exit">Exits. Emails team.</div>
+            </div>
+            <div class="persona-stat"><span class="pstat-n">6</span><span class="pstat-l">months requesting<br>the same question</span></div>
+          </div>
+          <div class="persona-card">
+            <div class="persona-av-ring v">V</div>
+            <div class="persona-pname">Vanessa</div>
+            <div class="persona-prole">Business Dev Lead</div>
+            <div class="persona-iq">"I send manual email surveys because the platform won't let me ask what I need."</div>
+            <div class="persona-journey">
+              <div class="pjourney-node">Logs in</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-node">Reviews options</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-exit">Sends email instead.</div>
+            </div>
+            <div class="persona-stat"><span class="pstat-n">0</span><span class="pstat-l">custom questions<br>in current version</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-ghost-num">02</div>
+  </div>
+
+  <!-- Design -->
+  <div class="cs-process-row" id="f-design">
+    <div class="cs-process-text reveal">
+      <div class="cs-process-stage">03 Design</div>
+      <h3 class="cs-process-heading">Wireframes &amp;<br>Component Design</h3>
+      <p class="cs-process-body">Wireframes first — deliberately rough. I wanted the founders reacting to structure, not colour. Once the interaction model was signed off, I stepped into the existing design system and extended it: three new icons for question types, a bar chart for scale questions, a donut for multiple choice. The system had strong bones. It mostly just needed new components, not a redesign.</p>
+      <div class="cs-pill-row">
+        <span class="cs-pill">Lo-Fi Wireframes</span>
+        <span class="cs-pill">Hi-Fi Screens</span>
+        <span class="cs-pill">Design System</span>
+        <span class="cs-pill">New Components</span>
+        <span class="cs-pill">Figma</span>
+      </div>
+    </div>
+    <div class="cs-illus-zone">
+      <div class="asset-wrap">
+        <div class="asset-qbuilder">
+          <div class="qb-topbar"><span class="qb-topbar-label">Question Builder</span></div>
+          <div class="qb-type-btns">
+            <button class="qb-type-btn active" onclick="qbSwitch(this,'mcq')">Multiple Choice</button>
+            <button class="qb-type-btn" onclick="qbSwitch(this,'rating')">Rating Scale</button>
+            <button class="qb-type-btn" onclick="qbSwitch(this,'open')">Open Text</button>
+          </div>
+          <div class="qb-body">
+            <div class="qb-preview active" id="qb-mcq">
+              <div class="qb-q">How satisfied are you with the response quality?</div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Very satisfied</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Satisfied</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Neutral</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Dissatisfied</span></div>
+              <div class="qb-add-opt">+ Add option</div>
+            </div>
+            <div class="qb-preview" id="qb-rating">
+              <div class="qb-q">Rate your overall experience with this feedback session.</div>
+              <div class="qb-scale-row">
+                <div class="qb-scale-pt">1</div><div class="qb-scale-pt">2</div><div class="qb-scale-pt">3</div><div class="qb-scale-pt">4</div><div class="qb-scale-pt">5</div>
+              </div>
+              <div class="qb-scale-labs"><span>Not at all</span><span>Extremely</span></div>
+            </div>
+            <div class="qb-preview" id="qb-open">
+              <div class="qb-q">What one thing could we improve most in this process?</div>
+              <textarea class="qb-textarea-mock" readonly placeholder="Respondent types here..."></textarea>
+              <div class="qb-char-ctr">0 / 280</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-ghost-num">03</div>
+  </div>
+
+  <!-- Deliver -->
+  <div class="cs-process-row flip" id="f-deliver">
+    <div class="cs-process-text reveal">
+      <div class="cs-process-stage">04 Deliver</div>
+      <h3 class="cs-process-heading">Handoff &amp;<br>Developer Collaboration</h3>
+      <p class="cs-process-body">Handoff wasn't just exporting assets — it was writing for the developers. Every component had a note: hover states, error handling, edge cases. We split Jira by platform (Bank and Business) and used child issues so nothing got buried in a long ticket. The goal was zero back-and-forth during implementation. Mostly we hit it.</p>
+      <div class="cs-pill-row">
+        <span class="cs-pill">Dev Notes</span>
+        <span class="cs-pill">Spacing Guides</span>
+        <span class="cs-pill">Jira</span>
+        <span class="cs-pill">Handoff</span>
+      </div>
+    </div>
+    <div class="cs-illus-zone">
+      <div class="asset-wrap">
+        <div class="asset-handoff">
+          <div class="hf-toggle">
+            <button class="hf-toggle-btn active" onclick="hfSwitch(this,'design')">Design</button>
+            <button class="hf-toggle-btn" onclick="hfSwitch(this,'dev')">Dev Notes</button>
+          </div>
+          <div class="hf-frame" id="hf-frame">
+            <div class="hf-fieldset" style="position:relative;">
+              <div class="hf-flabel">Question text</div>
+              <div class="hf-finput placeholder">Type your question...</div>
+              <div class="hf-annot">font: Inter 12px / 500<br>padding: 9px 12px<br>border-radius: 7px</div>
+            </div>
+            <div class="hf-fieldset" style="position:relative;">
+              <div class="hf-flabel">Question type</div>
+              <div class="hf-finput">Multiple Choice</div>
+              <div class="hf-annot">height: 38px<br>border: 1.5px var(--border)<br>bg: fg @ 3%</div>
+            </div>
+            <div class="hf-char-bar">Character limit: 280 &nbsp;|&nbsp; Real-time counter on input</div>
+            <div class="hf-actions">
+              <button class="hf-btn-c">Cancel</button>
+              <button class="hf-btn-s">Save Question<div class="hf-btn-annot">bg: var(--accent)<br>color: #fff<br>hover: scale(1.03)</div></button>
+            </div>
+            <div class="hf-ruler">&#x2190; 16px padding all sides &#x2192;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-ghost-num">04</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CHALLENGES / ITERATIONS
+  ══════════════════════════════════════════ -->
+  <section class="cs-challenges" id="iterations">
+    <div class="cs-challenges-header">
+      <div class="cs-eyebrow reveal">Challenges &amp; Iterations</div>
+      <h2 class="cs-section-title reveal reveal-d1">Where the design<br><em>got better.</em></h2>
+    </div>
+    <div class="cs-challenges-grid">
+      <div class="cs-challenge-card reveal">
+        <div class="cs-challenge-eyebrow">Iteration 01</div>
+        <h3 class="cs-challenge-title">Previously Used Questions</h3>
+        <p class="cs-challenge-body">First round of wireframe testing surfaced something I hadn't designed for: users didn't want to rebuild the same question twice. "I asked this last quarter — why can't I just reuse it?" That became a side drawer, reachable right from the question creation screen. The kind of thing that feels obvious in hindsight.</p>
+      </div>
+      <div class="cs-challenge-card reveal reveal-d1">
+        <div class="cs-challenge-eyebrow">Iteration 02</div>
+        <h3 class="cs-challenge-title">Character Counter</h3>
+        <p class="cs-challenge-body">Nobody writes a 400-character survey question. Except when they do. During testing, a user hammered the question field and the layout collapsed. We benchmarked limits across Google Forms and SurveyMonkey, landed on counts that covered real usage, then added a live counter. Not glamorous. Completely necessary.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FEATURE FINALE
+  ══════════════════════════════════════════ -->
+  <section class="cs-finale" id="feature-result">
+    <div class="cs-finale-quote reveal reveal-d1">
+      "Delivered on day 30.<br>The founders asked when we could start the next sprint."
+    </div>
+    <div class="cs-finale-stats reveal reveal-d2">
+      <span class="cs-finale-stat">30 Days</span>
+      <span class="cs-finale-stat">2 Nordic Banks</span>
+      <span class="cs-finale-stat">In Development</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       LEARNINGS
+  ══════════════════════════════════════════ -->
+  <section class="cs-learnings" id="learnings">
+    <p class="cs-learnings-quote reveal">
+      "Sprint design teaches you to trust incomplete information. Perfect research is a luxury — good <span>judgment</span> is a skill."
+    </p>
+    <div class="cs-learnings-grid">
+      <div class="cs-learning-card reveal">
+        <div class="cs-learning-num">01</div>
+        <p class="cs-learning-text">Getting a developer into ideation — not just handoff — changed the quality of decisions. They flagged three interaction patterns I'd designed that were technically expensive for zero UX benefit. Earlier involvement means fewer late surprises.</p>
+      </div>
+      <div class="cs-learning-card reveal reveal-d1">
+        <div class="cs-learning-num">02</div>
+        <p class="cs-learning-text">Writing dev notes is design work. The better I explained my intent — not just what it looked like but why — the fewer revision cycles we needed. On this project: zero major revisions post-handoff. I'll take that.</p>
+      </div>
+      <div class="cs-learning-card reveal reveal-d2">
+        <div class="cs-learning-num">03</div>
+        <p class="cs-learning-text">Before designing a single screen, I spent two days inside Google Forms, Microsoft Forms, and SurveyMonkey — not to copy, but to understand what people already know how to do. Muscle memory is free usability. Build with it.</p>
       </div>
     </div>
   </section>
@@ -1559,12 +2141,12 @@
        NEXT PROJECT
   ══════════════════════════════════════════ -->
   <section class="cs-next">
-    <div class="cs-next-label reveal">Next Project</div>
+    <div class="cs-next-label reveal">See More</div>
     <h2 class="cs-next-title reveal reveal-d1">
-      CXFacts <br><em>A custom question feature in 30 days.</em>
+      Back to<br><em>all work.</em>
     </h2>
-    <a href="cxfacts.html" class="cs-next-link reveal reveal-d2">
-      View Case Study <span class="cs-next-link-arrow">→</span>
+    <a href="../index.html#work" class="cs-next-link reveal reveal-d2">
+      View All Work <span class="cs-next-link-arrow">→</span>
     </a>
   </section>
 
@@ -1686,6 +2268,19 @@
       const el = document.getElementById(id);
       if (el) phaseObs.observe(el);
     });
+
+    function qbSwitch(btn, type) {
+      btn.closest('.asset-qbuilder').querySelectorAll('.qb-type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.closest('.asset-qbuilder').querySelectorAll('.qb-preview').forEach(p => p.classList.remove('active'));
+      document.getElementById('qb-' + type).classList.add('active');
+    }
+    function hfSwitch(btn, view) {
+      btn.closest('.hf-toggle').querySelectorAll('.hf-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const frame = document.getElementById('hf-frame');
+      if (frame) frame.classList.toggle('dev', view === 'dev');
+    }
   </script>
 </body>
 </html>
