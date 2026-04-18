@@ -649,88 +649,81 @@
       margin-bottom: 88px;
     }
 
-    /* ── 2×n floating card grid ── */
+    /* ── Editorial project spreads ── */
     .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Floating card */
     .project-card {
-      background: var(--surface);
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm), var(--shadow-md);
-      transform: translateZ(0);
-      transition:
-        transform 0.55s var(--ease),
-        box-shadow 0.55s var(--ease);
+      padding-top: 72px;
+      padding-bottom: 80px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      overflow: visible;
     }
-    .project-card:hover {
-      transform: translateY(-10px);
-      box-shadow:
-        0 2px 4px rgba(42,37,53,0.04),
-        0 12px 32px rgba(42,37,53,0.09),
-        0 32px 64px rgba(42,37,53,0.07);
-    }
+    .project-card:first-child { padding-top: 0; }
+    .project-card:last-child { border-bottom: none; }
 
-    /* Visual area lives at top of card */
+    /* Cinematic visual — no container box */
     .card-visual {
       position: relative;
+      width: 100%;
+      aspect-ratio: 2.5 / 1;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 0;
     }
-    .project-card:not(.wide) .card-visual { aspect-ratio: 16/10; }
 
     .card-visual-inner {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.75s var(--ease);
+      transition: transform 1s var(--ease);
     }
-    .project-card:hover .card-visual-inner { transform: scale(1.05); }
+    .project-card:hover .card-visual-inner { transform: scale(1.03); }
 
-    /* Ghost number on visual */
-    .card-num {
+    /* Ghost number behind text row */
+    .card-num { display: none; }
+
+    /* Two-column text row below visual */
+    .card-body {
+      padding: 32px 2px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 52px;
+      align-items: start;
+      position: relative;
+    }
+    .card-body::before {
+      content: attr(data-num);
       position: absolute;
-      bottom: 14px; right: 18px;
+      top: -16px; left: -6px;
       font-family: var(--serif);
-      font-size: 56px;
+      font-size: 160px;
       font-weight: 400;
-      color: white;
-      opacity: 0.2;
       line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--fg);
+      opacity: 0.035;
       pointer-events: none;
       user-select: none;
+      z-index: 0;
     }
 
-    /* Text body below visual */
-    .card-body { padding: 26px 30px 30px; }
-
-    /* ── Wide card: spans both columns, horizontal layout ── */
-    .project-card.wide {
-      grid-column: span 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    .project-card.wide .card-visual {
-      aspect-ratio: auto;
-      min-height: 320px;
-    }
-    .project-card.wide .card-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 44px 52px;
+    .card-body-left { position: relative; z-index: 1; }
+    .card-body-right {
+      position: relative; z-index: 1;
+      padding-top: 6px;
     }
 
-    /* Shared text styles (used in both layouts) */
     .project-tags {
       display: flex;
       flex-wrap: wrap;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .project-tag {
       font-size: 10px;
@@ -746,39 +739,37 @@
 
     .project-name {
       font-family: var(--serif);
-      font-size: clamp(26px, 2.4vw, 38px);
+      font-size: clamp(40px, 5.5vw, 76px);
       font-weight: 400;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
       color: var(--fg);
-      margin-bottom: 12px;
+      margin-bottom: 18px;
     }
 
     .project-desc {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 400;
       line-height: 1.72;
       color: var(--muted);
-      margin-bottom: 28px;
+      max-width: 520px;
     }
 
     .project-metric {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--accent);
-      opacity: 0.72;
-      margin-top: 14px;
-      margin-bottom: 22px;
+      opacity: 0.8;
+      margin-top: 20px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .project-metric::before {
       content: '';
-      width: 18px;
-      height: 1px;
+      width: 16px; height: 1px;
       background: var(--accent);
       opacity: 0.4;
       flex-shrink: 0;
@@ -794,10 +785,10 @@
       text-transform: uppercase;
       text-decoration: none;
       color: var(--fg);
-      border: 1.5px solid rgba(42,37,53,0.3);
-      padding: 11px 24px;
+      border: 1.5px solid var(--border-strong);
+      padding: 11px 22px;
       border-radius: 100px;
-      align-self: flex-start;
+      white-space: nowrap;
       transition:
         background 0.3s var(--ease),
         color 0.3s,
@@ -1303,19 +1294,16 @@
       .about-intro { padding: 80px 24px; }
       .about-visual { width: min(220px, 55vw); }
 
-      /* Projects: single column on mobile */
+      /* Projects: tighten on mobile */
       .projects { padding: 64px 16px; }
       /* Testimonials: responsive on mobile */
       .testimonials { padding: 80px 24px; min-height: 80vh; }
       .testimonial-quote { font-size: clamp(20px, 5vw, 32px); margin-bottom: 36px; }
-      .projects-grid { grid-template-columns: 1fr; gap: 14px; }
-      .project-card.wide {
-        grid-column: span 1;
-        grid-template-columns: 1fr;
-      }
-      .project-card.wide .card-visual { min-height: 220px; }
-      .project-card.wide .card-body { padding: 24px 26px 28px; }
-      .card-body { padding: 22px 24px 26px; }
+      .card-visual { aspect-ratio: 16/10; }
+      .card-body { grid-template-columns: 1fr; gap: 20px; }
+      .card-body-right { padding-top: 0; }
+      .card-body::before { font-size: 100px; }
+      .project-card { padding-top: 48px; padding-bottom: 52px; }
 
       /* Footer: stack */
       footer {
@@ -1335,7 +1323,7 @@
       .hero-headline { font-size: clamp(24px, 8vw, 32px); }
       .about-tagline { font-size: clamp(18px, 5vw, 22px); }
       .projects-heading { font-size: clamp(28px, 8vw, 36px); margin-bottom: 56px; }
-      .project-name { font-size: clamp(26px, 7vw, 34px); }
+      .project-name { font-size: clamp(32px, 9vw, 52px); }
     }
   </style>
 </head>
@@ -1699,18 +1687,21 @@
               </div>
             </div>
           </div>
-          <span class="card-num">01</span>
         </div>
-        <div class="card-body">
-          <div class="project-tags">
-            <span class="project-tag">Web Application</span>
-            <span class="project-tag">Fintech</span>
-            <span class="project-tag">UI/UX</span>
+        <div class="card-body" data-num="01">
+          <div class="card-body-left">
+            <div class="project-tags">
+              <span class="project-tag">Web Application</span>
+              <span class="project-tag">Fintech</span>
+              <span class="project-tag">UI/UX</span>
+            </div>
+            <h3 class="project-name">BuyingTeams</h3>
+            <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks simplifying complex financial workflows into intuitive interfaces.</p>
+            <div class="project-metric">6× login conversion · 50+ features shipped</div>
           </div>
-          <h3 class="project-name">BuyingTeams</h3>
-          <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks simplifying complex financial workflows into intuitive interfaces.</p>
-          <div class="project-metric">6× login conversion · 50+ features shipped</div>
-          <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
+          <div class="card-body-right">
+            <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
+          </div>
         </div>
       </div>
 
@@ -1744,18 +1735,21 @@
               </div>
             </div>
           </div>
-          <span class="card-num">02</span>
         </div>
-        <div class="card-body">
-          <div class="project-tags">
-            <span class="project-tag">B2B SaaS</span>
-            <span class="project-tag">Survey Tool</span>
-            <span class="project-tag">30 Days</span>
+        <div class="card-body" data-num="02">
+          <div class="card-body-left">
+            <div class="project-tags">
+              <span class="project-tag">B2B SaaS</span>
+              <span class="project-tag">Survey Tool</span>
+              <span class="project-tag">30 Days</span>
+            </div>
+            <h3 class="project-name">CXFacts</h3>
+            <p class="project-desc">Designed the Custom Question feature giving bank-business users the freedom to build their own survey questions. Attracted 2 major Nordic banks.</p>
+            <div class="project-metric">2 Nordic banks · 30-day sprint</div>
           </div>
-          <h3 class="project-name">CXFacts</h3>
-          <p class="project-desc">Designed the Custom Question feature giving bank-business users the freedom to build their own survey questions. Attracted 2 Major Nordic Banks.</p>
-          <div class="project-metric">2 Nordic banks · 30-day sprint</div>
-          <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
+          <div class="card-body-right">
+            <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
+          </div>
         </div>
       </div>
 
