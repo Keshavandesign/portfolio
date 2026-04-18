@@ -1316,13 +1316,11 @@
       .nav-right   { display: none; }
       .nav-hamburger { display: flex; }
 
-      /* Hero — left-aligned on mobile, larger headline */
-      .hero { padding: 80px 24px 88px; align-items: flex-start; text-align: left; }
-      .hero-content { text-align: left; }
-      .hero-headline { font-size: clamp(36px, 9.5vw, 48px); }
-      .hero-eyebrow { font-size: 9px; letter-spacing: 0.08em; margin-bottom: 18px; }
-      .hero-meta { font-size: 9px; letter-spacing: 0.08em; margin-top: 20px; }
-      .scroll-badge { left: 24px; transform: none; }
+      /* Hero — center-aligned, larger headline, no meta clutter */
+      .hero { padding: 80px 24px 88px; }
+      .hero-headline { font-size: clamp(40px, 11vw, 54px); }
+      .hero-eyebrow { font-size: 9px; letter-spacing: 0.07em; margin-bottom: 12px; }
+      .hero-meta { display: none; }
 
       /* About — same side margin as every other section */
       .about-intro { padding: 72px 24px; }
@@ -1360,9 +1358,9 @@
       /* Tools — two rings on mobile: middle (Figma) + thinned inner (Claude Code) */
       .tools-section { overflow: hidden; padding: 48px 24px 56px; }
       .tools-stage { height: 400px; }
-      /* Guide rings matched to scaled orbits (~173px middle, ~95px inner) */
-      .tools-stage::before { width: 96px;  height: 96px; }
-      .tools-stage::after  { display: block; width: 176px; height: 176px; opacity: 0.8; }
+      /* Guide rings matched to JS mobile radii (inner:65, middle:225, scale≈0.43) */
+      .tools-stage::before { width: 58px;  height: 58px; }
+      .tools-stage::after  { display: block; width: 196px; height: 196px; opacity: 0.8; }
       /* Outer ring (r=290) hidden — too wide at mobile scale */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
       /* Middle ring (r=200) visible — all 6 chips including Figma */
@@ -1378,14 +1376,12 @@
     }
 
     @media (max-width: 480px) {
-      .hero { padding: 72px 20px 80px; align-items: flex-start; text-align: left; }
-      .hero-content { text-align: left; }
-      .hero-headline { font-size: clamp(30px, 9vw, 38px); }
-      .hero-eyebrow { font-size: 8.5px; }
-      .hero-meta { font-size: 8.5px; margin-top: 16px; }
+      .hero { padding: 72px 20px 80px; }
+      .hero-headline { font-size: clamp(34px, 9.5vw, 44px); }
+      .hero-eyebrow { font-size: 8.5px; margin-bottom: 10px; }
       .tools-stage { height: 360px; }
-      .tools-stage::before { width: 82px;  height: 82px;  }
-      .tools-stage::after  { width: 152px; height: 152px; }
+      .tools-stage::before { width: 50px;  height: 50px;  }
+      .tools-stage::after  { width: 170px; height: 170px; }
       .about-intro { padding: 60px 20px; }
       .about-tagline { font-size: clamp(17px, 5vw, 22px); }
       .about-tagline .tagline-second { font-size: 13px; }
@@ -2039,14 +2035,24 @@
       if (!stage) return;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const chips = Array.from(stage.querySelectorAll('.tool-chip')).map(el => ({
-        el,
-        baseRadius: parseFloat(el.dataset.radius) || 200,
-        angle: parseFloat(el.dataset.angle) || 0,
-        degPerSec: parseFloat(el.dataset.speed) || 8,
-        bob: parseFloat(el.dataset.bob) || 4,
-        bobPhase: Math.random() * Math.PI * 2,
-      }));
+      const isMobile = window.innerWidth <= 768;
+      const chips = Array.from(stage.querySelectorAll('.tool-chip')).map(el => {
+        const rawR = parseFloat(el.dataset.radius) || 200;
+        // On mobile, spread inner + middle rings to create clear visual gap
+        let baseRadius = rawR;
+        if (isMobile) {
+          if (rawR === 110) baseRadius = 65;   // tighten inner ring
+          if (rawR === 200) baseRadius = 225;  // push middle ring out
+        }
+        return {
+          el,
+          baseRadius,
+          angle:     parseFloat(el.dataset.angle) || 0,
+          degPerSec: parseFloat(el.dataset.speed) || 8,
+          bob:       parseFloat(el.dataset.bob) || 4,
+          bobPhase:  Math.random() * Math.PI * 2,
+        };
+      });
 
       const DESIGN_HEIGHT = 680;
       function currentScale() {
@@ -2137,10 +2143,9 @@
     /* ═══════════════════════════════════════════
        THEME TOGGLE light / dark
     ═══════════════════════════════════════════ */
-    /* ── Mobile desktop notice ── */
+    /* ── Mobile desktop notice ── shows every page load on mobile ── */
     (function initMobileNotice() {
       if (window.innerWidth > 768) return;
-      if (sessionStorage.getItem('mnDismissed')) return;
 
       const backdrop = document.getElementById('mBackdrop');
       const sheet    = document.getElementById('mSheet');
@@ -2150,7 +2155,6 @@
       backdrop.style.display = 'block';
       sheet.style.display    = 'block';
 
-      // Double rAF ensures display:block is painted before transition starts
       requestAnimationFrame(() => requestAnimationFrame(() => {
         backdrop.classList.add('open');
         sheet.classList.add('open');
@@ -2159,7 +2163,6 @@
       function dismiss() {
         backdrop.classList.remove('open');
         sheet.classList.remove('open');
-        sessionStorage.setItem('mnDismissed', '1');
         setTimeout(() => {
           backdrop.style.display = 'none';
           sheet.style.display    = 'none';
