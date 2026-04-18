@@ -2143,9 +2143,10 @@
     /* ═══════════════════════════════════════════
        THEME TOGGLE light / dark
     ═══════════════════════════════════════════ */
-    /* ── Mobile desktop notice ── shows every page load on mobile ── */
+    /* ── Mobile desktop notice ── once per browser session ── */
     (function initMobileNotice() {
       if (window.innerWidth > 768) return;
+      if (sessionStorage.getItem('mn')) return;
 
       const backdrop = document.getElementById('mBackdrop');
       const sheet    = document.getElementById('mSheet');
@@ -2163,6 +2164,7 @@
       function dismiss() {
         backdrop.classList.remove('open');
         sheet.classList.remove('open');
+        sessionStorage.setItem('mn', '1');
         setTimeout(() => {
           backdrop.style.display = 'none';
           sheet.style.display    = 'none';
