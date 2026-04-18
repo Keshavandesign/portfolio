@@ -191,7 +191,6 @@
   let coins = 0;
   let state = 'PLAY';   // PLAY | DYING | END
   let deathTimer = 0;
-  let checkpointX = 40;
   let frame = 0;
   let powerup = null;   // { type, timer, maxTimer }
 
@@ -299,8 +298,93 @@
     { x:4700, y:560, w:100, h:20, col:C.p1[4] },
   ];
 
-  /* ── PLAYER (stub for camera) ── */
-  const player = { x:40, y:500, w:14, h:26, vx:0, vy:0, onGround:false, facing:1, wt:0, wf:0 };
+  /* ── PLAYER ── */
+  const SPAWN = { x:40, y:500 };
+  const player = { x:SPAWN.x, y:SPAWN.y, w:14, h:26, vx:0, vy:0, onGround:false, facing:1, wt:0, wf:0 };
+
+  function spawnPlayer() {
+    player.x = checkpointX;
+    player.y = checkpointX > 2000 ? 300 : 480;
+    player.vx = 0; player.vy = 0; player.onGround = false;
+  }
+
+  function updatePlayer() {
+    if (state !== 'PLAY') return;
+    let mx = 0;
+    if (keys['ArrowLeft']  || keys['KeyA']) mx = -1;
+    if (keys['ArrowRight'] || keys['KeyD']) mx =  1;
+    player.vx += mx * SPEED * 0.35;
+    player.vx *= FRICTION;
+    if (mx) player.facing = mx;
+    if (Math.abs(player.vx) > 0.5 && player.onGround) { player.wt++; player.wf = player.wt; }
+    else { player.wt = 0; player.wf = 0; }
+
+    if ((keys['ArrowUp'] || keys['KeyW'] || keys['Space']) && player.onGround) {
+      player.vy = JUMP_FORCE; player.onGround = false; sfxJump();
+    }
+
+    player.vy += GRAVITY;
+    player.x += player.vx;
+    player.onGround = false;
+
+    platforms.forEach(p => {
+      if (!hit(player, p)) return;
+      player.x = player.vx > 0 ? p.x - player.w : p.x + p.w;
+      player.vx = 0;
+    });
+
+    player.y += player.vy;
+    platforms.forEach(p => {
+      if (!hit(player, p)) return;
+      if (player.vy > 0) { player.y = p.y - player.h; player.vy = 0; player.onGround = true; }
+      else               { player.y = p.y + p.h; player.vy = 0; }
+    });
+
+    player.x = Math.max(0, Math.min(player.x, W - player.w));
+    if (player.y > H + 40) die();
+  }
+
+  function drawPlayer() {
+    if (state === 'DYING' && Math.floor(deathTimer / 4) % 2 === 0) return;
+    const shielded = powerup && powerup.type === 'shield';
+    if (shielded && Math.floor(frame / 3) % 2 === 0) return;
+
+    const cx = sx(player.x + player.w / 2);
+    const top = sy(player.y);
+    const f = player.facing;
+    const walk = player.onGround && Math.abs(player.vx) > 0.5;
+
+    ctx.save(); ctx.translate(cx, top);
+    ctx.strokeStyle = C.accent; ctx.fillStyle = C.accent;
+    ctx.lineWidth = Math.max(1, Math.ceil(2.2 * scale)); ctx.lineCap = 'square';
+
+    const hr = Math.ceil(5 * scale);
+    ctx.fillRect(-hr, Math.ceil(2*scale), hr*2, hr*2);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(f * Math.ceil(2*scale), Math.ceil(2*scale), Math.ceil(2*scale), Math.ceil(2*scale));
+
+    const bt = Math.ceil(9*scale), bb = Math.ceil(18*scale);
+    ctx.strokeStyle = C.accent;
+    ctx.beginPath(); ctx.moveTo(0, bt); ctx.lineTo(0, bb); ctx.stroke();
+
+    const ay = bt + Math.ceil(3*scale);
+    const sw2 = walk ? Math.sin(player.wf * 0.4) * Math.ceil(4*scale) : 0;
+    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(f * Math.ceil(6*scale), ay + Math.ceil(5*scale) + sw2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(-f * Math.ceil(5*scale), ay + Math.ceil(5*scale) - sw2); ctx.stroke();
+
+    if (walk) {
+      const ls = Math.sin(player.wf * 0.4) * Math.ceil(5*scale);
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(ls, bb + Math.ceil(8*scale)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-ls, bb + Math.ceil(8*scale)); ctx.stroke();
+    } else if (!player.onGround) {
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-Math.ceil(3*scale), bb + Math.ceil(6*scale)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(Math.ceil(3*scale), bb + Math.ceil(6*scale)); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-Math.ceil(3*scale), bb + Math.ceil(8*scale)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(Math.ceil(3*scale), bb + Math.ceil(8*scale)); ctx.stroke();
+    }
+    ctx.restore();
+  }
 
   /* ── DRAW: SKY ── */
   function drawSky() {
@@ -351,6 +435,8 @@
       p.x += p.dx;
       if (p.x <= p.minX || p.x + p.w >= p.maxX) p.dx *= -1;
     });
+
+    updatePlayer();
   }
 
   /* ── RENDER ── */
@@ -359,6 +445,7 @@
     ctx.fillRect(0, 0, vw, vh);
     drawSky();
     drawPlatforms();
+    drawPlayer();
   }
   let rafId;
   function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
