@@ -7,6 +7,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    // Apply theme before paint to avoid FOUC
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+      } catch (e) {}
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,9 +26,28 @@
       --muted: #7A7490;
       --accent: #9B2D7A;
       --border: rgba(42, 37, 53, 0.1);
+      --border-strong: rgba(42, 37, 53, 0.35);
+      --surface: #F4F1EC;
+      --nav-bg: rgba(237, 234, 227, 0.96);
+      --shadow-sm: 0 2px 8px rgba(42, 37, 53, 0.06);
+      --shadow-md: 0 8px 24px rgba(42, 37, 53, 0.05);
       --sans: 'Inter', sans-serif;
       --serif: 'DM Serif Display', serif;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Dark mode — inspired by Claude desktop: warm near-black + off-white */
+    [data-theme="dark"] {
+      --bg: #1F1E1B;
+      --fg: #F0EBE3;
+      --muted: #9E988E;
+      --accent: #E569A9;
+      --border: rgba(240, 235, 227, 0.10);
+      --border-strong: rgba(240, 235, 227, 0.28);
+      --surface: #2A2825;
+      --nav-bg: rgba(31, 30, 27, 0.94);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.30);
     }
 
     html {
@@ -35,6 +64,7 @@
       font-family: var(--sans);
       line-height: 1.6;
       overflow-x: hidden;
+      transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
     }
 
     /* ─────────────────────────────────────────
@@ -59,33 +89,61 @@
 
     nav.scrolled {
       padding: 14px 52px;
-      background: rgba(237, 234, 227, 0.96);
+      background: var(--nav-bg);
     }
 
-    /* ── Logo ── */
+    /* ── Logo — serif italic wordmark with accent dot ── */
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: inline-flex;
+      align-items: baseline;
       text-decoration: none;
       color: var(--fg);
     }
-
-    /* Square mark */
-    .logo-mark {
-      flex-shrink: 0;
-      transition: transform 0.35s var(--ease);
-    }
-    .nav-logo:hover .logo-mark { transform: rotate(5deg) scale(1.05); }
-
-    /* Wordmark */
     .logo-word {
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      line-height: 1;
       color: var(--fg);
+      transition: transform 0.35s var(--ease), letter-spacing 0.35s var(--ease);
     }
+    .logo-dot {
+      color: var(--accent);
+      font-style: normal;
+      margin-left: 1px;
+    }
+    .nav-logo:hover .logo-word {
+      transform: translateY(-1px);
+      letter-spacing: 0;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: transparent;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.25s var(--ease);
+    }
+    .theme-toggle:hover {
+      color: var(--fg);
+      border-color: var(--fg);
+      transform: rotate(-15deg);
+    }
+    .theme-icon { width: 16px; height: 16px; }
+    .theme-icon-sun  { display: none; }
+    .theme-icon-moon { display: block; }
+    [data-theme="dark"] .theme-icon-sun  { display: block; }
+    [data-theme="dark"] .theme-icon-moon { display: none; }
 
     /* ── Nav links (centered) ── */
     .nav-center {
@@ -143,7 +201,7 @@
       text-transform: uppercase;
       text-decoration: none;
       color: var(--fg);
-      border: 1.5px solid rgba(42, 37, 53, 0.35);
+      border: 1.5px solid var(--border-strong);
       padding: 9px 22px;
       border-radius: 100px;
       transition:
@@ -529,7 +587,7 @@
       text-transform: uppercase;
       text-decoration: none;
       color: var(--fg);
-      border: 1.5px solid rgba(42, 37, 53, 0.35);
+      border: 1.5px solid var(--border-strong);
       padding: 13px 34px;
       border-radius: 100px;
       transition:
@@ -574,12 +632,10 @@
 
     /* Floating card */
     .project-card {
-      background: #F4F1EC;
+      background: var(--surface);
       border-radius: 22px;
       overflow: hidden;
-      box-shadow:
-        0 2px 8px rgba(42,37,53,0.06),
-        0 8px 24px rgba(42,37,53,0.05);
+      box-shadow: var(--shadow-sm), var(--shadow-md);
       transform: translateZ(0);
       transition:
         transform 0.55s var(--ease),
@@ -1219,8 +1275,8 @@
   <!-- ── Nav ── -->
   <nav id="nav">
     <!-- Logo: mark + wordmark -->
-    <a href="/" class="nav-logo">
-      <img src="Assets/Logo.svg" alt="Keshav Anand" class="logo-mark" style="height: 40px; width: auto;" />
+    <a href="/" class="nav-logo" aria-label="Keshav Anand — home">
+      <span class="logo-word">Keshav<span class="logo-dot">.</span></span>
     </a>
 
     <!-- Center nav links -->
@@ -1233,9 +1289,18 @@
       </ul>
     </div>
 
-    <!-- Right: availability dot + resume pill -->
+    <!-- Right: availability dot + theme toggle + resume pill -->
     <div class="nav-right">
       <span class="nav-available-dot" aria-label="Available for work" title="Available for work"></span>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
       <a href="docs/Keshav_Anand_Resume.pdf" class="nav-btn" data-resume>Resume</a>
     </div>
 
@@ -1618,6 +1683,20 @@
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+      });
+    })();
+
+    /* ═══════════════════════════════════════════
+       THEME TOGGLE — light / dark
+    ═══════════════════════════════════════════ */
+    (function initThemeToggle() {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     })();
 
