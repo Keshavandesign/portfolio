@@ -657,6 +657,47 @@
     }
   }
 
+  /* ── END GAME ── */
+  function endGame(won) {
+    if (state === 'END') return;
+    state = 'END';
+    cancelAnimationFrame(rafId);
+    won ? sfxWin() : sfxLose();
+
+    const tiers = [
+      { min:0,  tag:'EXPLORER',  headline:'You explored.',          body:"Not bad for a first run. That curiosity? I can work with it. Claim a free design audit and let's see what you're building." },
+      { min:21, tag:'INSTINCT',  headline:'Good instincts.',        body:"You moved like you knew what you were doing. That reads in product too. Let's do a free audit and sharpen what you've got." },
+      { min:51, tag:'SHARP EYE', headline:'Sharp eye.',             body:"You found things most people miss. That's a rare skill. Book a free design audit and let's put it to use." },
+      { min:81, tag:'RARE',      headline:'You see what most miss.',body:"That was precise. Intentional. The kind of thing that separates good products from great ones. Let's talk." },
+    ];
+
+    const tier = [...tiers].reverse().find(t => score >= t.min) || tiers[0];
+    const tag  = won ? tier.tag : 'NOT DONE YET';
+    const line = won ? tier.headline : 'So close.';
+    const body = won ? tier.body : `${score} points, ${coins} coins. A solid run. Come back and finish it — or grab a free audit anyway.`;
+
+    document.getElementById('cardTag').textContent      = tag;
+    document.getElementById('cardHeadline').textContent = line;
+    document.getElementById('cardScore').textContent    = `${score} pts · ${coins} coins`;
+    document.getElementById('cardBody').textContent     = body;
+    document.getElementById('cardHint').textContent     = 'Screenshot your score and send it with your audit request.';
+
+    const subject = encodeURIComponent(`Free Design Audit — ${score} pts`);
+    const bodyTxt = encodeURIComponent(`Hi Keshav,\n\nI scored ${score} points and collected ${coins} coins.\n\n[Attach screenshot here]\n\nHere's what I'm building: `);
+    document.getElementById('cardCta').href = `mailto:keshavanand100@gmail.com?subject=${subject}&body=${bodyTxt}`;
+
+    const back = document.getElementById('cardBack');
+    if (won) {
+      back.textContent = 'Back to portfolio';
+      back.onclick = () => { window.location.href = 'index.html'; };
+    } else {
+      back.textContent = 'Try again';
+      back.onclick = () => location.reload();
+    }
+
+    document.getElementById('endCard').classList.add('show');
+  }
+
   /* ── DRAW: SKY ── */
   function drawSky() {
     const grad = ctx.createLinearGradient(0, offY, 0, offY + H * scale);
