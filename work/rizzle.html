@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rizzle Design System · Keshav Anand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function(){try{var s=localStorage.getItem('theme'),p=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',s||(p?'dark':'light'));}catch(e){}}());
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #EDEAE3; --fg: #2A2535; --muted: #7A7490;
+      /* Rizzle brand colors — override portfolio pink for this case study */
+      --accent: #9B59FF;
+      --border: rgba(42,37,53,0.1); --border-strong: rgba(42,37,53,0.28);
+      --surface: #F4F1EC;
+      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
+      --sans: 'Inter', sans-serif; --work: 'Work Sans', sans-serif;
+      --serif: 'DM Serif Display', serif;
+      --ease: cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-theme="dark"] {
+      --bg: #1F1E1B; --fg: #F0EBE3; --muted: #9E988E;
+      --accent: #B57BFF;
+      --border: rgba(240,235,227,0.10); --border-strong: rgba(240,235,227,0.26);
+      --surface: #2A2825; --nav-bg: rgba(31,30,27,0.94);
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; transition: background .35s var(--ease), color .35s var(--ease); }
+
+    /* ─── NAV ─── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: grid; grid-template-columns: auto 1fr auto; align-items: center; padding: 28px 52px; transition: padding .4s var(--ease), background .3s; }
+    nav.scrolled { padding: 14px 52px; background: var(--nav-bg); backdrop-filter: blur(8px); }
+    .nav-logo { display: inline-flex; align-items: baseline; text-decoration: none; color: var(--fg); }
+    .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -0.015em; line-height: 1; }
+    .logo-dot { color: var(--accent); font-style: normal; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-back { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--muted); transition: color .2s; }
+    .nav-back:hover { color: var(--fg); }
+    .theme-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; transition: border-color .2s, color .2s; }
+    .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+    @media (max-width:768px) { nav, nav.scrolled { padding: 18px 24px; } }
+
+    /* ─── HERO ─── */
+    .hero { padding: 160px 52px 100px; border-bottom: 1px solid var(--border-strong); }
+    .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .hero-headline { font-family: var(--serif); font-size: clamp(40px,5.5vw,76px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 28px; }
+    .hero-headline em { font-style: italic; color: var(--accent); }
+    .hero-sub { font-size: 16px; font-weight: 300; color: var(--muted); max-width: 520px; line-height: 1.75; }
+    .hero-meta { display: flex; margin-top: 64px; padding-top: 36px; border-top: 1px solid var(--border-strong); }
+    .meta-item { flex: 1; padding-right: 32px; }
+    .meta-item + .meta-item { padding-left: 32px; border-left: 1px solid var(--border); }
+    .meta-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+    .meta-value { font-size: 14px; }
+    @media (max-width:768px) { .hero { padding: 120px 24px 64px; } .hero-meta { flex-wrap: wrap; gap: 0; } .meta-item { flex: 1 1 50%; padding: 20px 0 0 0 !important; border-left: none !important; } }
+
+    /* ─── SECTIONS ─── */
+    .section { padding: 110px 52px; border-top: 1px solid var(--border); }
+    @media (max-width:768px) { .section { padding: 72px 24px; } }
+
+    /* Section counter + label row */
+    .sec-row { display: flex; align-items: center; gap: 16px; margin-bottom: 56px; }
+    .sec-count { font-family: var(--work); font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--muted); opacity: .45; }
+    .sec-label { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .sec-row-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ─── TWO-COL GRID ─── */
+    .two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+    .two-col.even { grid-template-columns: 1fr 1fr; }
+    .two-col.flip { grid-template-columns: 1.6fr 1fr; }
+    .two-col.flip .col-text { order: 2; } .two-col.flip .col-demo { order: 1; }
+    @media (max-width:900px) { .two-col, .two-col.flip, .two-col.even { grid-template-columns: 1fr; gap: 40px; } .two-col.flip .col-text, .two-col.flip .col-demo { order: unset; } }
+
+    /* ─── COLUMN TEXT ─── */
+    .col-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .col-heading { font-family: var(--serif); font-size: clamp(26px,2.8vw,40px); font-weight: 400; line-height: 1.15; letter-spacing: -.025em; margin-bottom: 20px; }
+    .col-heading em { font-style: italic; color: var(--accent); }
+    .col-body { font-size: 14px; line-height: 1.8; color: var(--muted); }
+    .col-body p + p { margin-top: 14px; }
+    .col-body strong { color: var(--fg); font-weight: 500; }
+    code { font-family: var(--work); font-size: 11px; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; }
+
+    /* ─── DEMO CARD ─── */
+    /* A clean, on-theme container — no dark windows */
+    .demo-card {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    /* Forms demo card needs visible overflow so dropdowns can escape */
+    .demo-card.overflow-visible { overflow: visible; }
+    .demo-card-label {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .demo-card-body { padding: 28px; }
+    .demo-card-body-sm { padding: 20px; }
+
+    /* ─── DEMO DIVIDER ─── */
+    .d-divider { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--border); margin: 24px 0 16px; font-family: var(--work); }
+    .d-divider:first-child { margin-top: 0; }
+
+    /* ─── STAT ROW ─── */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-strong); }
+    .stat-item { padding-right: 28px; }
+    .stat-item + .stat-item { padding-left: 28px; border-left: 1px solid var(--border); }
+    .stat-n { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 400; color: var(--accent); letter-spacing: -.02em; line-height: 1; }
+    .stat-d { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+    @media (max-width:768px) { .stat-row { grid-template-columns: 1fr 1fr; gap: 0; } .stat-item:nth-child(2){ border-right:none; } .stat-item:nth-child(3){ border-top:1px solid var(--border); border-left:none; padding-left:0; } .stat-item:nth-child(4){ border-top:1px solid var(--border); } }
+
+    /* ─── PROCESS ─── */
+    .process-list { margin-top: 48px; }
+    .proc-item { display: grid; grid-template-columns: 36px 1fr; gap: 20px; padding: 28px 0; border-top: 1px solid var(--border); }
+    .proc-n { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--accent); opacity: .4; line-height: 1.1; padding-top: 2px; }
+    .proc-heading { font-size: 15px; font-weight: 500; margin-bottom: 5px; }
+    .proc-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* ─── TABS ─── */
+    .tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; scrollbar-width: none; }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 10px 16px; background: none; border: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; transition: color .2s, border-color .2s; font-family: var(--sans); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-panel { display: none; } .tab-panel.active { display: block; }
+
+    /* ─── ICON SLOT ─── */
+    /* Placeholder for icons to be added later */
+    .ico {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 1.5px dashed var(--border-strong);
+      flex-shrink: 0;
+    }
+    .ico-sm { width: 13px; height: 13px; }
+    .ico-lg { width: 20px; height: 20px; }
+
+    /* ─────────────────────────────────────────
+       RIZZLE COMPONENTS
+       All colours use portfolio tokens — no hardcoded darks.
+    ───────────────────────────────────────── */
+
+    /* ── Buttons ── */
+    .rz-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      font-family: var(--work); font-weight: 600; cursor: pointer;
+      border: none; transition: background .15s, transform .1s, box-shadow .15s, opacity .15s;
+      outline: none; line-height: 1;
+    }
+    .rz-btn:active:not(:disabled) { transform: scale(0.97); }
+    .rz-btn-lg { font-size: 15px; padding: 11px 22px; border-radius: 8px; }
+    .rz-btn-md { font-size: 13px; padding: 9px 16px; border-radius: 7px; }
+    .rz-btn-sm { font-size: 11px; padding: 7px 13px; border-radius: 6px; }
+
+    .rz-btn-primary { background: var(--accent); color: #fff; }
+    .rz-btn-primary:hover:not(:disabled) { filter: brightness(1.1); box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent); }
+    .rz-btn-primary:disabled { opacity: .35; cursor: not-allowed; }
+
+    .rz-btn-secondary { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+    .rz-btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .rz-btn-secondary:disabled { opacity: .3; cursor: not-allowed; }
+
+    .rz-btn-ghost { background: transparent; color: var(--fg); border: 1.5px solid var(--border-strong); }
+    .rz-btn-ghost:hover:not(:disabled) { border-color: var(--fg); background: color-mix(in srgb, var(--fg) 5%, transparent); }
+    .rz-btn-ghost:disabled { opacity: .3; cursor: not-allowed; }
+
+    .rz-btn-icon { width: 38px; height: 38px; padding: 0; border-radius: 8px; background: transparent; color: var(--muted); border: 1.5px solid var(--border-strong); font-size: 0; }
+    .rz-btn-icon .ico { border-color: var(--muted); }
+    .rz-btn-icon:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .rz-btn-icon:hover:not(:disabled) .ico { border-color: var(--accent); }
+
+    .btn-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+    .btn-col { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+    .btn-state-tag { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: var(--work); }
+
+    /* ── Inputs ── */
+    .rz-field { display: flex; flex-direction: column; gap: 6px; }
+    .rz-label { font-family: var(--work); font-size: 12px; font-weight: 500; color: var(--muted); }
+    .rz-input {
+      background: var(--bg); border: 1.5px solid var(--border-strong);
+      border-radius: 8px; padding: 9px 12px; font-family: var(--work);
+      font-size: 13px; color: var(--fg); outline: none; width: 100%;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .rz-input::placeholder { color: var(--muted); opacity: .6; }
+    .rz-input:hover { border-color: var(--fg); }
+    .rz-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .rz-input.is-error { border-color: #E53E3E; }
+    .rz-input.is-error:focus { box-shadow: 0 0 0 3px rgba(229,62,62,.12); }
+    .rz-helper { font-family: var(--work); font-size: 11px; color: var(--muted); }
+    .rz-helper.is-error { color: #E53E3E; }
+
+    /* ── Dropdown ── */
+    .rz-dropdown { position: relative; }
+    .rz-dd-trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg); border: 1.5px solid var(--border-strong);
+      border-radius: 8px; padding: 9px 12px; font-family: var(--work);
+      font-size: 13px; color: var(--muted); cursor: pointer; width: 100%;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .rz-dd-trigger .has-val { color: var(--fg); }
+    .rz-dd-trigger:hover { border-color: var(--fg); }
+    .rz-dropdown.open .rz-dd-trigger { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .rz-dd-chevron { transition: transform .2s var(--ease); opacity: .5; font-size: 10px; }
+    .rz-dropdown.open .rz-dd-chevron { transform: rotate(180deg); }
+    .rz-dd-menu {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 200;
+      background: var(--surface); border: 1px solid var(--border-strong); border-radius: 10px;
+      box-shadow: 0 12px 32px rgba(0,0,0,.12); display: none; overflow: hidden;
+    }
+    .rz-dropdown.open .rz-dd-menu { display: block; }
+    .rz-dd-item { padding: 9px 12px; font-family: var(--work); font-size: 13px; color: var(--fg); cursor: pointer; transition: background .12s; display: flex; align-items: center; gap: 8px; }
+    .rz-dd-item:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .rz-dd-item.is-selected { color: var(--accent); font-weight: 600; }
+    .rz-dd-item.is-selected::after { content: '✓'; margin-left: auto; font-size: 11px; }
+
+    /* ── Radio ── */
+    .rz-radio-grp { display: flex; flex-direction: column; gap: 10px; }
+    .rz-radio-row { display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: var(--work); font-size: 13px; color: var(--fg); }
+    .rz-radio-row input[type=radio] { appearance: none; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border-strong); background: transparent; cursor: pointer; transition: border-color .15s, background .15s; flex-shrink: 0; position: relative; }
+    .rz-radio-row input[type=radio]:hover { border-color: var(--accent); }
+    .rz-radio-row input[type=radio]:checked { border-color: var(--accent); background: var(--accent); }
+    .rz-radio-row input[type=radio]:checked::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+    .rz-radio-row.is-disabled { opacity: .35; cursor: not-allowed; }
+    .rz-radio-row.is-disabled * { pointer-events: none; }
+
+    /* ── Checkbox ── */
+    .rz-check-grp { display: flex; flex-direction: column; gap: 10px; }
+    .rz-check-row { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-family: var(--work); font-size: 13px; color: var(--fg); }
+    .rz-check-row input[type=checkbox] { appearance: none; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border-strong); background: transparent; cursor: pointer; transition: border-color .15s, background .15s; flex-shrink: 0; position: relative; margin-top: 1px; }
+    .rz-check-row input[type=checkbox]:hover { border-color: var(--accent); }
+    .rz-check-row input[type=checkbox]:checked { border-color: var(--accent); background: var(--accent); }
+    .rz-check-row input[type=checkbox]:checked::after { content: ''; position: absolute; top: 2px; left: 5px; width: 5px; height: 9px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg); }
+    .rz-check-row.is-disabled { opacity: .35; cursor: not-allowed; }
+    .rz-check-row.is-disabled * { pointer-events: none; }
+
+    /* ── Toggle ── */
+    .rz-toggle-grp { display: flex; flex-direction: column; gap: 12px; }
+    .rz-toggle-row { display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: var(--work); font-size: 13px; color: var(--fg); }
+    .rz-toggle-wrap { position: relative; width: 42px; height: 23px; flex-shrink: 0; }
+    .rz-toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .rz-toggle-track { position: absolute; inset: 0; border-radius: 23px; background: var(--border-strong); transition: background .2s; cursor: pointer; }
+    .rz-toggle-thumb { position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: var(--bg); transition: transform .2s var(--ease); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+    .rz-toggle-wrap input:checked ~ .rz-toggle-track { background: var(--accent); }
+    .rz-toggle-wrap input:checked ~ .rz-toggle-thumb { transform: translateX(19px); }
+    .rz-toggle-row.is-disabled { opacity: .35; cursor: not-allowed; }
+    .rz-toggle-row.is-disabled * { pointer-events: none; }
+
+    /* ── Sidebar ── */
+    .sidebar-demo-shell { position: relative; contain: layout; display: flex; border: 1px solid var(--border-strong); border-radius: 12px; overflow: hidden; height: 300px; isolation: isolate; }
+    .rz-sidebar { width: 210px; min-width: 210px; border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: width .3s var(--ease), min-width .3s var(--ease); overflow: hidden; background: var(--surface); flex-shrink: 0; }
+    .rz-sidebar.collapsed { width: 52px; min-width: 52px; }
+    .sb-top { display: flex; align-items: center; gap: 8px; padding: 14px; border-bottom: 1px solid var(--border); }
+    .sb-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); opacity: .7; flex-shrink: 0; }
+    .sb-user { font-family: var(--work); font-size: 13px; font-weight: 500; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .sb-collapse { width: 22px; height: 22px; border-radius: 4px; background: transparent; border: 1px solid var(--border-strong); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); transition: background .15s; flex-shrink: 0; }
+    .sb-collapse:hover { background: var(--border); color: var(--fg); }
+    .sb-nav { padding: 8px; flex: 1; overflow-y: auto; }
+    .sb-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 7px; cursor: pointer; transition: background .12s; white-space: nowrap; }
+    .sb-item:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
+    .sb-item.active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+    .sb-item-text { font-family: var(--work); font-size: 13px; color: var(--muted); }
+    .sb-item.active .sb-item-text { color: var(--accent); font-weight: 500; }
+    .sb-bottom { padding: 8px; border-top: 1px solid var(--border); }
+    .sb-content { flex: 1; padding: 20px; overflow: auto; }
+    .sb-content-title { font-family: var(--work); font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 6px; }
+    .sb-content-body { font-family: var(--work); font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Modal ── */
+    .rz-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); backdrop-filter: blur(4px); z-index: 500; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .rz-overlay.open { opacity: 1; pointer-events: all; }
+    .rz-modal { background: var(--bg); border: 1px solid var(--border-strong); border-radius: 14px; padding: 28px; max-width: 400px; width: 90%; transform: translateY(16px); transition: transform .3s var(--ease); position: relative; }
+    .rz-overlay.open .rz-modal { transform: none; }
+    .rz-modal-title { font-family: var(--work); font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: 10px; }
+    .rz-modal-body { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+    .rz-modal-body .warn { color: #E53E3E; font-weight: 500; }
+    .rz-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .rz-modal-x { position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-radius: 50%; background: transparent; border: 1px solid var(--border-strong); cursor: pointer; color: var(--muted); font-size: 12px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+    .rz-modal-x:hover { background: var(--surface); color: var(--fg); }
+
+    /* ── Toast ── */
+    .toast-stack { position: fixed; bottom: 24px; right: 24px; z-index: 600; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 320px; }
+    .rz-toast { display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,.12); overflow: hidden; pointer-events: all; transform: translateX(120%); transition: transform .35s var(--ease), opacity .3s; opacity: 0; }
+    .rz-toast.show { transform: none; opacity: 1; }
+    .toast-body { display: flex; align-items: flex-start; gap: 0; }
+    .toast-inner { padding: 13px 14px; flex: 1; }
+    .toast-title { font-family: var(--work); font-size: 13px; font-weight: 600; color: var(--fg); }
+    .toast-desc { font-family: var(--work); font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+    .toast-act { font-family: var(--work); font-size: 12px; font-weight: 600; color: var(--accent); background: none; border: none; cursor: pointer; padding: 12px 14px 12px 0; align-self: center; white-space: nowrap; flex-shrink: 0; }
+    /* Timer bar runs left-to-right from full to zero */
+    .toast-timer { height: 3px; width: 100%; transform-origin: left center; }
+    .toast-timer.s { background: #38A169; }
+    .toast-timer.e { background: #E53E3E; }
+    .toast-timer.w { background: #D97706; }
+    .toast-timer.i { background: var(--accent); }
+    @keyframes toast-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+    /* ── Token tables ── */
+    .token-tbl { width: 100%; border-collapse: collapse; font-family: var(--work); }
+    .token-tbl th { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 8px 0; text-align: left; border-bottom: 1px solid var(--border); }
+    .token-tbl td { padding: 10px 0; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .token-tbl tr:last-child td { border-bottom: none; }
+    .tok-pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+    .sp-bar { height: 7px; background: var(--accent); border-radius: 2px; opacity: .5; display: inline-block; }
+    .rad-prev { display: inline-block; width: 34px; height: 22px; border: 1.5px solid var(--accent); opacity: .55; }
+
+    /* ── Typography specimen ── */
+    .type-row { display: flex; align-items: baseline; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .type-meta { width: 180px; flex-shrink: 0; }
+    .type-tok { font-size: 11px; font-weight: 600; color: var(--accent); }
+    .type-spec { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .type-sample { font-family: var(--work); flex: 1; }
+
+    /* ── Color swatches ── */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(66px,1fr)); gap: 10px; margin-top: 20px; }
+    .swatch { cursor: pointer; }
+    .swatch-chip { height: 44px; border-radius: 8px; transition: transform .2s var(--ease); position: relative; }
+    .swatch:hover .swatch-chip { transform: translateY(-3px); }
+    .swatch-chip .copy-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: rgba(0,0,0,.3); opacity: 0; transition: opacity .15s; font-size: 9px; color: #fff; font-weight: 700; font-family: var(--work); letter-spacing: .06em; }
+    .swatch:hover .swatch-chip .copy-hint { opacity: 1; }
+    .swatch-name { font-size: 10px; font-weight: 500; color: var(--muted); margin-top: 5px; }
+    .swatch-hex { font-size: 10px; color: var(--fg); font-family: var(--work); }
+
+    /* ── Grid visualiser ── */
+    .grid-vis { display: flex; gap: 5px; height: 80px; }
+    .grid-vis-col { flex: 1; background: color-mix(in srgb, var(--accent) 8%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); border-radius: 3px; transition: background .3s, max-width .3s; }
+    .grid-vis-col.sidebar-col { background: color-mix(in srgb, var(--accent) 18%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); max-width: 32px; }
+    .grid-vis-col.hidden { max-width: 0; min-width: 0; border: none; overflow: hidden; }
+
+    /* ── Pull quote ── */
+    .pull-quote { padding: 32px 36px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; margin: 64px 0; }
+    .pull-quote p { font-family: var(--serif); font-size: clamp(17px,2vw,24px); font-style: italic; line-height: 1.5; letter-spacing: -.01em; }
+    .pull-quote cite { display: block; margin-top: 12px; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-style: normal; }
+    @media (max-width:768px) { .pull-quote { padding: 24px 24px; } }
+
+    /* ── Learnings ── */
+    .learn-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 56px; border-top: 1px solid var(--border-strong); }
+    .learn-item { padding: 36px 36px 36px 0; border-right: 1px solid var(--border); }
+    .learn-item:last-child { border-right: none; padding-right: 0; }
+    .learn-item + .learn-item { padding-left: 36px; }
+    .learn-n { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); opacity: .35; line-height: 1; }
+    .learn-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-top: 14px; }
+    .learn-text strong { color: var(--fg); font-weight: 500; }
+    @media (max-width:768px) { .learn-grid { grid-template-columns: 1fr; } .learn-item { border-right: none; padding: 28px 0 !important; border-bottom: 1px solid var(--border); } .learn-item:last-child { border-bottom: none; } }
+
+    /* ── Next project ── */
+    .next-section { padding: 100px 52px; border-top: 1px solid var(--border); }
+    .next-label { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 36px; }
+    .next-link { display: flex; align-items: baseline; gap: 16px; text-decoration: none; color: var(--fg); transition: color .25s; }
+    .next-link:hover { color: var(--accent); }
+    .next-title { font-family: var(--serif); font-size: clamp(36px,5vw,72px); font-weight: 400; letter-spacing: -.03em; }
+    .next-arrow { font-size: clamp(32px,4vw,56px); transition: transform .35s var(--ease); }
+    .next-link:hover .next-arrow { transform: translateX(10px); }
+    @media (max-width:768px) { .next-section { padding: 64px 24px; } }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .rd1 { transition-delay: .1s; } .rd2 { transition-delay: .2s; } .rd3 { transition-delay: .3s; }
+
+    /* ── Copy hint ── */
+    #cpToast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(6px); background: var(--fg); color: var(--bg); padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 999; }
+    #cpToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Trigger btn util (for modal/toast demo launchers) ── */
+    .trigger-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <nav id="mainNav">
+    <a href="../index.html" class="nav-logo"><span class="logo-word">Keshav<span class="logo-dot">.</span></span></a>
+    <div></div>
+    <div class="nav-right">
+      <a href="../index.html#work" class="nav-back">All work</a>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">◑</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow reveal">Rizzle · Design Systems · 2023</p>
+    <h1 class="hero-headline reveal rd1">One language.<br><em>Every surface.</em></h1>
+    <p class="hero-sub reveal rd2">Rizzle had ten designers, three front-end squads, and no shared source of truth. I built the system from tokens to organisms — six months, ground up.</p>
+    <div class="hero-meta reveal rd3">
+      <div class="meta-item"><div class="meta-label">Role</div><div class="meta-value">Lead Product Designer</div></div>
+      <div class="meta-item"><div class="meta-label">Timeline</div><div class="meta-value">6 months</div></div>
+      <div class="meta-item"><div class="meta-label">Platform</div><div class="meta-value">Web · Tablet</div></div>
+      <div class="meta-item"><div class="meta-label">Deliverable</div><div class="meta-value">Figma library + token spec</div></div>
+    </div>
+  </header>
+
+  <!-- 01 · PROBLEM -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">01</span>
+      <span class="sec-label">The problem</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <h2 class="col-heading reveal">Four teams.<br>Four button styles.<br><em>Zero alignment.</em></h2>
+        <div class="col-body reveal rd1">
+          <p>Rizzle's product moved fast. Every squad pulled from its own Figma library or copied components off existing screens. After two years: <strong>four distinct button styles</strong>, three spacing systems, values that lived only in engineers' memory.</p>
+          <p>I joined to fix it. Tokens first. Components second. Documentation last — because docs nobody reads are just debt with better formatting.</p>
+        </div>
+        <div class="stat-row reveal rd2" style="margin-top:48px; padding-top:28px;">
+          <div class="stat-item"><div class="stat-n">4×</div><div class="stat-d">fewer handoff questions per sprint</div></div>
+          <div class="stat-item"><div class="stat-n">120+</div><div class="stat-d">components in the shared library</div></div>
+          <div class="stat-item"><div class="stat-n">6mo</div><div class="stat-d">token to full component coverage</div></div>
+          <div class="stat-item"><div class="stat-n">3</div><div class="stat-d">squads adopted in sprint one</div></div>
+        </div>
+      </div>
+      <div class="reveal rd1">
+        <div class="process-list">
+          <div class="proc-item"><span class="proc-n">1</span><div><div class="proc-heading">Audit the existing product</div><div class="proc-body">Two weeks of screenshots, tagging every unique spacing value, color, and component variant. Found 23 different shades of purple being used across the product.</div></div></div>
+          <div class="proc-item"><span class="proc-n">2</span><div><div class="proc-heading">Define the token architecture</div><div class="proc-body">Primitive tokens first (raw values), then semantic tokens (what they mean: surface, interactive, error). Engineers adopted the semantic layer directly into CSS custom properties.</div></div></div>
+          <div class="proc-item"><span class="proc-n">3</span><div><div class="proc-heading">Build molecules from atoms</div><div class="proc-body">Every state documented explicitly — idle, hover, active, disabled, error. If it wasn't in the library, it didn't exist.</div></div></div>
+          <div class="proc-item"><span class="proc-n">4</span><div><div class="proc-heading">Test inside real product flows</div><div class="proc-body">Embedded the library into three ongoing builds while still in progress. Gaps showed up fast. Better then than after 40 engineers have adopted draft one.</div></div></div>
+          <div class="proc-item"><span class="proc-n">5</span><div><div class="proc-heading">Ship the docs as a product</div><div class="proc-body">Built inside Rizzle's own stack, not Notion. If designers had to leave their environment to read the rules, they wouldn't.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · GRID -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">02</span>
+      <span class="sec-label">Foundation · Grid</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Grid system</p>
+        <h3 class="col-heading reveal rd1">The grid is the<br><em>first opinion</em><br>a designer makes.</h3>
+        <div class="col-body reveal rd2">
+          <p>Desktop at 1440px: 12 columns, 32px gutters, 64px outer margins. Tablet at 1024px: 12 narrower columns, 24px gutters, 48px margins.</p>
+          <p>The sidebar is a first-class layout citizen. Designers specify sidebar-on and sidebar-off variants so the grid never fights the navigation.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="demo-card">
+          <div class="demo-card-label">
+            <span>Grid visualiser</span>
+            <button class="rz-btn rz-btn-ghost rz-btn-sm" id="gridToggle" style="font-size:10px;padding:5px 10px;">Toggle sidebar</button>
+          </div>
+          <div class="demo-card-body">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--work);margin-bottom:8px;">Desktop · 1440px · 12 col</div>
+            <div class="grid-vis" id="gridDesktop">
+              <div class="grid-vis-col sidebar-col" id="gridSb"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+            </div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--work);margin:20px 0 8px;">Tablet · 1024px · 12 col</div>
+            <div class="grid-vis" style="height:60px;">
+              <div class="grid-vis-col sidebar-col" style="max-width:24px;"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div><div class="grid-vis-col"></div><div class="grid-vis-col"></div>
+              <div class="grid-vis-col"></div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px;">Accent column = sidebar zone. Toggle to see without-sidebar variant.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · TOKENS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">03</span>
+      <span class="sec-label">Foundation · Tokens</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col flip">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Spacing &amp; radius</p>
+        <h3 class="col-heading reveal rd1">Named values beat<br><em>magic numbers.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Twenty spacing steps from 0 to 160px. Designers stop debating 16px vs 18px. They pick <code>spacing-sm</code> and move on.</p>
+          <p>Radius tokens follow: none through full. A product-wide rounding decision is a single token swap — not a ticket.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="tab-bar" id="tokenTabs">
+          <button class="tab-btn active" data-panel="tp-sp">Spacing</button>
+          <button class="tab-btn" data-panel="tp-rad">Radius</button>
+        </div>
+        <div id="tp-sp" class="tab-panel active">
+          <table class="token-tbl">
+            <thead><tr><th>Token</th><th>px</th><th>Visual</th></tr></thead>
+            <tbody>
+              <tr><td><span class="tok-pill">spacing-none</span></td><td>0</td><td></td></tr>
+              <tr><td><span class="tok-pill">spacing-xxs</span></td><td>2</td><td><div class="sp-bar" style="width:2px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-xs</span></td><td>4</td><td><div class="sp-bar" style="width:4px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-sm</span></td><td>8</td><td><div class="sp-bar" style="width:8px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-md</span></td><td>12</td><td><div class="sp-bar" style="width:12px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-lg</span></td><td>16</td><td><div class="sp-bar" style="width:16px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-xl</span></td><td>20</td><td><div class="sp-bar" style="width:20px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-2xl</span></td><td>24</td><td><div class="sp-bar" style="width:24px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-3xl</span></td><td>32</td><td><div class="sp-bar" style="width:32px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-4xl</span></td><td>40</td><td><div class="sp-bar" style="width:40px"></div></td></tr>
+              <tr><td><span class="tok-pill">spacing-5xl</span></td><td>48</td><td><div class="sp-bar" style="width:48px"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="tp-rad" class="tab-panel">
+          <table class="token-tbl">
+            <thead><tr><th>Token</th><th>px</th><th>Preview</th></tr></thead>
+            <tbody>
+              <tr><td><span class="tok-pill">radius-none</span></td><td>0</td><td><div class="rad-prev" style="border-radius:0"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-xs</span></td><td>2</td><td><div class="rad-prev" style="border-radius:2px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-sm</span></td><td>4</td><td><div class="rad-prev" style="border-radius:4px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-md</span></td><td>8</td><td><div class="rad-prev" style="border-radius:8px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-lg</span></td><td>12</td><td><div class="rad-prev" style="border-radius:12px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-xl</span></td><td>16</td><td><div class="rad-prev" style="border-radius:16px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-2xl</span></td><td>20</td><td><div class="rad-prev" style="border-radius:20px"></div></td></tr>
+              <tr><td><span class="tok-pill">radius-full</span></td><td>9999</td><td><div class="rad-prev" style="border-radius:9999px"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · TYPOGRAPHY -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">04</span>
+      <span class="sec-label">Foundation · Typography</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Work Sans</p>
+        <h3 class="col-heading reveal rd1">One typeface.<br><em>Eight weights.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Work Sans reads neutral at small sizes, confident at display scale. Rizzle's product lives at 12–18px, so every weight decision was tested there first — not at 72px in a brand spec.</p>
+          <p>Semibold is reserved for interactive labels. Never decoration.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:16px;padding-bottom:20px;border-bottom:1px solid var(--border);">
+          <span style="font-family:var(--work);font-size:52px;font-weight:600;line-height:1;letter-spacing:-.02em;">Ag</span>
+          <div>
+            <div style="font-family:var(--work);font-size:15px;font-weight:600;">Work Sans</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">300 · 400 · 500 · 600 · 700</div>
+            <div style="font-family:var(--work);font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.02em;line-height:1.6;">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789</div>
+          </div>
+        </div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 1</div><div class="type-spec">Semibold · 32/40</div></div><div class="type-sample" style="font-size:28px;font-weight:600;line-height:1.2;">Headline 1</div></div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 2</div><div class="type-spec">Bold · 24/32</div></div><div class="type-sample" style="font-size:22px;font-weight:700;line-height:1.3;">Headline 2</div></div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 3</div><div class="type-spec">Semibold · 20/28</div></div><div class="type-sample" style="font-size:18px;font-weight:600;">Headline 3</div></div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Body 1</div><div class="type-spec">Regular · 16/24</div></div><div class="type-sample" style="font-size:15px;font-weight:400;color:var(--muted);">The quick brown fox jumps.</div></div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Body 2</div><div class="type-spec">Regular · 14/24</div></div><div class="type-sample" style="font-size:13px;font-weight:400;color:var(--muted);">The quick brown fox jumps.</div></div>
+        <div class="type-row"><div class="type-meta"><div class="type-tok">Quote</div><div class="type-spec">Regular italic · 16/24</div></div><div class="type-sample" style="font-size:14px;font-style:italic;color:var(--muted);">"Creating together, naturally."</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · COLORS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">05</span>
+      <span class="sec-label">Foundation · Color</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col flip">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Color system</p>
+        <h3 class="col-heading reveal rd1">Purple is the brand.<br><em>Semantics</em> are the system.</h3>
+        <div class="col-body reveal rd2">
+          <p>Full tonal scale — 50 to 900. Every surface, from subtle tints to vibrant CTAs, pulls from the same source.</p>
+          <p>Semantic tokens sit on top: <code>color.interactive.idle</code>, <code>color.error.idle</code>. State behavior is a token decision, not a one-off. When Rizzle refreshed their brand, we swapped values under the tokens and the whole product updated in a day.</p>
+          <p style="margin-top:10px;font-size:12px;">Click any swatch to copy its hex value.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="tab-bar" id="colorTabs">
+          <button class="tab-btn active" data-panel="cp-pri">Primary</button>
+          <button class="tab-btn" data-panel="cp-sec">Secondary</button>
+          <button class="tab-btn" data-panel="cp-sem">Semantic</button>
+        </div>
+        <div id="cp-pri" class="tab-panel active">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Purple · violet</div>
+          <div class="swatch-grid">
+            <div class="swatch" data-hex="#F3EEFF"><div class="swatch-chip" style="background:#F3EEFF;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#F3EEFF</div></div>
+            <div class="swatch" data-hex="#E4D3FF"><div class="swatch-chip" style="background:#E4D3FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#E4D3FF</div></div>
+            <div class="swatch" data-hex="#C9A8FF"><div class="swatch-chip" style="background:#C9A8FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#C9A8FF</div></div>
+            <div class="swatch" data-hex="#AD7CFF"><div class="swatch-chip" style="background:#AD7CFF"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#AD7CFF</div></div>
+            <div class="swatch" data-hex="#9B59FF"><div class="swatch-chip" style="background:#9B59FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">400 ★</div><div class="swatch-hex">#9B59FF</div></div>
+            <div class="swatch" data-hex="#7C3AED"><div class="swatch-chip" style="background:#7C3AED"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#7C3AED</div></div>
+            <div class="swatch" data-hex="#6D28D9"><div class="swatch-chip" style="background:#6D28D9"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#6D28D9</div></div>
+            <div class="swatch" data-hex="#5B21B6"><div class="swatch-chip" style="background:#5B21B6"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#5B21B6</div></div>
+            <div class="swatch" data-hex="#4C1D95"><div class="swatch-chip" style="background:#4C1D95"><div class="copy-hint">COPY</div></div><div class="swatch-name">800</div><div class="swatch-hex">#4C1D95</div></div>
+            <div class="swatch" data-hex="#2E1065"><div class="swatch-chip" style="background:#2E1065"><div class="copy-hint">COPY</div></div><div class="swatch-name">900</div><div class="swatch-hex">#2E1065</div></div>
+          </div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:20px;">Pink · hot</div>
+          <div class="swatch-grid">
+            <div class="swatch" data-hex="#FFF0FA"><div class="swatch-chip" style="background:#FFF0FA;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#FFF0FA</div></div>
+            <div class="swatch" data-hex="#FECEF4"><div class="swatch-chip" style="background:#FECEF4"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#FECEF4</div></div>
+            <div class="swatch" data-hex="#FCA0E8"><div class="swatch-chip" style="background:#FCA0E8"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#FCA0E8</div></div>
+            <div class="swatch" data-hex="#F76FD8"><div class="swatch-chip" style="background:#F76FD8"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#F76FD8</div></div>
+            <div class="swatch" data-hex="#EC4CC8"><div class="swatch-chip" style="background:#EC4CC8"><div class="copy-hint">COPY</div></div><div class="swatch-name">400 ★</div><div class="swatch-hex">#EC4CC8</div></div>
+            <div class="swatch" data-hex="#D62DAE"><div class="swatch-chip" style="background:#D62DAE"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#D62DAE</div></div>
+            <div class="swatch" data-hex="#B01890"><div class="swatch-chip" style="background:#B01890"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#B01890</div></div>
+            <div class="swatch" data-hex="#891476"><div class="swatch-chip" style="background:#891476"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#891476</div></div>
+          </div>
+        </div>
+        <div id="cp-sec" class="tab-panel">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Neon Yellow · lime</div>
+          <div class="swatch-grid">
+            <div class="swatch" data-hex="#FEFFD0"><div class="swatch-chip" style="background:#FEFFD0;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#FEFFD0</div></div>
+            <div class="swatch" data-hex="#FAFEA0"><div class="swatch-chip" style="background:#FAFEA0"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#FAFEA0</div></div>
+            <div class="swatch" data-hex="#F4FC5C"><div class="swatch-chip" style="background:#F4FC5C"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#F4FC5C</div></div>
+            <div class="swatch" data-hex="#ECFA18"><div class="swatch-chip" style="background:#ECFA18"><div class="copy-hint">COPY</div></div><div class="swatch-name">300 ★</div><div class="swatch-hex">#ECFA18</div></div>
+            <div class="swatch" data-hex="#D4E010"><div class="swatch-chip" style="background:#D4E010"><div class="copy-hint">COPY</div></div><div class="swatch-name">400</div><div class="swatch-hex">#D4E010</div></div>
+            <div class="swatch" data-hex="#A8B00A"><div class="swatch-chip" style="background:#A8B00A"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#A8B00A</div></div>
+            <div class="swatch" data-hex="#7A8006"><div class="swatch-chip" style="background:#7A8006"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#7A8006</div></div>
+            <div class="swatch" data-hex="#4E5203"><div class="swatch-chip" style="background:#4E5203"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#4E5203</div></div>
+          </div>
+        </div>
+        <div id="cp-sem" class="tab-panel">
+          <div class="swatch-grid">
+            <div class="swatch" data-hex="#22C55E"><div class="swatch-chip" style="background:#22C55E"><div class="copy-hint">COPY</div></div><div class="swatch-name">success.500</div><div class="swatch-hex">#22C55E</div></div>
+            <div class="swatch" data-hex="#16A34A"><div class="swatch-chip" style="background:#16A34A"><div class="copy-hint">COPY</div></div><div class="swatch-name">success.600</div><div class="swatch-hex">#16A34A</div></div>
+            <div class="swatch" data-hex="#EF4444"><div class="swatch-chip" style="background:#EF4444"><div class="copy-hint">COPY</div></div><div class="swatch-name">error.500</div><div class="swatch-hex">#EF4444</div></div>
+            <div class="swatch" data-hex="#DC2626"><div class="swatch-chip" style="background:#DC2626"><div class="copy-hint">COPY</div></div><div class="swatch-name">error.600</div><div class="swatch-hex">#DC2626</div></div>
+            <div class="swatch" data-hex="#EAB308"><div class="swatch-chip" style="background:#EAB308"><div class="copy-hint">COPY</div></div><div class="swatch-name">warning.500</div><div class="swatch-hex">#EAB308</div></div>
+            <div class="swatch" data-hex="#CA8A04"><div class="swatch-chip" style="background:#CA8A04"><div class="copy-hint">COPY</div></div><div class="swatch-name">warning.600</div><div class="swatch-hex">#CA8A04</div></div>
+            <div class="swatch" data-hex="#3B82F6"><div class="swatch-chip" style="background:#3B82F6"><div class="copy-hint">COPY</div></div><div class="swatch-name">info.500</div><div class="swatch-hex">#3B82F6</div></div>
+            <div class="swatch" data-hex="#2563EB"><div class="swatch-chip" style="background:#2563EB"><div class="copy-hint">COPY</div></div><div class="swatch-name">info.600</div><div class="swatch-hex">#2563EB</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · BUTTONS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">06</span>
+      <span class="sec-label">Components · Buttons</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Interactive states</p>
+        <h3 class="col-heading reveal rd1">Every state.<br><em>Explicitly built.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Primary, secondary, ghost, and icon-only. All ship with four states. Hover and click the components to see them respond live.</p>
+          <p>Three sizes — large (15px), medium (13px), small (11px) — all sharing the same state contract.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="demo-card">
+          <div class="demo-card-label"><span>Buttons · hover and click to interact</span></div>
+          <div class="demo-card-body">
+            <div class="d-divider">Primary</div>
+            <div class="btn-grid">
+              <div class="btn-col"><div class="btn-state-tag">Large</div><button class="rz-btn rz-btn-primary rz-btn-lg">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Medium</div><button class="rz-btn rz-btn-primary rz-btn-md">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Small</div><button class="rz-btn rz-btn-primary rz-btn-sm">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Disabled</div><button class="rz-btn rz-btn-primary rz-btn-md" disabled>Button</button></div>
+            </div>
+            <div class="d-divider">Secondary</div>
+            <div class="btn-grid">
+              <div class="btn-col"><div class="btn-state-tag">Large</div><button class="rz-btn rz-btn-secondary rz-btn-lg">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Medium</div><button class="rz-btn rz-btn-secondary rz-btn-md">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Small</div><button class="rz-btn rz-btn-secondary rz-btn-sm">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Disabled</div><button class="rz-btn rz-btn-secondary rz-btn-md" disabled>Button</button></div>
+            </div>
+            <div class="d-divider">Ghost &amp; icon-only</div>
+            <div class="btn-grid">
+              <div class="btn-col"><div class="btn-state-tag">Ghost lg</div><button class="rz-btn rz-btn-ghost rz-btn-lg">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Ghost md</div><button class="rz-btn rz-btn-ghost rz-btn-md">Button</button></div>
+              <div class="btn-col"><div class="btn-state-tag">Icon only</div><button class="rz-btn rz-btn-icon" aria-label="Options"><span class="ico ico-lg"></span></button></div>
+              <div class="btn-col"><div class="btn-state-tag">Disabled</div><button class="rz-btn rz-btn-ghost rz-btn-md" disabled>Button</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 · FORMS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">07</span>
+      <span class="sec-label">Components · Forms</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col flip">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Inputs &amp; dropdowns</p>
+        <h3 class="col-heading reveal rd1">Six states.<br><em>All documented.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Empty, hover, focused, filled, error, disabled. Every field ships with all six documented. If a state isn't in the library, an engineer invents it at implementation time — differently every time.</p>
+          <p>Click into fields, type, and interact with the dropdowns.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="demo-card overflow-visible">
+          <div class="demo-card-label"><span>Inputs &amp; Dropdowns · fully interactive</span></div>
+          <div class="demo-card-body">
+            <div class="d-divider">Text inputs</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="rz-field">
+                <label class="rz-label">Empty</label>
+                <input class="rz-input" type="text" placeholder="Placeholder text" />
+              </div>
+              <div class="rz-field">
+                <label class="rz-label">Filled</label>
+                <input class="rz-input" type="text" value="User has typed here" />
+              </div>
+              <div class="rz-field">
+                <label class="rz-label">With helper</label>
+                <input class="rz-input" type="text" placeholder="Video title..." />
+                <span class="rz-helper">Shown below the video timeline</span>
+              </div>
+              <div class="rz-field">
+                <label class="rz-label">Error state</label>
+                <input class="rz-input is-error" type="text" value="invalid@" />
+                <span class="rz-helper is-error">This field is required</span>
+              </div>
+            </div>
+            <div class="d-divider">Dropdowns</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="rz-field">
+                <label class="rz-label">Default</label>
+                <div class="rz-dropdown" id="dd1">
+                  <button class="rz-dd-trigger" type="button"><span class="dd-val">Select a category</span><span class="rz-dd-chevron">▾</span></button>
+                  <div class="rz-dd-menu">
+                    <div class="rz-dd-item" data-val="Tutorial"><span class="ico ico-sm"></span> Tutorial</div>
+                    <div class="rz-dd-item" data-val="Comedy"><span class="ico ico-sm"></span> Comedy</div>
+                    <div class="rz-dd-item" data-val="Music"><span class="ico ico-sm"></span> Music</div>
+                    <div class="rz-dd-item" data-val="Gaming"><span class="ico ico-sm"></span> Gaming</div>
+                    <div class="rz-dd-item" data-val="Podcast"><span class="ico ico-sm"></span> Podcast</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rz-field">
+                <label class="rz-label">With selection</label>
+                <div class="rz-dropdown" id="dd2">
+                  <button class="rz-dd-trigger" type="button"><span class="dd-val has-val">Music</span><span class="rz-dd-chevron">▾</span></button>
+                  <div class="rz-dd-menu">
+                    <div class="rz-dd-item" data-val="Tutorial"><span class="ico ico-sm"></span> Tutorial</div>
+                    <div class="rz-dd-item" data-val="Comedy"><span class="ico ico-sm"></span> Comedy</div>
+                    <div class="rz-dd-item is-selected" data-val="Music"><span class="ico ico-sm"></span> Music</div>
+                    <div class="rz-dd-item" data-val="Gaming"><span class="ico ico-sm"></span> Gaming</div>
+                    <div class="rz-dd-item" data-val="Podcast"><span class="ico ico-sm"></span> Podcast</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>Form components are where most systems break down. States get inconsistent, error treatments become afterthoughts. I documented every combination before writing a single auto-layout property.</p>
+      <cite>On form documentation first</cite>
+    </div>
+  </section>
+
+  <!-- 08 · SELECTION FIELDS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">08</span>
+      <span class="sec-label">Components · Selection fields</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Radio · Checkbox · Toggle</p>
+        <h3 class="col-heading reveal rd1">Permission flows need<br><em>deliberate</em> controls.</h3>
+        <div class="col-body reveal rd2">
+          <p>Rizzle's workspace has complex permission flows. Users toggle features on and off constantly. Making these feel deliberate reduced support tickets around "I didn't know that was turned on."</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="demo-card">
+          <div class="demo-card-label"><span>Selection fields · all interactive</span></div>
+          <div class="demo-card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;">
+              <div>
+                <div class="d-divider" style="margin-top:0;">Radio</div>
+                <div class="rz-radio-grp">
+                  <label class="rz-radio-row"><input type="radio" name="rg1" checked /><span>Option one</span></label>
+                  <label class="rz-radio-row"><input type="radio" name="rg1" /><span>Option two</span></label>
+                  <label class="rz-radio-row"><input type="radio" name="rg1" /><span>Option three</span></label>
+                  <label class="rz-radio-row is-disabled"><input type="radio" name="rg1" disabled /><span>Disabled</span></label>
+                </div>
+              </div>
+              <div>
+                <div class="d-divider" style="margin-top:0;">Checkbox</div>
+                <div class="rz-check-grp">
+                  <label class="rz-check-row"><input type="checkbox" checked /><span>Checked</span></label>
+                  <label class="rz-check-row"><input type="checkbox" /><span>Unchecked</span></label>
+                  <label class="rz-check-row"><input type="checkbox" checked /><span>Also checked</span></label>
+                  <label class="rz-check-row is-disabled"><input type="checkbox" disabled /><span>Disabled</span></label>
+                </div>
+              </div>
+              <div>
+                <div class="d-divider" style="margin-top:0;">Toggle</div>
+                <div class="rz-toggle-grp">
+                  <label class="rz-toggle-row"><span class="rz-toggle-wrap"><input type="checkbox" checked /><div class="rz-toggle-track"></div><div class="rz-toggle-thumb"></div></span><span>On</span></label>
+                  <label class="rz-toggle-row"><span class="rz-toggle-wrap"><input type="checkbox" /><div class="rz-toggle-track"></div><div class="rz-toggle-thumb"></div></span><span>Off</span></label>
+                  <label class="rz-toggle-row"><span class="rz-toggle-wrap"><input type="checkbox" checked /><div class="rz-toggle-track"></div><div class="rz-toggle-thumb"></div></span><span>Enabled</span></label>
+                  <label class="rz-toggle-row is-disabled"><span class="rz-toggle-wrap"><input type="checkbox" disabled /><div class="rz-toggle-track"></div><div class="rz-toggle-thumb"></div></span><span>Disabled</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 · SIDEBAR NAV -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">09</span>
+      <span class="sec-label">Components · Navigation</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col flip">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Sidebar navigation</p>
+        <h3 class="col-heading reveal rd1">Navigation carries<br><em>the product's personality.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Holds user context, workspace switching, and primary navigation in under 240px. Three collapse states: full, icon-only, collapsed.</p>
+          <p>Use the ‹ button to collapse the sidebar. Click items to switch the active state.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="sidebar-demo-shell">
+          <div class="rz-sidebar" id="rzSidebar">
+            <div class="sb-top">
+              <div class="sb-avatar"></div>
+              <span class="sb-user">Alexander A.</span>
+              <button class="sb-collapse" id="sbToggle">‹</button>
+            </div>
+            <nav class="sb-nav">
+              <div class="sb-item active"><span class="ico"></span><span class="sb-item-text">Create</span></div>
+              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Library</span></div>
+              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Analytics</span></div>
+              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Settings</span></div>
+            </nav>
+            <div class="sb-bottom">
+              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Log out</span></div>
+            </div>
+          </div>
+          <div class="sb-content">
+            <div class="sb-content-title" id="sbContentTitle">Create</div>
+            <div class="sb-content-body">Click sidebar items to navigate. Use ‹ to collapse to icon-only mode.</div>
+            <div style="margin-top:16px;display:flex;gap:8px;">
+              <button class="rz-btn rz-btn-primary rz-btn-sm">New video</button>
+              <button class="rz-btn rz-btn-ghost rz-btn-sm">Import</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · FEEDBACK -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">10</span>
+      <span class="sec-label">Components · Feedback</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-text">
+        <p class="col-eyebrow reveal">Modals &amp; toasts</p>
+        <h3 class="col-heading reveal rd1">Interruption<br>with <em>purpose.</em></h3>
+        <div class="col-body reveal rd2">
+          <p>Destructive confirmations get a red confirm, passive cancel. Non-destructive dialogs flip those weights. The difference cut accidental discards by more than half in testing.</p>
+          <p>Toasts carry four semantic types. Engineers choose intent, not colour.</p>
+        </div>
+      </div>
+      <div class="col-demo reveal rd1">
+        <div class="demo-card">
+          <div class="demo-card-label"><span>Click to trigger</span></div>
+          <div class="demo-card-body">
+            <div class="d-divider">Modals</div>
+            <div class="trigger-row">
+              <button class="rz-btn rz-btn-secondary rz-btn-md" id="openInfo">Info dialog</button>
+              <button class="rz-btn rz-btn-md" style="background:color-mix(in srgb,#E53E3E 12%,transparent);color:#E53E3E;border:1.5px solid color-mix(in srgb,#E53E3E 40%,transparent);" id="openDestructive">Destructive dialog</button>
+            </div>
+            <div class="d-divider">Toast notifications</div>
+            <div class="trigger-row">
+              <button class="rz-btn rz-btn-sm" style="background:color-mix(in srgb,#38A169 12%,transparent);color:#38A169;border:1.5px solid color-mix(in srgb,#38A169 35%,transparent);" data-toast="s">Success</button>
+              <button class="rz-btn rz-btn-sm" style="background:color-mix(in srgb,#E53E3E 12%,transparent);color:#E53E3E;border:1.5px solid color-mix(in srgb,#E53E3E 35%,transparent);" data-toast="e">Error</button>
+              <button class="rz-btn rz-btn-sm" style="background:color-mix(in srgb,#D97706 12%,transparent);color:#D97706;border:1.5px solid color-mix(in srgb,#D97706 35%,transparent);" data-toast="w">Warning</button>
+              <button class="rz-btn rz-btn-sm" style="background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);border:1.5px solid color-mix(in srgb,var(--accent) 35%,transparent);" data-toast="i">Info</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · LEARNINGS -->
+  <section class="section">
+    <div class="sec-row reveal">
+      <span class="sec-count">11</span>
+      <span class="sec-label">What I took away</span>
+      <div class="sec-row-line"></div>
+    </div>
+    <h2 class="col-heading reveal" style="max-width:560px;">A design system is a <em>political document</em> as much as a technical one.</h2>
+    <div class="learn-grid">
+      <div class="learn-item reveal">
+        <div class="learn-n">01</div>
+        <div class="learn-text"><strong>Token adoption requires trust, not enforcement.</strong> Engineers used the system because it made their work easier. The docs had to answer questions they were already asking — not questions I assumed they had.</div>
+      </div>
+      <div class="learn-item reveal rd1">
+        <div class="learn-n">02</div>
+        <div class="learn-text"><strong>Name for intent, not appearance.</strong> <code>color.interactive.idle</code> ages better than <code>purple-500</code>. When Rizzle refreshed their brand, we swapped values under the tokens and the whole product updated in a day.</div>
+      </div>
+      <div class="learn-item reveal rd2">
+        <div class="learn-n">03</div>
+        <div class="learn-text"><strong>Ship an incomplete system sooner.</strong> Three squads on a 60% complete library gave us real feedback in two weeks that six more months of spec work never would have surfaced. Zero major revisions post-handoff. I'll take that.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT -->
+  <div class="next-section">
+    <p class="next-label">Next case study</p>
+    <a href="buyingteams.html" class="next-link">
+      <span class="next-title">CXFacts</span>
+      <span class="next-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- MODALS -->
+  <div class="rz-overlay" id="modalInfo">
+    <div class="rz-modal">
+      <button class="rz-modal-x" data-close="modalInfo">✕</button>
+      <div class="rz-modal-title">Save as new video</div>
+      <div class="rz-modal-body">This version will be created as a new video. Please be aware that restoring a previous version will lose all progress made after that version.</div>
+      <div class="rz-modal-actions">
+        <button class="rz-btn rz-btn-ghost rz-btn-md" data-close="modalInfo">Cancel</button>
+        <button class="rz-btn rz-btn-primary rz-btn-md">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="rz-overlay" id="modalDestructive">
+    <div class="rz-modal">
+      <button class="rz-modal-x" data-close="modalDestructive">✕</button>
+      <div class="rz-modal-title">Discard edits</div>
+      <div class="rz-modal-body">Please be aware that discarding all edits <span class="warn">will reset to the latest regenerated version.</span> This cannot be undone.</div>
+      <div class="rz-modal-actions">
+        <button class="rz-btn rz-btn-ghost rz-btn-md" data-close="modalDestructive">Cancel</button>
+        <button class="rz-btn rz-btn-md" style="background:#E53E3E;color:#fff;" data-close="modalDestructive">Discard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST STACK -->
+  <div class="toast-stack" id="toastStack"></div>
+
+  <!-- COPY HINT -->
+  <div id="cpToast">Copied to clipboard</div>
+
+  <script>
+    /* theme */
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e){}
+    });
+
+    /* nav scroll */
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* reveal */
+    const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+    /* tabs */
+    document.querySelectorAll('.tab-bar').forEach(bar => {
+      bar.addEventListener('click', e => {
+        const btn = e.target.closest('.tab-btn');
+        if (!btn) return;
+        const id = btn.dataset.panel;
+        bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const scope = bar.parentElement;
+        scope.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        const panel = document.getElementById(id);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    /* grid toggle */
+    let gridHidden = false;
+    document.getElementById('gridToggle').addEventListener('click', () => {
+      gridHidden = !gridHidden;
+      document.getElementById('gridSb').classList.toggle('hidden', gridHidden);
+      document.getElementById('gridToggle').textContent = gridHidden ? 'Show sidebar' : 'Toggle sidebar';
+    });
+
+    /* dropdowns */
+    document.querySelectorAll('.rz-dropdown').forEach(dd => {
+      const trigger = dd.querySelector('.rz-dd-trigger');
+      const valSpan = dd.querySelector('.dd-val');
+      trigger.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+      dd.querySelector('.rz-dd-menu').addEventListener('click', e => {
+        const item = e.target.closest('.rz-dd-item');
+        if (!item) return;
+        dd.querySelectorAll('.rz-dd-item').forEach(i => i.classList.remove('is-selected'));
+        item.classList.add('is-selected');
+        valSpan.textContent = item.dataset.val;
+        valSpan.classList.add('has-val');
+        dd.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', () => document.querySelectorAll('.rz-dropdown.open').forEach(d => d.classList.remove('open')));
+
+    /* sidebar */
+    document.getElementById('sbToggle').addEventListener('click', () => {
+      const sb = document.getElementById('rzSidebar');
+      const c = sb.classList.toggle('collapsed');
+      document.getElementById('sbToggle').textContent = c ? '›' : '‹';
+    });
+    document.querySelectorAll('.sb-nav .sb-item, .sb-bottom .sb-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const label = item.querySelector('.sb-item-text')?.textContent;
+        if (label) document.getElementById('sbContentTitle').textContent = label;
+      });
+    });
+
+    /* modals */
+    document.getElementById('openInfo').addEventListener('click', () => document.getElementById('modalInfo').classList.add('open'));
+    document.getElementById('openDestructive').addEventListener('click', () => document.getElementById('modalDestructive').classList.add('open'));
+    document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => document.getElementById(btn.dataset.close).classList.remove('open')));
+    document.querySelectorAll('.rz-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
+
+    /* toasts */
+    const toastData = {
+      s: { stripe:'s', title:'Text graphics edited', desc:'Editing graphics might result in layout changes.', act:'Undo' },
+      e: { stripe:'e', title:'Generation failed', desc:'Generation has failed, please try again.', act:'Retry' },
+      w: { stripe:'w', title:'Media overlap detected', desc:'Overlap not supported for the same text.', act:'Reset' },
+      i: { stripe:'i', title:'Voiceover changed', desc:'Natasha voice applied to this segment.', act:'View' },
+    };
+    const stack = document.getElementById('toastStack');
+    document.querySelectorAll('[data-toast]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const d = toastData[btn.dataset.toast];
+        const t = document.createElement('div');
+        t.className = 'rz-toast';
+        t.innerHTML = `<div class="toast-body"><div class="toast-inner"><div class="toast-title">${d.title}</div><div class="toast-desc">${d.desc}</div></div><button class="toast-act">${d.act}</button></div><div class="toast-timer ${d.stripe}"></div>`;
+        stack.appendChild(t);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          t.classList.add('show');
+          const bar = t.querySelector('.toast-timer');
+          bar.style.animation = 'toast-drain 5s linear forwards';
+        }));
+        const dismiss = () => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); };
+        t.querySelector('.toast-act').addEventListener('click', dismiss);
+        setTimeout(dismiss, 5000);
+      });
+    });
+
+    /* color copy */
+    const cpToast = document.getElementById('cpToast');
+    let cpTimer;
+    document.querySelectorAll('.swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        navigator.clipboard?.writeText(sw.dataset.hex).catch(() => {});
+        cpToast.classList.add('show');
+        clearTimeout(cpTimer);
+        cpTimer = setTimeout(() => cpToast.classList.remove('show'), 1800);
+      });
+    });
+  </script>
+</body>
+</html>
