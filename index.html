@@ -662,7 +662,7 @@
        FEATURED PROJECTS
     ───────────────────────────────────────── */
     .projects {
-      padding: 120px 80px;
+      padding: 120px 120px;
       position: relative;
       contain: layout style;
       scroll-snap-align: start;
@@ -2140,6 +2140,86 @@
 
       cta.addEventListener('click', dismiss);
       backdrop.addEventListener('click', dismiss);
+    })();
+
+    /* ═══════════════════════════════════════════
+       AMBIENT BRAND COLOR FLASH
+       Up to 3 chips at a time drift to brand color
+    ═══════════════════════════════════════════ */
+    (function initAmbientFlash() {
+      const stage = document.getElementById('toolsStage');
+      if (!stage) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const FADE   = 900;   // ms in/out transition
+      const HOLD   = 3000;  // ms brand color stays visible
+      const MIN    = 4000;  // ms min between batches
+      const MAX    = 8000;  // ms max between batches
+      const LIMIT  = 3;     // max chips flashing at once
+
+      const active = new Set();
+
+      function eligible(chip) {
+        return !chip.classList.contains('no-logo')
+            && !chip.classList.contains('no-brand')
+            && !active.has(chip)
+            && !chip.matches(':hover')
+            && getComputedStyle(chip).opacity !== '0'; // skip hidden mobile chips
+      }
+
+      function flash(chip) {
+        const brand = chip.querySelector('.tool-logo.brand');
+        if (!brand || !brand.complete || brand.naturalWidth === 0) return;
+        const monos = Array.from(chip.querySelectorAll('.tool-logo.light, .tool-logo.dark'));
+
+        active.add(chip);
+
+        // Show brand at opacity 0, fade mono out
+        brand.style.transition = `opacity ${FADE}ms ease-out`;
+        brand.style.display    = 'block';
+        brand.style.opacity    = '0';
+        monos.forEach(m => {
+          m.style.transition = `opacity ${FADE}ms ease-out`;
+          m.style.opacity    = '0';
+        });
+
+        // Next frame: fade brand in
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          brand.style.opacity = '1';
+        }));
+
+        // After HOLD: fade brand out, mono back in
+        setTimeout(() => {
+          brand.style.opacity = '0';
+          monos.forEach(m => { m.style.opacity = '0.88'; });
+
+          // Clean up after transition
+          setTimeout(() => {
+            brand.style.display    = '';
+            brand.style.opacity    = '';
+            brand.style.transition = '';
+            monos.forEach(m => {
+              m.style.opacity    = '';
+              m.style.transition = '';
+            });
+            active.delete(chip);
+          }, FADE);
+        }, HOLD);
+      }
+
+      function batch() {
+        const pool = Array.from(stage.querySelectorAll('.tool-chip')).filter(eligible);
+        const n    = Math.min(1 + Math.floor(Math.random() * LIMIT), pool.length);
+        // Fisher-Yates shuffle then take first n
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        pool.slice(0, n).forEach(flash);
+        setTimeout(batch, MIN + Math.random() * (MAX - MIN));
+      }
+
+      setTimeout(batch, 3000); // first flash after page settles
     })();
 
     (function initThemeToggle() {
