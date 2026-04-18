@@ -257,11 +257,108 @@
   });
   window.addEventListener('keyup', e => { keys[e.code] = false; });
 
-  /* ── GAME LOOP STUB ── */
-  function update() { frame++; }
+  /* ── PLATFORMS ── */
+  // { x, y, w, h, col, moving?, dx?, minX?, maxX? }
+  const platforms = [
+    // ── Zone 1: Ground intro (x 0–800) ──
+    { x:0,    y:560, w:300, h:20, col:C.p1[0] },
+    { x:340,  y:560, w:200, h:20, col:C.p1[0] },
+    { x:580,  y:560, w:260, h:20, col:C.p1[0] },
+    { x:400,  y:480, w:120, h:16, col:C.p1[0] },
+    { x:560,  y:420, w:100, h:16, col:C.p1[0] },
+
+    // ── Zone 2: Multi-tier climb (x 800–2000) ──
+    { x:840,  y:560, w:200, h:20, col:C.p1[1] },
+    { x:1080, y:500, w:140, h:16, col:C.p1[1] },
+    { x:1260, y:430, w:140, h:16, col:C.p1[1] },
+    { x:1440, y:360, w:140, h:16, col:C.p1[1] },
+    { x:1620, y:430, w:120, h:16, col:C.p1[1] },
+    { x:1780, y:500, w:200, h:20, col:C.p1[1] },
+    { x:1980, y:560, w:100, h:20, col:C.p1[1] },
+
+    // ── Zone 3: Moving platforms over pit (x 2000–3200) ──
+    { x:2100, y:560, w:120, h:20, col:C.p1[2] },
+    { x:2300, y:480, w:100, h:16, col:C.p1[2], moving:true, dx:1.2, minX:2300, maxX:2480 },
+    { x:2550, y:420, w:100, h:16, col:C.p1[2], moving:true, dx:-1.0, minX:2480, maxX:2650 },
+    { x:2750, y:480, w:100, h:16, col:C.p1[2], moving:true, dx:1.4, minX:2700, maxX:2900 },
+    { x:2960, y:430, w:120, h:16, col:C.p1[2] },
+    { x:3100, y:560, w:150, h:20, col:C.p1[2] },
+
+    // ── Zone 4: Dense zone (x 3200–4000) ──
+    { x:3260, y:560, w:180, h:20, col:C.p1[3] },
+    { x:3480, y:500, w:120, h:16, col:C.p1[3] },
+    { x:3640, y:440, w:120, h:16, col:C.p1[3] },
+    { x:3800, y:500, w:120, h:16, col:C.p1[3] },
+    { x:3960, y:560, w:100, h:20, col:C.p1[3] },
+
+    // ── Zone 5: Final sprint (x 4000–4800) ──
+    { x:4060, y:560, w:160, h:20, col:C.p1[4] },
+    { x:4260, y:500, w:100, h:16, col:C.p1[4] },
+    { x:4400, y:440, w:100, h:16, col:C.p1[4] },
+    { x:4560, y:500, w:120, h:16, col:C.p1[4] },
+    { x:4700, y:560, w:100, h:20, col:C.p1[4] },
+  ];
+
+  /* ── PLAYER (stub for camera) ── */
+  const player = { x:40, y:500, w:14, h:26, vx:0, vy:0, onGround:false, facing:1, wt:0, wf:0 };
+
+  /* ── DRAW: SKY ── */
+  function drawSky() {
+    const grad = ctx.createLinearGradient(0, offY, 0, offY + H * scale);
+    grad.addColorStop(0, C.sky1);
+    grad.addColorStop(1, C.sky2);
+    ctx.fillStyle = grad;
+    ctx.fillRect(offX, offY, W * scale, H * scale);
+
+    // Zone color bands (subtle tint)
+    const zones = [
+      { x:0,    w:840,  col:'rgba(76,175,80,0.08)' },
+      { x:840,  w:1160, col:'rgba(255,152,0,0.08)' },
+      { x:2000, w:1200, col:'rgba(224,64,251,0.08)' },
+      { x:3200, w:800,  col:'rgba(255,82,82,0.08)' },
+      { x:4000, w:800,  col:'rgba(38,198,218,0.08)' },
+    ];
+    zones.forEach(z => {
+      ctx.fillStyle = z.col;
+      ctx.fillRect(sx(z.x), offY, sw(z.w), H * scale);
+    });
+  }
+
+  /* ── DRAW: PLATFORMS ── */
+  function drawPlatforms() {
+    platforms.forEach(p => {
+      ctx.fillStyle = p.col;
+      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
+      // Shadow gradient on top surface
+      const grad = ctx.createLinearGradient(0, sy(p.y), 0, sy(p.y) + sh(p.h));
+      grad.addColorStop(0, 'rgba(0,0,0,0.18)');
+      grad.addColorStop(1, 'rgba(0,0,0,0.0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
+    });
+  }
+
+  /* ── UPDATE ── */
+  function update() {
+    frame++;
+    // Camera: keep player at ~35% from left
+    const targetCam = player.x - vw / scale * 0.35;
+    cam = Math.max(0, Math.min(targetCam, W - vw / scale));
+
+    // Update moving platforms
+    platforms.forEach(p => {
+      if (!p.moving) return;
+      p.x += p.dx;
+      if (p.x <= p.minX || p.x + p.w >= p.maxX) p.dx *= -1;
+    });
+  }
+
+  /* ── RENDER ── */
   function render() {
     ctx.fillStyle = C.gameBg;
     ctx.fillRect(0, 0, vw, vh);
+    drawSky();
+    drawPlatforms();
   }
   let rafId;
   function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
