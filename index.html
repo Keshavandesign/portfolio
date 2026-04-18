@@ -430,23 +430,44 @@
     }
     .client-marquee {
       display: flex;
-      gap: 60px;
+      align-items: center;
+      gap: 52px;
       width: max-content;
       animation: clientScroll 60s linear infinite;
     }
-    .client-marquee span {
+    .client {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .client-text {
       font-size: 12px;
       font-weight: 500;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--muted);
-      opacity: 0.4;
+      opacity: 0.45;
       white-space: nowrap;
-      flex-shrink: 0;
     }
-    .client-marquee span.dot {
-      opacity: 0.25;
+    .client-logo {
+      height: 22px;
+      width: auto;
+      max-width: 110px;
+      object-fit: contain;
+      opacity: 0.5;
+    }
+    .client-logo.dark { display: none; }
+    [data-theme="dark"] .client-logo.light { display: none; }
+    [data-theme="dark"] .client-logo.dark  { display: inline-block; }
+    .client .client-text { display: none; }
+    .client.no-logo .client-text { display: inline; }
+    .client.no-logo .client-logo { display: none !important; }
+    .client-marquee .client-sep {
+      font-size: 12px;
       color: var(--accent);
+      opacity: 0.3;
+      flex-shrink: 0;
     }
     @keyframes clientScroll {
       from { transform: translateX(0); }
@@ -1388,24 +1409,65 @@
 
   <!-- ── Client Strip ── -->
   <section class="client-strip" aria-label="Selected clients and teams">
-    <div class="client-marquee">
-      <span>MSN</span><span class="dot">·</span>
-      <span>ESPN</span><span class="dot">·</span>
-      <span>Getty</span><span class="dot">·</span>
-      <span>FinalLayer</span><span class="dot">·</span>
-      <span>Rizzle</span><span class="dot">·</span>
-      <span>CXFacts</span><span class="dot">·</span>
-      <span>Lagorii</span><span class="dot">·</span>
-      <span>Excytech</span><span class="dot">·</span>
-      <!-- Duplicate for seamless loop -->
-      <span>MSN</span><span class="dot">·</span>
-      <span>ESPN</span><span class="dot">·</span>
-      <span>Getty</span><span class="dot">·</span>
-      <span>FinalLayer</span><span class="dot">·</span>
-      <span>Rizzle</span><span class="dot">·</span>
-      <span>CXFacts</span><span class="dot">·</span>
-      <span>Lagorii</span><span class="dot">·</span>
-      <span>Excytech</span><span class="dot">·</span>
+    <div class="client-marquee" id="clientMarquee">
+      <!-- Set A -->
+      <span class="client" data-slug="microsoft" data-label="MSN">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/microsoft/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/microsoft/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">MSN</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client" data-slug="espn" data-label="ESPN">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/espn/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/espn/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">ESPN</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client" data-slug="gettyimages" data-label="Getty">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/gettyimages/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/gettyimages/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">Getty</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="FinalLayer"><span class="client-text">FinalLayer</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Rizzle"><span class="client-text">Rizzle</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="CXFacts"><span class="client-text">CXFacts</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Lagorii"><span class="client-text">Lagorii</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Excytech"><span class="client-text">Excytech</span></span>
+      <span class="client-sep">·</span>
+      <!-- Set B — duplicate for seamless loop -->
+      <span class="client" data-slug="microsoft" data-label="MSN">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/microsoft/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/microsoft/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">MSN</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client" data-slug="espn" data-label="ESPN">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/espn/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/espn/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">ESPN</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client" data-slug="gettyimages" data-label="Getty">
+        <img class="client-logo light" src="https://cdn.simpleicons.org/gettyimages/2A2535" alt="" loading="lazy" />
+        <img class="client-logo dark"  src="https://cdn.simpleicons.org/gettyimages/F0EBE3" alt="" loading="lazy" />
+        <span class="client-text">Getty</span>
+      </span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="FinalLayer"><span class="client-text">FinalLayer</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Rizzle"><span class="client-text">Rizzle</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="CXFacts"><span class="client-text">CXFacts</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Lagorii"><span class="client-text">Lagorii</span></span>
+      <span class="client-sep">·</span>
+      <span class="client no-logo" data-label="Excytech"><span class="client-text">Excytech</span></span>
+      <span class="client-sep">·</span>
     </div>
   </section>
 
@@ -1733,16 +1795,22 @@
 
   <script>
     /* ═══════════════════════════════════════════
-       TOOL LOGOS — graceful fallback to letter chip on 404
+       LOGO FALLBACKS — graceful text fallback on 404
     ═══════════════════════════════════════════ */
-    (function initToolLogoFallback() {
-      document.querySelectorAll('.tool-logo').forEach(img => {
-        const markFallback = () => {
-          const chip = img.closest('.tool-chip');
-          if (chip) chip.classList.add('no-logo');
-        };
-        if (img.complete && img.naturalWidth === 0) markFallback();
-        img.addEventListener('error', markFallback);
+    (function initLogoFallbacks() {
+      const pairs = [
+        { imgSel: '.tool-logo',   parentSel: '.tool-chip' },
+        { imgSel: '.client-logo', parentSel: '.client' },
+      ];
+      pairs.forEach(({ imgSel, parentSel }) => {
+        document.querySelectorAll(imgSel).forEach(img => {
+          const markFallback = () => {
+            const parent = img.closest(parentSel);
+            if (parent) parent.classList.add('no-logo');
+          };
+          if (img.complete && img.naturalWidth === 0) markFallback();
+          img.addEventListener('error', markFallback);
+        });
       });
     })();
 
