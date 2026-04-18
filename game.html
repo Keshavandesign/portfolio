@@ -194,6 +194,16 @@
   let frame = 0;
   let powerup = null;   // { type, timer, maxTimer }
 
+  function resetState() {
+    cam = 0; lives = 3; score = 0; coins = 0;
+    state = 'PLAY'; deathTimer = 0; checkpointX = 40; frame = 0; powerup = null;
+    coinDefs.forEach(c => c.alive = true);
+    artifactDefs.forEach(a => a.alive = true);
+    powerupDefs.forEach(p => p.alive = true);
+    projectiles.length = 0;
+    spawnPlayer();
+  }
+
   /* ── AUDIO ── */
   let audioCtx = null;
   function getAudio() {
@@ -218,7 +228,7 @@
   function sfxJump()     { beep(200, 0.08, 'sine', 0.15, 420); }
   function sfxDie()      { beep(400, 0.4,  'square', 0.2, 60); }
   function sfxCoin()     { [523,659,784].forEach((f,i) => setTimeout(() => beep(f, 0.07, 'square', 0.12), i*55)); }
-  function sfxArtifact() { [523,659,784,1047].forEach((f,i) => setTimeout(() => beep(f, 0.09, 'sine', 0.15), i*60)); }
+  function sfxArtifact() { [392,494,587,740].forEach((f,i) => setTimeout(() => beep(f, 0.09, 'sine', 0.15), i*60)); }
   function sfxPowerup()  { beep(300, 0.25, 'sawtooth', 0.18, 900); }
   function sfxThrow()    { beep(800, 0.08, 'sawtooth', 0.14, 200); }
   function sfxHit()      { beep(150, 0.06, 'square', 0.15); }
@@ -693,7 +703,11 @@
       back.onclick = () => { window.location.href = 'index.html'; };
     } else {
       back.textContent = 'Try again';
-      back.onclick = () => location.reload();
+      back.onclick = () => {
+        document.getElementById('endCard').classList.remove('show');
+        resetState();
+        rafId = requestAnimationFrame(loop);
+      };
     }
 
     document.getElementById('endCard').classList.add('show');
