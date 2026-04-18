@@ -345,6 +345,59 @@
       to   { transform: rotate(360deg); }
     }
 
+    /* ─── CLIENT MARQUEE ─── */
+    .client-strip {
+      padding: 22px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      background: var(--bg);
+    }
+    .client-strip::before,
+    .client-strip::after {
+      content: '';
+      position: absolute; top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .client-strip::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg), transparent);
+    }
+    .client-strip::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg), transparent);
+    }
+    .client-marquee {
+      display: flex;
+      gap: 60px;
+      width: max-content;
+      animation: clientScroll 60s linear infinite;
+    }
+    .client-marquee span {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.4;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .client-marquee span.dot {
+      opacity: 0.25;
+      color: var(--accent);
+    }
+    @keyframes clientScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .client-marquee { animation: none; }
+    }
+
     /* ─────────────────────────────────────────
        ABOUT / INTRO
     ───────────────────────────────────────── */
@@ -983,6 +1036,29 @@
           <textPath href="#circle-path">SCROLL · SCROLL · SCROLL ·</textPath>
         </text>
       </svg>
+    </div>
+  </section>
+
+  <!-- ── Client Strip ── -->
+  <section class="client-strip" aria-label="Selected clients and teams">
+    <div class="client-marquee">
+      <span>MSN</span><span class="dot">·</span>
+      <span>ESPN</span><span class="dot">·</span>
+      <span>Getty</span><span class="dot">·</span>
+      <span>FinalLayer</span><span class="dot">·</span>
+      <span>Rizzle</span><span class="dot">·</span>
+      <span>CXFacts</span><span class="dot">·</span>
+      <span>Lagorii</span><span class="dot">·</span>
+      <span>Excytech</span><span class="dot">·</span>
+      <!-- Duplicate for seamless loop -->
+      <span>MSN</span><span class="dot">·</span>
+      <span>ESPN</span><span class="dot">·</span>
+      <span>Getty</span><span class="dot">·</span>
+      <span>FinalLayer</span><span class="dot">·</span>
+      <span>Rizzle</span><span class="dot">·</span>
+      <span>CXFacts</span><span class="dot">·</span>
+      <span>Lagorii</span><span class="dot">·</span>
+      <span>Excytech</span><span class="dot">·</span>
     </div>
   </section>
 
