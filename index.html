@@ -1518,6 +1518,68 @@
       padding: 0;
     }
     .m-cta:active { opacity: 0.82; }
+    /* ─────────────────────────────────────────
+       BRAND CURSOR + SELECTION
+    ───────────────────────────────────────── */
+
+    /* Text selection */
+    ::selection { background: rgba(155, 45, 122, 0.22); color: var(--fg); }
+    [data-theme="dark"] ::selection { background: rgba(229, 105, 169, 0.26); }
+
+    /* Hide default cursor everywhere except text inputs */
+    *, *::before, *::after { cursor: none; }
+    input, textarea, select, [contenteditable] { cursor: text; }
+
+    /* Cursor layers */
+    .k-dot, .k-ring, .k-aura {
+      position: fixed;
+      top: 0; left: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      will-change: transform;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .k-dot {
+      width: 14px; height: 14px;
+      background: #9B2D7A;
+      transition: opacity 0.4s, background 0.2s, transform 0.1s;
+    }
+    [data-theme="dark"] .k-dot { background: #E569A9; }
+
+    .k-ring {
+      width: 44px; height: 44px;
+      border: 1.5px solid rgba(155, 45, 122, 0.6);
+      transition: opacity 0.4s, width 0.25s cubic-bezier(0.22,1,0.36,1),
+                  height 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.2s;
+    }
+    [data-theme="dark"] .k-ring { border-color: rgba(229, 105, 169, 0.6); }
+
+    .k-aura {
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(155, 45, 122, 0.09) 0%, transparent 68%);
+      transition: opacity 0.4s;
+    }
+    [data-theme="dark"] .k-aura {
+      background: radial-gradient(circle, rgba(229, 105, 169, 0.09) 0%, transparent 68%);
+    }
+
+    /* Hover state — ring expands, dot shrinks */
+    .k-dot.hov   { background: #C43896; transform: translate(-50%,-50%) scale(0.65) !important; }
+    .k-ring.hov  { width: 56px; height: 56px; border-color: rgba(155, 45, 122, 0.9); }
+    [data-theme="dark"] .k-dot.hov  { background: #F07EC1; }
+    [data-theme="dark"] .k-ring.hov { border-color: rgba(229, 105, 169, 0.9); }
+
+    /* Click pulse */
+    .k-dot.click  { transform: translate(-50%,-50%) scale(0.45) !important; }
+    .k-ring.click { width: 66px; height: 66px; opacity: 0.35 !important; }
+
+    /* No custom cursor on touch/coarse devices */
+    @media (pointer: coarse) {
+      *, *::before, *::after { cursor: auto; }
+      .k-dot, .k-ring, .k-aura { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -1974,6 +2036,11 @@
     </ul>
   </footer>
 
+  <!-- Brand cursor layers -->
+  <div class="k-aura" id="kAura"></div>
+  <div class="k-ring" id="kRing"></div>
+  <div class="k-dot"  id="kDot"></div>
+
   <a href="#" class="scroll-top" id="scrollTop">↑</a>
 
   <!-- ── Mobile desktop notice ── -->
@@ -2180,6 +2247,82 @@
 
       cta.addEventListener('click', dismiss);
       backdrop.addEventListener('click', dismiss);
+    })();
+
+    /* ═══════════════════════════════════════════
+       BRAND CURSOR — dot + ring + aura
+    ═══════════════════════════════════════════ */
+    (function initBrandCursor() {
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+
+      const dot  = document.getElementById('kDot');
+      const ring = document.getElementById('kRing');
+      const aura = document.getElementById('kAura');
+      if (!dot || !ring || !aura) return;
+
+      let mx = -300, my = -300;
+      let rx = -300, ry = -300;
+      let ax = -300, ay = -300;
+      let visible = false;
+
+      /* Position each layer centered on its coordinate */
+      function place(el, x, y) {
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      }
+
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX;
+        my = e.clientY;
+        place(dot, mx, my);
+        if (!visible) {
+          dot.style.opacity  = '1';
+          ring.style.opacity = '0.7';
+          aura.style.opacity = '1';
+          visible = true;
+        }
+      });
+
+      document.addEventListener('mouseleave', () => {
+        dot.style.opacity = ring.style.opacity = aura.style.opacity = '0';
+        visible = false;
+      });
+
+      /* Ring + aura lerp toward mouse */
+      function tick() {
+        rx += (mx - rx) * 0.14;
+        ry += (my - ry) * 0.14;
+        ax += (mx - ax) * 0.06;
+        ay += (my - ay) * 0.06;
+        place(ring, rx, ry);
+        place(aura, ax, ay);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      /* Hover state via event delegation */
+      const INTERACTIVE = 'a, button, [role="button"], label, [data-resume], .project-card, .tool-chip, .cs-phase-card';
+      document.addEventListener('mouseover', e => {
+        if (e.target.closest(INTERACTIVE)) {
+          dot.classList.add('hov');
+          ring.classList.add('hov');
+        }
+      });
+      document.addEventListener('mouseout', e => {
+        if (e.target.closest(INTERACTIVE)) {
+          dot.classList.remove('hov');
+          ring.classList.remove('hov');
+        }
+      });
+
+      /* Click pulse */
+      document.addEventListener('mousedown', () => {
+        dot.classList.add('click');
+        ring.classList.add('click');
+      });
+      document.addEventListener('mouseup', () => {
+        dot.classList.remove('click');
+        ring.classList.remove('click');
+      });
     })();
 
     (function initThemeToggle() {
