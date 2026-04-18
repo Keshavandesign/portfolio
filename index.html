@@ -815,9 +815,14 @@
 
     /* ─── TOOLS / ORBITAL ─── */
     .tools-section {
-      padding: 120px 52px;
+      padding: 80px 52px;
       position: relative;
       overflow: hidden;
+      min-height: 100svh;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .tools-label {
       font-size: 11px;
@@ -826,7 +831,7 @@
       text-transform: lowercase;
       color: var(--muted);
       opacity: 0.7;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
       text-align: left;
       font-style: italic;
       font-family: var(--serif);
@@ -840,21 +845,23 @@
     .tools-stage {
       position: relative;
       width: 100%;
-      height: 520px;
+      height: 680px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .tools-stage::before {
+    .tools-stage::before,
+    .tools-stage::after {
       content: '';
       position: absolute;
       inset: 0;
       margin: auto;
-      width: 260px; height: 260px;
       border-radius: 50%;
-      border: 1px dashed rgba(155, 45, 122, 0.12);
+      border: 1px dashed rgba(155, 45, 122, 0.10);
       pointer-events: none;
     }
+    .tools-stage::before { width: 400px;  height: 400px; }
+    .tools-stage::after  { width: 580px;  height: 580px; opacity: 0.7; }
     .tool-chip {
       position: absolute;
       width: 64px; height: 64px;
@@ -908,11 +915,66 @@
       .tool-chip { animation: none !important; }
     }
     @media (max-width: 768px) {
-      .tools-section { padding: 80px 24px; }
-      .tools-stage { height: 360px; }
-      .tools-stage::before { width: 180px; height: 180px; }
-      .tool-chip { width: 52px; height: 52px; margin-top: -26px; margin-left: -26px; }
-      .tool-chip-inner { font-size: 16px; }
+      .tools-section { padding: 60px 24px; min-height: auto; }
+      .tools-stage { height: 440px; }
+      .tools-stage::before { width: 240px; height: 240px; }
+      .tools-stage::after  { width: 360px; height: 360px; }
+      .tool-chip { width: 48px; height: 48px; margin-top: -24px; margin-left: -24px; }
+      .tool-chip-inner { font-size: 14px; }
+    }
+
+    /* ─── RESUME FULLSCREEN OVERLAY ─── */
+    .resume-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .resume-overlay.open {
+      display: flex;
+      animation: resumeFade 0.25s var(--ease);
+    }
+    .resume-overlay iframe {
+      width: 100%;
+      max-width: 960px;
+      height: 100%;
+      max-height: calc(100vh - 96px);
+      border: 0;
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+    .resume-close {
+      position: fixed;
+      top: 20px; right: 20px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      z-index: 10001;
+      padding: 0;
+    }
+    .resume-close:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: scale(1.05);
+    }
+    body.resume-open { overflow: hidden; }
+    @keyframes resumeFade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     /* Scroll to top */
@@ -1148,7 +1210,7 @@
     <ul class="mobile-nav-links">
       <li><a href="#about" class="mobile-link">About</a></li>
       <li><a href="#work"  class="mobile-link">Work</a></li>
-      <li><a href="#"      class="mobile-link">Resume</a></li>
+      <li><a href="docs/Keshav_Anand_Resume.pdf" class="mobile-link" data-resume>Resume</a></li>
       <li><a href="#"      class="mobile-link">Contact</a></li>
     </ul>
     <div class="mobile-nav-footer">keshavanand.com</div>
@@ -1166,7 +1228,7 @@
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#work">Work</a></li>
-        <li><a href="#">Resume</a></li>
+        <li><a href="docs/Keshav_Anand_Resume.pdf" data-resume>Resume</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </div>
@@ -1174,7 +1236,7 @@
     <!-- Right: availability dot + resume pill -->
     <div class="nav-right">
       <span class="nav-available-dot" aria-label="Available for work" title="Available for work"></span>
-      <a href="#" class="nav-btn">Resume</a>
+      <a href="docs/Keshav_Anand_Resume.pdf" class="nav-btn" data-resume>Resume</a>
     </div>
 
     <!-- Hamburger (mobile) -->
@@ -1268,16 +1330,27 @@
   <section class="tools-section" id="tools" aria-label="Tools I use">
     <div class="tools-label reveal">tools of the trade</div>
     <div class="tools-stage" id="toolsStage">
-      <div class="tool-chip" data-radius="200" data-angle="0"   data-speed="55" data-bob="4"><span class="tool-chip-inner">Fg</span><span class="tool-chip-label">Figma</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="36"  data-speed="65" data-bob="5"><span class="tool-chip-inner">Fr</span><span class="tool-chip-label">Framer</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="72"  data-speed="60" data-bob="3"><span class="tool-chip-inner">Pp</span><span class="tool-chip-label">Protopie</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="108" data-speed="70" data-bob="4"><span class="tool-chip-inner">No</span><span class="tool-chip-label">Notion</span></div>
-      <div class="tool-chip" data-radius="200" data-angle="144" data-speed="58" data-bob="5"><span class="tool-chip-inner">Mi</span><span class="tool-chip-label">Miro</span></div>
-      <div class="tool-chip" data-radius="120" data-angle="0"   data-speed="-75" data-bob="4"><span class="tool-chip-inner">Cc</span><span class="tool-chip-label">Claude Code</span></div>
-      <div class="tool-chip" data-radius="120" data-angle="72"  data-speed="-85" data-bob="3"><span class="tool-chip-inner">Cx</span><span class="tool-chip-label">Codex</span></div>
-      <div class="tool-chip" data-radius="120" data-angle="144" data-speed="-80" data-bob="5"><span class="tool-chip-inner">Cu</span><span class="tool-chip-label">Cursor</span></div>
-      <div class="tool-chip" data-radius="120" data-angle="216" data-speed="-90" data-bob="4"><span class="tool-chip-inner">v0</span><span class="tool-chip-label">v0</span></div>
-      <div class="tool-chip" data-radius="120" data-angle="288" data-speed="-70" data-bob="3"><span class="tool-chip-inner">Lv</span><span class="tool-chip-label">Lovable</span></div>
+      <!-- Outer ring — Ops / Thinking -->
+      <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3"><span class="tool-chip-inner">Li</span><span class="tool-chip-label">Linear</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4"><span class="tool-chip-inner">No</span><span class="tool-chip-label">Notion</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3"><span class="tool-chip-inner">Lm</span><span class="tool-chip-label">Loom</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4"><span class="tool-chip-inner">Dv</span><span class="tool-chip-label">Dovetail</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3"><span class="tool-chip-inner">Mi</span><span class="tool-chip-label">Miro</span></div>
+      <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4"><span class="tool-chip-inner">Sl</span><span class="tool-chip-label">Slack</span></div>
+      <!-- Middle ring — Design craft -->
+      <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4"><span class="tool-chip-inner">Fg</span><span class="tool-chip-label">Figma</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="90"  data-speed="-7" data-bob="5"><span class="tool-chip-inner">Fr</span><span class="tool-chip-label">Framer</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="150" data-speed="-7" data-bob="3"><span class="tool-chip-inner">Pp</span><span class="tool-chip-label">Protopie</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="210" data-speed="-7" data-bob="4"><span class="tool-chip-inner">Sp</span><span class="tool-chip-label">Spline</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="270" data-speed="-7" data-bob="5"><span class="tool-chip-inner">Ri</span><span class="tool-chip-label">Rive</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="330" data-speed="-7" data-bob="3"><span class="tool-chip-inner">Ae</span><span class="tool-chip-label">After Effects</span></div>
+      <!-- Inner ring — AI builders -->
+      <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3"><span class="tool-chip-inner">Cc</span><span class="tool-chip-label">Claude Code</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="60"  data-speed="10" data-bob="4"><span class="tool-chip-inner">Cx</span><span class="tool-chip-label">Codex</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3"><span class="tool-chip-inner">Cu</span><span class="tool-chip-label">Cursor</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="180" data-speed="10" data-bob="4"><span class="tool-chip-inner">v0</span><span class="tool-chip-label">v0</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="3"><span class="tool-chip-inner">Lv</span><span class="tool-chip-label">Lovable</span></div>
+      <div class="tool-chip" data-radius="110" data-angle="300" data-speed="10" data-bob="4"><span class="tool-chip-inner">Ws</span><span class="tool-chip-label">Windsurf</span></div>
     </div>
   </section>
 
@@ -1433,7 +1506,7 @@
     <ul class="footer-nav">
       <li><a href="#about">About</a></li>
       <li><a href="#work">Work</a></li>
-      <li><a href="#">Resume</a></li>
+      <li><a href="docs/Keshav_Anand_Resume.pdf" data-resume>Resume</a></li>
       <li><a href="#tools">Tools</a></li>
     </ul>
     <ul class="footer-links">
@@ -1445,45 +1518,107 @@
 
   <a href="#" class="scroll-top" id="scrollTop">↑</a>
 
+  <!-- ── Resume fullscreen overlay ── -->
+  <div class="resume-overlay" id="resumeOverlay" role="dialog" aria-modal="true" aria-label="Resume">
+    <button class="resume-close" id="resumeClose" aria-label="Close resume">×</button>
+    <iframe id="resumeFrame" title="Keshav Anand Resume"></iframe>
+  </div>
+
   <script>
     /* ═══════════════════════════════════════════
        TOOLS — ORBITAL + FLOATING MOTION
+       - degPerSec: rotation in degrees per second
+       - hover anywhere on stage → ease to a full stop
     ═══════════════════════════════════════════ */
     (function initToolsOrbital() {
       const stage = document.getElementById('toolsStage');
       if (!stage) return;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       const chips = Array.from(stage.querySelectorAll('.tool-chip')).map(el => ({
         el,
-        radius: parseFloat(el.dataset.radius) || 200,
+        baseRadius: parseFloat(el.dataset.radius) || 200,
         angle: parseFloat(el.dataset.angle) || 0,
-        speed: parseFloat(el.dataset.speed) || 60,
+        degPerSec: parseFloat(el.dataset.speed) || 8,
         bob: parseFloat(el.dataset.bob) || 4,
         bobPhase: Math.random() * Math.PI * 2,
       }));
 
-      function place(chip, t) {
-        const rad = (chip.angle + (t / chip.speed) * 360) * Math.PI / 180;
-        const bobY = Math.sin(t / 1200 + chip.bobPhase) * chip.bob;
-        const x = Math.cos(rad) * chip.radius;
-        const y = Math.sin(rad) * chip.radius + bobY;
+      const DESIGN_HEIGHT = 680;
+      function currentScale() {
+        return Math.min(1, stage.clientHeight / DESIGN_HEIGHT);
+      }
+
+      function place(chip, t, scale) {
+        const r = chip.baseRadius * scale;
+        const rad = (chip.angle + chip.degPerSec * t) * Math.PI / 180;
+        const bobY = Math.sin(t * 0.6 + chip.bobPhase) * chip.bob * scale;
+        const x = Math.cos(rad) * r;
+        const y = Math.sin(rad) * r + bobY;
         chip.el.style.setProperty('--tx', x + 'px');
         chip.el.style.setProperty('--ty', y + 'px');
         chip.el.style.transform = `translate(${x}px, ${y}px)`;
       }
 
       if (reduced) {
-        chips.forEach(c => place(c, 0));
+        const s = currentScale();
+        chips.forEach(c => place(c, 0, s));
         return;
       }
 
-      let start = performance.now();
+      // Hover pause with eased speed factor (1 = normal, 0 = stopped)
+      let speedFactor = 1;
+      let target = 1;
+      stage.addEventListener('mouseenter', () => { target = 0; });
+      stage.addEventListener('mouseleave', () => { target = 1; });
+
+      let accumT = 0;            // accumulated simulation seconds
+      let lastNow = performance.now();
+
       function frame(now) {
-        const t = (now - start) / 10;
-        chips.forEach(c => place(c, t));
+        const dt = Math.min(0.05, (now - lastNow) / 1000);
+        lastNow = now;
+        // Ease toward target (≈ 250ms to settle, ease-out feel)
+        speedFactor += (target - speedFactor) * (1 - Math.exp(-dt * 6));
+        accumT += dt * speedFactor;
+        const s = currentScale();
+        chips.forEach(c => place(c, accumT, s));
         requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
+    })();
+
+    /* ═══════════════════════════════════════════
+       RESUME — fullscreen overlay
+    ═══════════════════════════════════════════ */
+    (function initResumeOverlay() {
+      const overlay = document.getElementById('resumeOverlay');
+      const frame = document.getElementById('resumeFrame');
+      const closeBtn = document.getElementById('resumeClose');
+      if (!overlay || !frame || !closeBtn) return;
+      const PDF_PATH = 'docs/Keshav_Anand_Resume.pdf';
+
+      function open(e) {
+        if (e) e.preventDefault();
+        if (!frame.getAttribute('src')) frame.setAttribute('src', PDF_PATH);
+        overlay.classList.add('open');
+        document.body.classList.add('resume-open');
+      }
+      function close() {
+        overlay.classList.remove('open');
+        document.body.classList.remove('resume-open');
+      }
+
+      document.querySelectorAll('[data-resume]').forEach(a => {
+        a.addEventListener('click', open);
+      });
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+      });
     })();
 
     /* ═══════════════════════════════════════════
