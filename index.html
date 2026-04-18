@@ -1316,11 +1316,13 @@
       .nav-right   { display: none; }
       .nav-hamburger { display: flex; }
 
-      /* Hero — tighter vertical, consistent 24px sides */
-      .hero { padding: 80px 24px 88px; }
-      .hero-headline { font-size: clamp(28px, 7.5vw, 42px); }
+      /* Hero — left-aligned on mobile, larger headline */
+      .hero { padding: 80px 24px 88px; align-items: flex-start; text-align: left; }
+      .hero-content { text-align: left; }
+      .hero-headline { font-size: clamp(36px, 9.5vw, 48px); }
       .hero-eyebrow { font-size: 9px; letter-spacing: 0.08em; margin-bottom: 18px; }
       .hero-meta { font-size: 9px; letter-spacing: 0.08em; margin-top: 20px; }
+      .scroll-badge { left: 24px; transform: none; }
 
       /* About — same side margin as every other section */
       .about-intro { padding: 72px 24px; }
@@ -1355,15 +1357,19 @@
       .footer-nav { justify-content: flex-start; flex-wrap: wrap; gap: 16px; }
       .footer-links { justify-content: flex-start; }
 
-      /* Tools — clip overflow, hide outer + middle rings, show only inner AI ring */
+      /* Tools — two rings on mobile: middle (Figma) + thinned inner (Claude Code) */
       .tools-section { overflow: hidden; padding: 48px 24px 56px; }
-      .tools-stage { height: 280px; }
-      .tools-stage::before { width: 160px; height: 160px; }
-      .tools-stage::after  { display: none; }
-      /* Outer ring (r=290) and middle ring (r=200) hidden on mobile */
+      .tools-stage { height: 400px; }
+      /* Guide rings matched to scaled orbits (~173px middle, ~95px inner) */
+      .tools-stage::before { width: 96px;  height: 96px; }
+      .tools-stage::after  { display: block; width: 176px; height: 176px; opacity: 0.8; }
+      /* Outer ring (r=290) hidden — too wide at mobile scale */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
-      .tool-chip[data-radius="200"] { opacity: 0; pointer-events: none; }
-      /* Inner AI ring only — 6 chips on a 110 orbit, comfortably visible */
+      /* Middle ring (r=200) visible — all 6 chips including Figma */
+      /* Inner ring (r=110): keep 3 evenly spaced (Claude Code 0°, Cursor 120°, Lovable 240°) */
+      .tool-chip[data-radius="110"][data-angle="60"]  { opacity: 0; pointer-events: none; }
+      .tool-chip[data-radius="110"][data-angle="180"] { opacity: 0; pointer-events: none; }
+      .tool-chip[data-radius="110"][data-angle="300"] { opacity: 0; pointer-events: none; }
       .tools-header { margin-bottom: 20px; }
       .tools-heading { font-size: clamp(28px, 7vw, 48px); }
 
@@ -1372,10 +1378,14 @@
     }
 
     @media (max-width: 480px) {
-      .hero { padding: 72px 20px 80px; }
-      .hero-headline { font-size: clamp(24px, 8vw, 34px); }
+      .hero { padding: 72px 20px 80px; align-items: flex-start; text-align: left; }
+      .hero-content { text-align: left; }
+      .hero-headline { font-size: clamp(30px, 9vw, 38px); }
       .hero-eyebrow { font-size: 8.5px; }
       .hero-meta { font-size: 8.5px; margin-top: 16px; }
+      .tools-stage { height: 360px; }
+      .tools-stage::before { width: 82px;  height: 82px;  }
+      .tools-stage::after  { width: 152px; height: 152px; }
       .about-intro { padding: 60px 20px; }
       .about-tagline { font-size: clamp(17px, 5vw, 22px); }
       .about-tagline .tagline-second { font-size: 13px; }
