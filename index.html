@@ -804,6 +804,14 @@
       flex-shrink: 0;
     }
 
+    /* Stretched link — entire project card is clickable */
+    .project-card { cursor: pointer; }
+    .project-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
     .project-btn {
       display: inline-flex;
       align-items: center;
