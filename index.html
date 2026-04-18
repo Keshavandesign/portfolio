@@ -422,6 +422,28 @@
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .about-eyebrow-now {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      opacity: 0.7;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .about-eyebrow-now::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.65;
+      display: inline-block;
     }
 
     /* Sculpture */
@@ -1064,7 +1086,10 @@
 
   <!-- ── About / Intro ── -->
   <section class="about-intro" id="about">
-    <div class="about-eyebrow reveal">'FOR INQUISITIVE MINDS'</div>
+    <div class="about-eyebrow reveal">
+      <span>'FOR INQUISITIVE MINDS'</span>
+      <span class="about-eyebrow-now">Currently · Founding Designer at FinalLayer</span>
+    </div>
 
     <div class="about-visual reveal reveal-d1">
       <div class="sculpture-float">
@@ -1079,7 +1104,7 @@
     </div>
 
     <p class="about-tagline reveal reveal-d2">
-      A digital product designer mad for <strong>Art &amp; Psychology.</strong>
+      A product designer mad for <strong>Art &amp; Psychology</strong> — building AI-native products with <strong>measurable impact.</strong>
     </p>
 
     <a href="#" class="about-btn reveal reveal-d3">About me</a>
