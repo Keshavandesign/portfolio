@@ -375,6 +375,15 @@
       else               { player.y = p.y + p.h; player.vy = 0; }
     });
 
+    // Ride moving platforms
+    platforms.forEach(p => {
+      if (!p.moving) return;
+      const standingOn = player.onGround &&
+        player.y + player.h >= p.y && player.y + player.h <= p.y + p.h + 2 &&
+        player.x + player.w > p.x && player.x < p.x + p.w;
+      if (standingOn) player.x += p.dx;
+    });
+
     player.x = Math.max(0, Math.min(player.x, W - player.w));
 
     const shielded = powerup && powerup.type === 'shield';
@@ -587,7 +596,7 @@
     btnThrowEl.addEventListener('mousedown',  throwFn);
   }
 
-  function updateCollectibles() {
+  function updateCollectibles(dt = 1/60) {
     if (state !== 'PLAY') return;
     coinDefs.forEach(c => {
       if (!c.alive) return;
@@ -606,7 +615,7 @@
       }
     });
     if (powerup) {
-      powerup.timer -= 1/60;
+      powerup.timer -= dt;
       if (powerup.timer <= 0) powerup = null;
     }
   }
@@ -725,9 +734,11 @@
   function drawFactoid() {
     if (factoidTimer <= 0 || !factoidText) return;
 
-    const alpha = factoidTimer > 30
-      ? Math.min(1, (220 - factoidTimer) / 20 + 0.05) * Math.min(1, factoidTimer / 30)
-      : factoidTimer / 30;
+    let alpha;
+    if (factoidTimer > 190) alpha = (220 - factoidTimer) / 30;       // fade in (frames 220→190)
+    else if (factoidTimer > 30) alpha = 1;                            // full show
+    else alpha = factoidTimer / 30;                                   // fade out (frames 30→0)
+    alpha = Math.max(0, Math.min(1, alpha));
 
     const maxW = Math.min(Math.ceil(360 * scale), vw * 0.85);
     const pad  = Math.ceil(12 * scale);
@@ -809,6 +820,7 @@
       back.textContent = 'Try again';
       back.onclick = () => {
         document.getElementById('endCard').classList.remove('show');
+        document.activeElement?.blur();
         resetState();
         rafId = requestAnimationFrame(loop);
       };
@@ -854,12 +866,12 @@
   }
 
   /* ── UPDATE ── */
-  function update() {
+  function update(dt = 1/60) {
     frame++;
-    if (factoidTimer > 0) factoidTimer--;
+    if (factoidTimer > 0) factoidTimer -= dt * 60;
     // Camera: keep player at ~35% from left
     const targetCam = player.x - vw / scale * 0.35;
-    cam = Math.max(0, Math.min(targetCam, W - vw / scale));
+    cam = Math.max(0, Math.min(targetCam, Math.max(0, W - vw / scale)));
 
     // Update moving platforms
     platforms.forEach(p => {
@@ -870,7 +882,7 @@
 
     updatePlayer();
     updateEnemies();
-    updateCollectibles();
+    updateCollectibles(dt);
     updateProjectiles();
     if (state === 'DYING') {
       deathTimer--;
@@ -894,7 +906,14 @@
     drawFactoid();
   }
   let rafId;
-  function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
+  let lastTime = 0;
+  function loop(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    update(dt);
+    render();
+    rafId = requestAnimationFrame(loop);
+  }
   rafId = requestAnimationFrame(loop);
   </script>
 </body>
