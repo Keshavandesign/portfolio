@@ -198,9 +198,29 @@
   let frame = 0;
   let powerup = null;   // { type, timer, maxTimer }
 
+  let factoidText = '';
+  let factoidTimer = 0;  // frames to show (180 = ~3s at 60fps)
+
+  function showFactoid(text) {
+    factoidText = text;
+    factoidTimer = 220;
+  }
+
+  const FACTOIDS = {
+    F: "I've shipped in Figma since day one. It's where thinking becomes real.",
+    P: "4 years. B2B SaaS, fintech, AI products. I still sketch on paper first.",
+    G: "I was Founding Designer at FinalLayer. Built the design system from zero.",
+    C: "I built this game too. Design and code aren't that different once you stop treating them that way.",
+    Z1: "BuyingTeams. A B2B fintech platform. I owned it end to end.",
+    Z2: "CXFacts. A Custom Question feature. 30 days. Double Diamond. Shipped.",
+    Z3: "I work across Hyderabad and remote. Context switching is a design skill.",
+    Z4: "MSN, ESPN, Getty. Different scales. Same instinct: what does the user actually need?",
+  };
+
   function resetState() {
     cam = 0; lives = 3; score = 0; coins = 0;
     state = 'PLAY'; deathTimer = 0; checkpointX = 40; frame = 0; powerup = null;
+    factoidText = ''; factoidTimer = 0;
     coinDefs.forEach(c => c.alive = true);
     artifactDefs.forEach(a => a.alive = true);
     powerupDefs.forEach(p => p.alive = true);
@@ -367,7 +387,13 @@
 
     if (player.y > H + 40) die();
 
-    CHECKPOINTS.forEach(cx => { if (player.x > cx && cx > checkpointX) checkpointX = cx; });
+    CHECKPOINTS.forEach((cx, i) => {
+      if (player.x > cx && cx > checkpointX) {
+        checkpointX = cx;
+        const key = 'Z' + i;
+        if (i > 0 && FACTOIDS[key]) showFactoid(FACTOIDS[key]);
+      }
+    });
     if (player.x + player.w > FLAG.x && player.x < FLAG.x + 20 &&
         player.y + player.h > FLAG.y && player.y < FLAG.y + 60) {
       endGame(true);
@@ -569,7 +595,7 @@
     });
     artifactDefs.forEach(a => {
       if (!a.alive) return;
-      if (hit(player, a)) { a.alive = false; score += 5; sfxArtifact(); }
+      if (hit(player, a)) { a.alive = false; score += 5; sfxArtifact(); showFactoid(FACTOIDS[a.label]); }
     });
     powerupDefs.forEach(p => {
       if (!p.alive) return;
@@ -696,6 +722,56 @@
     }
   }
 
+  function drawFactoid() {
+    if (factoidTimer <= 0 || !factoidText) return;
+
+    const alpha = factoidTimer > 30
+      ? Math.min(1, (220 - factoidTimer) / 20 + 0.05) * Math.min(1, factoidTimer / 30)
+      : factoidTimer / 30;
+
+    const maxW = Math.min(Math.ceil(360 * scale), vw * 0.85);
+    const pad  = Math.ceil(12 * scale);
+    const fs   = Math.ceil(11 * scale);
+
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+    ctx.font = `500 ${fs}px Inter, sans-serif`;
+
+    // Measure text — wrap if needed
+    const words = factoidText.split(' ');
+    const lines = [];
+    let line = '';
+    words.forEach(w => {
+      const test = line ? line + ' ' + w : w;
+      if (ctx.measureText(test).width > maxW - pad * 2) {
+        if (line) lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
+    });
+    if (line) lines.push(line);
+
+    const lineH = fs * 1.5;
+    const bh = lines.length * lineH + pad * 2;
+    const bw = maxW;
+    const bx = offX + (vw - bw) / 2;
+    const by = offY + Math.ceil(60 * scale);
+
+    ctx.fillStyle = 'rgba(42,37,53,0.88)';
+    if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, Math.ceil(8*scale));
+    else ctx.rect(bx, by, bw, bh);
+    ctx.fill();
+
+    ctx.fillStyle = '#F0EBE3';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    lines.forEach((l, i) => {
+      ctx.fillText(l, bx + bw/2, by + pad + i * lineH);
+    });
+    ctx.restore();
+  }
+
   /* ── END GAME ── */
   function endGame(won) {
     if (state === 'END') return;
@@ -780,6 +856,7 @@
   /* ── UPDATE ── */
   function update() {
     frame++;
+    if (factoidTimer > 0) factoidTimer--;
     // Camera: keep player at ~35% from left
     const targetCam = player.x - vw / scale * 0.35;
     cam = Math.max(0, Math.min(targetCam, W - vw / scale));
@@ -814,6 +891,7 @@
     drawFlag();
     drawPlayer();
     drawHUD();
+    drawFactoid();
   }
   let rafId;
   function loop() { update(); render(); rafId = requestAnimationFrame(loop); }
