@@ -462,9 +462,9 @@
     [data-theme="dark"] .client-logo.light { display: none; }
     [data-theme="dark"] .client-logo.dark  { display: inline-block; }
     .client:hover .client-logo { opacity: 0.95; }
-    .client:hover .client-logo.light,
-    .client:hover .client-logo.dark  { display: none !important; }
-    .client:hover .client-logo.brand { display: inline-block; }
+    .client:not(.no-brand):hover .client-logo.light,
+    .client:not(.no-brand):hover .client-logo.dark  { display: none !important; }
+    .client:not(.no-brand):hover .client-logo.brand { display: inline-block; }
     .client .client-text { display: none; }
     .client.no-logo .client-text { display: inline; }
     .client.no-logo .client-logo { display: none !important; }
@@ -975,8 +975,7 @@
       position: absolute;
       width: 64px; height: 64px;
       border-radius: 50%;
-      /* Inverted contrast: dark bubble in light mode, light bubble in dark mode */
-      background: var(--fg);
+      background: var(--bg);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
       display: flex;
@@ -988,41 +987,41 @@
       cursor: default;
       will-change: transform;
     }
+    /* Hover: invert bubble to contrast + swap mono logo for brand-color splash */
     .tool-chip:hover {
       transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.08);
       box-shadow: var(--shadow-md);
+      background: var(--fg);
       z-index: 10;
     }
+    .tool-chip:hover .tool-chip-inner { color: var(--bg); }
     .tool-chip-inner {
       font-family: var(--serif);
       font-style: italic;
       font-weight: 400;
       font-size: 20px;
-      /* Fallback letter reads against the inverted chip bg */
-      color: var(--bg);
+      color: var(--fg);
       letter-spacing: -0.02em;
+      transition: color 0.35s var(--ease);
     }
     .tool-logo {
       width: 28px;
       height: 28px;
       object-fit: contain;
-      opacity: 0.9;
+      opacity: 0.88;
       transition: opacity 0.25s var(--ease);
     }
-    /* Chip bg is --fg, so logo must be tinted like --bg for contrast.
-       .light class = dark-tinted source (for LIGHT chip = dark mode);
-       .dark  class = light-tinted source (for DARK chip = light mode). */
-    .tool-logo.light { display: none; }
-    .tool-logo.dark  { display: block; }
+    /* Mono logo shows on the subtle resting bubble; matches the --fg tint */
+    .tool-logo.dark  { display: none; }
     .tool-logo.brand { display: none; }
-    [data-theme="dark"] .tool-logo.dark  { display: none; }
-    [data-theme="dark"] .tool-logo.light { display: block; }
-    /* Hover: swap mono for brand-color logo ("color splash") */
-    .tool-chip:hover .tool-logo.light,
-    .tool-chip:hover .tool-logo.dark  { display: none !important; }
-    .tool-chip:hover .tool-logo.brand { display: block; }
+    [data-theme="dark"] .tool-logo.light { display: none; }
+    [data-theme="dark"] .tool-logo.dark  { display: block; }
+    /* Hover: swap mono for brand-color logo, unless brand img failed to load */
+    .tool-chip:not(.no-brand):hover .tool-logo.light,
+    .tool-chip:not(.no-brand):hover .tool-logo.dark  { display: none !important; }
+    .tool-chip:not(.no-brand):hover .tool-logo.brand { display: block; }
     .tool-chip:hover .tool-logo { opacity: 1; }
-    /* Fallback: hide letter when a logo is present and loaded */
+    /* Fallback: show letter only when BOTH mono logos failed */
     .tool-chip .tool-fallback { display: none; }
     .tool-chip.no-logo .tool-fallback { display: inline-block; }
     .tool-chip.no-logo .tool-logo { display: none !important; }
@@ -1836,20 +1835,39 @@
   <script>
     /* ═══════════════════════════════════════════
        LOGO FALLBACKS — graceful text fallback on 404
+       - Require BOTH mono imgs (light + dark) to fail before dropping to letter
+       - Brand (hover) img failure only disables the color-splash, keeps mono
     ═══════════════════════════════════════════ */
     (function initLogoFallbacks() {
-      const pairs = [
-        { imgSel: '.tool-logo',   parentSel: '.tool-chip' },
-        { imgSel: '.client-logo', parentSel: '.client' },
+      const configs = [
+        { parentSel: '.tool-chip', monoSel: '.tool-logo.light, .tool-logo.dark', brandSel: '.tool-logo.brand' },
+        { parentSel: '.client',    monoSel: '.client-logo.light, .client-logo.dark', brandSel: '.client-logo.brand' },
       ];
-      pairs.forEach(({ imgSel, parentSel }) => {
-        document.querySelectorAll(imgSel).forEach(img => {
-          const markFallback = () => {
-            const parent = img.closest(parentSel);
-            if (parent) parent.classList.add('no-logo');
+
+      configs.forEach(({ parentSel, monoSel, brandSel }) => {
+        // Mono: mark .no-logo only when both light + dark images have failed
+        const monoFails = new WeakMap(); // parentEl → Set<'light'|'dark'>
+        document.querySelectorAll(monoSel).forEach(img => {
+          const parent = img.closest(parentSel);
+          if (!parent) return;
+          const tone = img.classList.contains('light') ? 'light' : 'dark';
+          const mark = () => {
+            let fails = monoFails.get(parent);
+            if (!fails) { fails = new Set(); monoFails.set(parent, fails); }
+            fails.add(tone);
+            if (fails.size >= 2) parent.classList.add('no-logo');
           };
-          if (img.complete && img.naturalWidth === 0) markFallback();
-          img.addEventListener('error', markFallback);
+          if (img.complete && img.naturalWidth === 0) mark();
+          img.addEventListener('error', mark);
+        });
+
+        // Brand: mark .no-brand on failure — mono stays visible on hover
+        document.querySelectorAll(brandSel).forEach(img => {
+          const parent = img.closest(parentSel);
+          if (!parent) return;
+          const mark = () => parent.classList.add('no-brand');
+          if (img.complete && img.naturalWidth === 0) mark();
+          img.addEventListener('error', mark);
         });
       });
     })();
