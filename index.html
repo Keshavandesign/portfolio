@@ -979,18 +979,17 @@
       align-items: center;
       justify-content: center;
     }
-    .tools-stage::before,
-    .tools-stage::after {
-      content: '';
+    /* Three explicit guide rings — one per orbit, aligned exactly */
+    .tools-orbit-guide {
       position: absolute;
-      inset: 0;
-      margin: auto;
+      inset: 0; margin: auto;
       border-radius: 50%;
       border: 1px dashed rgba(155, 45, 122, 0.10);
       pointer-events: none;
     }
-    .tools-stage::before { width: 400px;  height: 400px; }
-    .tools-stage::after  { width: 580px;  height: 580px; opacity: 0.7; }
+    .tools-orbit-guide:nth-child(2) { width: 400px; height: 400px; }  /* middle r=200 */
+    .tools-orbit-guide:nth-child(3) { width: 220px; height: 220px; }  /* inner  r=110 */
+    .tools-orbit-guide:nth-child(4) { width: 580px; height: 580px; opacity: 0.6; } /* outer r=290 */
     .tool-chip {
       position: absolute;
       width: 64px; height: 64px;
@@ -1072,8 +1071,9 @@
     @media (max-width: 768px) {
       .tools-section { padding: 60px 24px; min-height: auto; }
       .tools-stage { height: 440px; }
-      .tools-stage::before { width: 240px; height: 240px; }
-      .tools-stage::after  { width: 360px; height: 360px; }
+      .tools-orbit-guide:nth-child(2) { width: 240px; height: 240px; }
+      .tools-orbit-guide:nth-child(3) { width: 144px; height: 144px; }
+      .tools-orbit-guide:nth-child(4) { width: 360px; height: 360px; }
       .tool-chip { width: 48px; height: 48px; margin-top: -24px; margin-left: -24px; }
       .tool-chip-inner { font-size: 14px; }
       .tool-logo { width: 22px; height: 22px; }
@@ -1359,9 +1359,10 @@
       /* Tools — two rings on mobile: middle (Figma) + thinned inner (Claude Code) */
       .tools-section { overflow: hidden; padding: 48px 24px 56px; }
       .tools-stage { height: 400px; }
-      /* Guide rings matched to JS mobile radii (inner:65, middle:225, scale≈0.43) */
-      .tools-stage::before { width: 58px;  height: 58px; }
-      .tools-stage::after  { display: block; width: 196px; height: 196px; opacity: 0.8; }
+      /* Guide rings matched to JS mobile radii (inner:65→28px, middle:225→98px) at scale≈0.43 */
+      .tools-orbit-guide:nth-child(2) { width: 196px; height: 196px; }
+      .tools-orbit-guide:nth-child(3) { width: 58px;  height: 58px; }
+      .tools-orbit-guide:nth-child(4) { display: none; }
       /* Outer ring (r=290) hidden — too wide at mobile scale */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
       /* Middle ring (r=200) visible — all 6 chips including Figma */
@@ -1381,8 +1382,8 @@
       .hero-headline { font-size: clamp(34px, 9.5vw, 44px); }
       .hero-eyebrow { font-size: 8.5px; margin-bottom: 10px; }
       .tools-stage { height: 360px; }
-      .tools-stage::before { width: 50px;  height: 50px;  }
-      .tools-stage::after  { width: 170px; height: 170px; }
+      .tools-orbit-guide:nth-child(2) { width: 170px; height: 170px; }
+      .tools-orbit-guide:nth-child(3) { width: 50px;  height: 50px; }
       .about-intro { padding: 60px 20px; }
       .about-tagline { font-size: clamp(17px, 5vw, 22px); }
       .about-tagline .tagline-second { font-size: 13px; }
@@ -1668,6 +1669,10 @@
       </p>
     </div>
     <div class="tools-stage" id="toolsStage">
+      <!-- Orbit guide rings — one per orbit radius -->
+      <div class="tools-orbit-guide"></div>
+      <div class="tools-orbit-guide"></div>
+      <div class="tools-orbit-guide"></div>
       <!-- Outer ring Ops / Thinking -->
       <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" />
