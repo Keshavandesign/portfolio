@@ -21,7 +21,13 @@
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      scroll-padding-top: 80px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     body {
       background: var(--bg);
@@ -41,22 +47,19 @@
       grid-template-columns: auto 1fr auto;
       align-items: center;
       padding: 28px 52px;
-      /* Smart hide/show */
-      transform: translateY(0);
+      /* GPU layer for smooth hide/show */
+      transform: translateZ(0);
       transition:
         transform 0.45s var(--ease),
         padding 0.4s var(--ease),
-        background 0.35s ease,
-        backdrop-filter 0.35s ease;
+        background 0.35s ease;
     }
 
     nav.hide { transform: translateY(-110%); }
 
     nav.scrolled {
       padding: 14px 52px;
-      background: rgba(237, 234, 227, 0.90);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(237, 234, 227, 0.96);
     }
 
     /* ── Logo ── */
@@ -246,6 +249,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      scroll-snap-align: start;
       justify-content: center;
       text-align: center;
       padding: 120px 52px 140px;
@@ -298,6 +302,7 @@
       width: 88px; height: 88px;
       z-index: 1;
       opacity: 0;
+      cursor: pointer;
       animation: fadeIn 0.7s var(--ease) 1.5s forwards;
     }
     .scroll-badge svg {
@@ -319,10 +324,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      scroll-snap-align: start;
       justify-content: center;
       text-align: center;
       padding: 100px 52px;
       overflow: hidden;
+      contain: layout style;
     }
 
     .about-eyebrow {
@@ -341,10 +348,36 @@
       position: relative;
     }
 
+    /* Playful tooltip on hover */
+    .about-visual::after {
+      content: '🎮 Psst… click me to play a secret game & win a free call!';
+      position: absolute;
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 10px 18px;
+      border-radius: 100px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition:
+        opacity 0.35s var(--ease),
+        transform 0.35s var(--ease);
+      z-index: 5;
+    }
+    .about-visual:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* Float lives on wrapper so hover scale doesn't fight it */
     .sculpture-float {
       animation: sculptureFloat 5s ease-in-out infinite;
-      will-change: transform;
     }
 
     .sculpture-img {
@@ -353,17 +386,11 @@
       display: block;
       filter: drop-shadow(0 20px 44px rgba(42,37,53,0.12));
       transform-origin: center bottom;
-      transition:
-        transform 0.55s var(--ease),
-        filter 0.55s var(--ease);
-      will-change: transform, filter;
+      transition: transform 0.55s var(--ease);
     }
 
     .about-visual:hover .sculpture-img {
       transform: scale(1.04);
-      filter:
-        drop-shadow(0 28px 56px rgba(42,37,53,0.16))
-        sepia(0.12) saturate(1.18) brightness(1.04);
     }
 
     @keyframes sculptureFloat {
@@ -419,6 +446,8 @@
     .projects {
       padding: 120px 52px;
       position: relative;
+      contain: layout style;
+      scroll-snap-align: start;
     }
 
     .projects-heading {
@@ -444,13 +473,12 @@
       border-radius: 22px;
       overflow: hidden;
       box-shadow:
-        0 1px 2px rgba(42,37,53,0.04),
-        0 4px 16px rgba(42,37,53,0.05),
-        0 12px 32px rgba(42,37,53,0.04);
+        0 2px 8px rgba(42,37,53,0.06),
+        0 8px 24px rgba(42,37,53,0.05);
+      transform: translateZ(0);
       transition:
         transform 0.55s var(--ease),
         box-shadow 0.55s var(--ease);
-      will-change: transform;
     }
     .project-card:hover {
       transform: translateY(-10px);
@@ -651,59 +679,54 @@
     .scroll-top:hover { transform: translateY(-3px); color: var(--fg); }
 
     /* ─────────────────────────────────────────
-       TESTIMONIALS — full-width carousel
+       TESTIMONIALS — hero-style full-viewport carousel
     ───────────────────────────────────────── */
     .testimonials {
-      padding: 120px 52px;
+      padding: 100px 52px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: 60vh;
-    }
-
-    .testimonials-eyebrow {
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 52px;
+      min-height: 100vh;
+      position: relative;
+      scroll-snap-align: start;
     }
 
     .testimonials-carousel {
       position: relative;
-      max-width: 780px;
+      max-width: 900px;
       width: 100%;
     }
 
     .testimonial-slide {
       display: none;
-    }
-    .testimonial-slide.active {
-      display: block;
-      animation: tSlideIn 0.65s var(--ease) forwards;
+      animation: tFadeIn 0.5s var(--ease) both;
     }
 
-    @keyframes tSlideIn {
-      from { opacity: 0; transform: translateY(14px); }
+    .testimonial-slide.active {
+      display: block;
+    }
+
+    @keyframes tFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     .testimonial-quote {
       font-family: var(--serif);
-      font-size: clamp(22px, 2.6vw, 38px);
+      font-size: clamp(28px, 3.2vw, 48px);
       font-weight: 400;
-      letter-spacing: -0.025em;
-      line-height: 1.45;
+      font-style: italic;
+      letter-spacing: -0.03em;
+      line-height: 1.5;
       color: var(--fg);
-      margin-bottom: 36px;
+      margin-bottom: 48px;
     }
 
     .testimonial-attribution {
       font-family: var(--sans);
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
@@ -714,29 +737,35 @@
       color: var(--fg);
     }
 
+    .attribution-sep {
+      opacity: 0.4;
+      margin: 0 6px;
+    }
+
     /* Navigation */
     .testimonial-nav {
       display: flex;
       align-items: center;
-      gap: 22px;
-      margin-top: 56px;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 72px;
     }
 
     .t-nav-btn {
-      width: 38px; height: 38px;
-      border: 1.5px solid rgba(42,37,53,0.2);
+      width: 40px; height: 40px;
+      border: 1.5px solid rgba(42,37,53,0.25);
       border-radius: 50%;
       background: none;
       color: var(--fg);
-      font-size: 15px;
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition:
-        background 0.28s var(--ease),
-        border-color 0.28s,
-        color 0.28s,
+        background 0.3s var(--ease),
+        border-color 0.3s,
+        color 0.3s,
         transform 0.35s var(--ease);
     }
 
@@ -744,16 +773,16 @@
       background: var(--fg);
       color: var(--bg);
       border-color: var(--fg);
-      transform: scale(1.08);
+      transform: scale(1.1);
     }
 
     .t-counter {
       font-family: var(--sans);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 400;
       letter-spacing: 0.1em;
       color: var(--muted);
-      min-width: 36px;
+      min-width: 44px;
       text-align: center;
     }
 
@@ -767,7 +796,6 @@
       transition:
         opacity  0.6s var(--ease),
         transform 0.6s var(--ease);
-      will-change: transform, opacity;
     }
     .reveal.visible {
       opacity: 1;
@@ -822,9 +850,9 @@
 
       /* Projects: single column on mobile */
       .projects { padding: 64px 16px; }
-      /* Testimonials: single column on mobile */
-      .testimonials { padding: 64px 16px; }
-      .testimonials-grid { grid-template-columns: 1fr; gap: 14px; }
+      /* Testimonials: responsive on mobile */
+      .testimonials { padding: 80px 24px; min-height: 80vh; }
+      .testimonial-quote { font-size: clamp(20px, 5vw, 32px); margin-bottom: 36px; }
       .projects-grid { grid-template-columns: 1fr; gap: 14px; }
       .project-card.wide {
         grid-column: span 1;
@@ -871,25 +899,7 @@
   <nav id="nav">
     <!-- Logo: mark + wordmark -->
     <a href="/" class="nav-logo">
-      <!-- Dot-grid K mark -->
-      <svg class="logo-mark" width="28" height="28" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Row 0 -->
-        <rect x="0"  y="0"  width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <rect x="24" y="0"  width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <!-- Row 1 -->
-        <rect x="0"  y="6"  width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <rect x="18" y="6"  width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <!-- Row 2 — junction -->
-        <rect x="0"  y="12" width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <rect x="6"  y="12" width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <!-- Row 3 -->
-        <rect x="0"  y="18" width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <rect x="18" y="18" width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <!-- Row 4 -->
-        <rect x="0"  y="24" width="3" height="3" rx="0.6" fill="#2A2535"/>
-        <rect x="24" y="24" width="3" height="3" rx="0.6" fill="#2A2535"/>
-      </svg>
-      <span class="logo-word">Keshavanand</span>
+      <img src="Assets/Logo.svg" alt="Keshav Anand" class="logo-mark" style="height: 40px; width: auto;" />
     </a>
 
     <!-- Center nav links -->
@@ -924,7 +934,7 @@
     </div>
 
     <!-- Rotating scroll badge — no dot -->
-    <div class="scroll-badge">
+    <div class="scroll-badge" id="scrollBadge">
       <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <path id="circle-path" d="M48,48 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/>
@@ -949,9 +959,11 @@
     <div class="about-visual reveal reveal-d1">
       <div class="sculpture-float">
         <img
+          id="sculptureEgg"
           src="assets/sculpture.png"
           alt="Classical sculpture — Keshav Anand"
           class="sculpture-img"
+          style="cursor: pointer;"
         />
       </div>
     </div>
@@ -1010,7 +1022,7 @@
           </div>
           <h3 class="project-name">BuyingTeams</h3>
           <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks — simplifying complex financial workflows into intuitive interfaces.</p>
-          <a href="#" class="project-btn">View Case Study →</a>
+          <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
         </div>
       </div>
 
@@ -1050,7 +1062,51 @@
         </div>
       </div>
 
-      <!-- Card 3 — Atlas Design System (wide, horizontal) -->
+      <!-- Card 3 — CXFacts -->
+      <div class="project-card reveal reveal-d1">
+        <div class="card-visual" style="background: linear-gradient(145deg, #D4DDE4 0%, #B4C4D4 100%);">
+          <div class="card-visual-inner">
+            <div class="mockup-wrap">
+              <div class="mockup-browser">
+                <div class="mockup-bar-top">
+                  <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                  <div class="mockup-url"></div>
+                </div>
+                <div class="mockup-screen" style="background:#F8FAFC;padding:12px;display:flex;flex-direction:column;gap:8px;">
+                  <div style="height:6px;background:#E2EAF2;border-radius:3px;width:55%;"></div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="background:#EEF3F8;border-radius:6px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;">
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:70%;"></div>
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:45%;opacity:0.6;"></div>
+                    </div>
+                    <div style="background:#EEF3F8;border-radius:6px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;">
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:80%;"></div>
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:55%;opacity:0.6;"></div>
+                    </div>
+                    <div style="background:#EEF3F8;border-radius:6px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;">
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:60%;"></div>
+                      <div style="height:5px;background:#CBD8E6;border-radius:2px;width:40%;opacity:0.6;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="card-num">03</span>
+        </div>
+        <div class="card-body">
+          <div class="project-tags">
+            <span class="project-tag">B2B SaaS</span>
+            <span class="project-tag">Survey Tool</span>
+            <span class="project-tag">30 Days</span>
+          </div>
+          <h3 class="project-name">CXFacts</h3>
+          <p class="project-desc">Designed the Custom Question feature — giving bank-business users the freedom to build their own survey questions. Attracted 2 Major Nordic Banks.</p>
+          <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
+        </div>
+      </div>
+
+      <!-- Card 4 — Atlas Design System (wide, horizontal) -->
       <div class="project-card wide reveal">
         <div class="card-visual" style="background: linear-gradient(145deg, #E4DDD4 0%, #D0C4B4 100%);">
           <div class="card-visual-inner">
@@ -1073,7 +1129,7 @@
               </div>
             </div>
           </div>
-          <span class="card-num">03</span>
+          <span class="card-num">04</span>
         </div>
         <div class="card-body">
           <div class="project-tags">
@@ -1092,37 +1148,43 @@
 
   <!-- ── Testimonials ── -->
   <section class="testimonials" id="testimonials">
-    <h2 class="testimonials-heading reveal">Kind Words</h2>
-
-    <div class="testimonials-grid">
-
-      <div class="testimonial-card reveal">
-        <span class="testimonial-quote-mark">"</span>
-        <p class="testimonial-text">Keshav has a rare ability to translate complex business problems into elegant, intuitive interfaces. His work on BuyingTeams significantly elevated our product quality and user satisfaction.</p>
-        <div class="testimonial-author">
-          <span class="author-name">Arjun Sharma</span>
-          <span class="author-role">CEO, BuyingTeams</span>
+    <div class="testimonials-carousel">
+      <!-- Slide 1 -->
+      <div class="testimonial-slide active">
+        <p class="testimonial-quote">"Keshav has a rare ability to translate complex business problems into elegant, intuitive interfaces. His work on BuyingTeams significantly elevated our product quality."</p>
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Arjun Sharma</span>
+          <span class="attribution-sep">·</span>
+          <span>CEO, BuyingTeams</span>
         </div>
       </div>
 
-      <div class="testimonial-card reveal reveal-d1">
-        <span class="testimonial-quote-mark">"</span>
-        <p class="testimonial-text">Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief — a combination that's genuinely hard to find.</p>
-        <div class="testimonial-author">
-          <span class="author-name">Priya Menon</span>
-          <span class="author-role">Product Manager, Wellpath</span>
+      <!-- Slide 2 -->
+      <div class="testimonial-slide">
+        <p class="testimonial-quote">"Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief — a combination that's genuinely hard to find."</p>
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Priya Menon</span>
+          <span class="attribution-sep">·</span>
+          <span>Product Manager, Wellpath</span>
         </div>
       </div>
 
-      <div class="testimonial-card reveal reveal-d2">
-        <span class="testimonial-quote-mark">"</span>
-        <p class="testimonial-text">The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems — which is exactly what we needed at scale.</p>
-        <div class="testimonial-author">
-          <span class="author-name">Daniel Lee</span>
-          <span class="author-role">Head of Design, Atlas</span>
+      <!-- Slide 3 -->
+      <div class="testimonial-slide">
+        <p class="testimonial-quote">"The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems — which is exactly what we needed at scale."</p>
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Daniel Lee</span>
+          <span class="attribution-sep">·</span>
+          <span>Head of Design, Atlas</span>
         </div>
       </div>
+    </div>
 
+    <!-- Navigation -->
+    <div class="testimonial-nav">
+      <button class="t-nav-btn t-prev" aria-label="Previous testimonial">←</button>
+      <span class="t-counter"><span id="t-current">1</span> / <span id="t-total">3</span></span>
+      <button class="t-nav-btn t-next" aria-label="Next testimonial">→</button>
     </div>
   </section>
 
@@ -1175,7 +1237,7 @@
         });
         ticking = true;
       }
-    });
+    }, { passive: true });
 
     /* ═══════════════════════════════════════════
        MOBILE HAMBURGER
@@ -1235,6 +1297,84 @@
     });
 
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ═══════════════════════════════════════════
+       EASTER EGG — Click sculpture to play game
+    ═══════════════════════════════════════════ */
+    const sculptureEl = document.getElementById('sculptureEgg');
+    const meow = new Audio('Assets/Game_Enter.wav');
+    meow.preload = 'auto';
+
+    // Hover to play sound — browser allows audio from user interactions (no unlock needed)
+    sculptureEl.addEventListener('mouseenter', () => {
+      meow.currentTime = 0;
+      meow.play().catch(() => {}); // Graceful fallback if browser blocks
+    });
+
+    sculptureEl.addEventListener('mouseleave', () => {
+      meow.pause();
+      meow.currentTime = 0;
+    });
+
+    sculptureEl.addEventListener('click', () => {
+      window.location.href = 'game.html';
+    });
+
+    /* ═══════════════════════════════════════════
+       TESTIMONIALS — simple fade carousel
+    ═══════════════════════════════════════════ */
+    (function () {
+      const slides   = Array.from(document.querySelectorAll('.testimonial-slide'));
+      const N        = slides.length;
+      const currSpan = document.getElementById('t-current');
+      let active     = 0;
+
+      function goTo(idx) {
+        slides[active].classList.remove('active');
+        active = ((idx % N) + N) % N;
+        slides[active].classList.add('active');
+        if (currSpan) currSpan.textContent = active + 1;
+      }
+
+      document.querySelector('.t-prev')?.addEventListener('click', () => goTo(active - 1));
+      document.querySelector('.t-next')?.addEventListener('click', () => goTo(active + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft')  goTo(active - 1);
+        if (e.key === 'ArrowRight') goTo(active + 1);
+      });
+    })();
+
+    /* ═══════════════════════════════════════════
+       SCROLL BADGE — Click to next section
+    ═══════════════════════════════════════════ */
+    const scrollBadge = document.getElementById('scrollBadge');
+    const sections = [
+      document.querySelector('.hero'),
+      document.querySelector('.about-intro'),
+      document.querySelector('.projects'),
+      document.querySelector('.testimonials')
+    ];
+
+    scrollBadge?.addEventListener('click', () => {
+      const scrollTop = window.scrollY;
+      let currentIdx = 0;
+
+      // Find which section we're currently in
+      for (let i = 0; i < sections.length; i++) {
+        const rect = sections[i].getBoundingClientRect();
+        if (rect.top <= window.innerHeight / 2) {
+          currentIdx = i;
+        }
+      }
+
+      // Go to next section, loop back to hero if at end
+      const nextIdx = (currentIdx + 1) % sections.length;
+      const nextSection = sections[nextIdx];
+
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   </script>
 </body>
 </html>
