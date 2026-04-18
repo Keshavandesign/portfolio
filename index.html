@@ -763,6 +763,108 @@
     }
     .footer-links a:hover { color: var(--fg); }
 
+    /* ─── TOOLS / ORBITAL ─── */
+    .tools-section {
+      padding: 120px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tools-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: lowercase;
+      color: var(--muted);
+      opacity: 0.7;
+      margin-bottom: 16px;
+      text-align: left;
+      font-style: italic;
+      font-family: var(--serif);
+    }
+    .tools-label::before {
+      content: '— ';
+      color: var(--accent);
+      opacity: 0.6;
+      font-style: normal;
+    }
+    .tools-stage {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tools-stage::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      border: 1px dashed rgba(155, 45, 122, 0.12);
+      pointer-events: none;
+    }
+    .tool-chip {
+      position: absolute;
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 20px rgba(42, 37, 53, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 50%; left: 50%;
+      margin-top: -32px; margin-left: -32px;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      cursor: default;
+      will-change: transform;
+    }
+    .tool-chip:hover {
+      transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.08);
+      box-shadow: 0 10px 28px rgba(42, 37, 53, 0.12);
+      z-index: 10;
+    }
+    .tool-chip-inner {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 20px;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+    }
+    .tool-chip-label {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 100px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s var(--ease);
+      white-space: nowrap;
+    }
+    .tool-chip:hover .tool-chip-label { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .tool-chip { animation: none !important; }
+    }
+    @media (max-width: 768px) {
+      .tools-section { padding: 80px 24px; }
+      .tools-stage { height: 360px; }
+      .tools-stage::before { width: 180px; height: 180px; }
+      .tool-chip { width: 52px; height: 52px; margin-top: -26px; margin-left: -26px; }
+      .tool-chip-inner { font-size: 16px; }
+    }
+
     /* Scroll to top */
     .scroll-top {
       position: fixed;
@@ -1110,6 +1212,23 @@
     <a href="#" class="about-btn reveal reveal-d3">About me</a>
   </section>
 
+  <!-- ── Tools ── -->
+  <section class="tools-section" id="tools" aria-label="Tools I use">
+    <div class="tools-label reveal">tools of the trade</div>
+    <div class="tools-stage" id="toolsStage">
+      <div class="tool-chip" data-radius="200" data-angle="0"   data-speed="55" data-bob="4"><span class="tool-chip-inner">Fg</span><span class="tool-chip-label">Figma</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="36"  data-speed="65" data-bob="5"><span class="tool-chip-inner">Fr</span><span class="tool-chip-label">Framer</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="72"  data-speed="60" data-bob="3"><span class="tool-chip-inner">Pp</span><span class="tool-chip-label">Protopie</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="108" data-speed="70" data-bob="4"><span class="tool-chip-inner">No</span><span class="tool-chip-label">Notion</span></div>
+      <div class="tool-chip" data-radius="200" data-angle="144" data-speed="58" data-bob="5"><span class="tool-chip-inner">Mi</span><span class="tool-chip-label">Miro</span></div>
+      <div class="tool-chip" data-radius="120" data-angle="0"   data-speed="-75" data-bob="4"><span class="tool-chip-inner">Cc</span><span class="tool-chip-label">Claude Code</span></div>
+      <div class="tool-chip" data-radius="120" data-angle="72"  data-speed="-85" data-bob="3"><span class="tool-chip-inner">Cx</span><span class="tool-chip-label">Codex</span></div>
+      <div class="tool-chip" data-radius="120" data-angle="144" data-speed="-80" data-bob="5"><span class="tool-chip-inner">Cu</span><span class="tool-chip-label">Cursor</span></div>
+      <div class="tool-chip" data-radius="120" data-angle="216" data-speed="-90" data-bob="4"><span class="tool-chip-inner">v0</span><span class="tool-chip-label">v0</span></div>
+      <div class="tool-chip" data-radius="120" data-angle="288" data-speed="-70" data-bob="3"><span class="tool-chip-inner">Lv</span><span class="tool-chip-label">Lovable</span></div>
+    </div>
+  </section>
+
   <!-- ── Featured Projects ── -->
   <section class="projects" id="work">
     <h2 class="projects-heading reveal">Featured Projects</h2>
@@ -1264,6 +1383,46 @@
   <a href="#" class="scroll-top" id="scrollTop">↑</a>
 
   <script>
+    /* ═══════════════════════════════════════════
+       TOOLS — ORBITAL + FLOATING MOTION
+    ═══════════════════════════════════════════ */
+    (function initToolsOrbital() {
+      const stage = document.getElementById('toolsStage');
+      if (!stage) return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const chips = Array.from(stage.querySelectorAll('.tool-chip')).map(el => ({
+        el,
+        radius: parseFloat(el.dataset.radius) || 200,
+        angle: parseFloat(el.dataset.angle) || 0,
+        speed: parseFloat(el.dataset.speed) || 60,
+        bob: parseFloat(el.dataset.bob) || 4,
+        bobPhase: Math.random() * Math.PI * 2,
+      }));
+
+      function place(chip, t) {
+        const rad = (chip.angle + (t / chip.speed) * 360) * Math.PI / 180;
+        const bobY = Math.sin(t / 1200 + chip.bobPhase) * chip.bob;
+        const x = Math.cos(rad) * chip.radius;
+        const y = Math.sin(rad) * chip.radius + bobY;
+        chip.el.style.setProperty('--tx', x + 'px');
+        chip.el.style.setProperty('--ty', y + 'px');
+        chip.el.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      if (reduced) {
+        chips.forEach(c => place(c, 0));
+        return;
+      }
+
+      let start = performance.now();
+      function frame(now) {
+        const t = (now - start) / 10;
+        chips.forEach(c => place(c, t));
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+
     /* ═══════════════════════════════════════════
        SMART NAVBAR — hide on scroll down, show on up
     ═══════════════════════════════════════════ */
