@@ -341,6 +341,15 @@
     });
 
     player.x = Math.max(0, Math.min(player.x, W - player.w));
+
+    const shielded = powerup && powerup.type === 'shield';
+    enemies.forEach(e => {
+      if (!shielded && hit(player, { x:e.x+2, y:e.y+2, w:e.w-4, h:e.h-4 })) die();
+    });
+    spikes.forEach(s => {
+      if (!shielded && hit(player, s)) die();
+    });
+
     if (player.y > H + 40) die();
   }
 
@@ -384,6 +393,83 @@
       ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(Math.ceil(3*scale), bb + Math.ceil(8*scale)); ctx.stroke();
     }
     ctx.restore();
+  }
+
+  /* ── ENEMIES ── */
+  const enemies = [
+    { x:420, w:18, h:18, minX:360, maxX:540, speed:1.0, dir:1, type:0 },
+    { x:900, w:14, h:14, minX:840, maxX:1020, speed:1.4, dir:1, type:1 },
+    { x:1320, w:14, h:14, minX:1260, maxX:1380, speed:1.2, dir:-1, type:1 },
+    { x:1660, w:20, h:20, minX:1620, maxX:1780, speed:0.9, dir:1, type:2 },
+    { x:2960, w:14, h:14, minX:2960, maxX:3080, speed:1.3, dir:1, type:0 },
+    { x:3320, w:18, h:18, minX:3260, maxX:3440, speed:1.5, dir:1, type:1 },
+    { x:3520, w:14, h:14, minX:3480, maxX:3600, speed:1.3, dir:-1, type:2 },
+    { x:3850, w:20, h:20, minX:3800, maxX:3960, speed:1.0, dir:1, type:0 },
+    { x:4120, w:14, h:14, minX:4060, maxX:4220, speed:1.6, dir:1, type:1 },
+    { x:4310, w:18, h:18, minX:4260, maxX:4400, speed:1.4, dir:-1, type:2 },
+    { x:4610, w:14, h:14, minX:4560, maxX:4690, speed:1.5, dir:1, type:1 },
+  ];
+  enemies.forEach(e => {
+    const plat = platforms.find(p => e.x >= p.x && e.x <= p.x + p.w);
+    e.y = plat ? plat.y - e.h : GROUND - e.h;
+    e.baseY = e.y;
+  });
+
+  /* ── SPIKES ── */
+  const spikes = [
+    { x:1100, y:484, w:12, h:16 },
+    { x:1120, y:484, w:12, h:16 },
+    { x:1280, y:414, w:12, h:16 },
+    { x:3500, y:484, w:12, h:16 },
+    { x:3660, y:424, w:12, h:16 },
+    { x:3680, y:424, w:12, h:16 },
+    { x:4280, y:484, w:12, h:16 },
+    { x:4420, y:424, w:12, h:16 },
+    { x:4580, y:484, w:12, h:16 },
+  ];
+
+  function die() {
+    if (state !== 'PLAY') return;
+    sfxDie();
+    lives--;
+    if (lives <= 0) { endGame(false); return; }
+    state = 'DYING'; deathTimer = 50;
+  }
+
+  function updateEnemies() {
+    if (state !== 'PLAY') return;
+    enemies.forEach(e => {
+      e.x += e.speed * e.dir;
+      if (e.x <= e.minX || e.x + e.w >= e.maxX) e.dir *= -1;
+      const plat = platforms.find(p => p.moving && Math.abs(p.y - (e.baseY + e.h)) < 2 &&
+        e.x + e.w/2 >= p.x && e.x + e.w/2 <= p.x + p.w);
+      if (plat) e.y = plat.y - e.h;
+    });
+  }
+
+  function drawEnemies() {
+    enemies.forEach(e => {
+      const bob = Math.sin(frame * 0.08 + e.x) * 2 * scale;
+      ctx.fillStyle = C.blob[e.type];
+      ctx.fillRect(sx(e.x), sy(e.y) + bob, sw(e.w), sh(e.h));
+      ctx.fillStyle = '#fff';
+      const ew = Math.ceil(4*scale), eh = Math.ceil(4*scale);
+      ctx.fillRect(sx(e.x + (e.dir > 0 ? e.w-6 : 2)), sy(e.y+4) + bob, ew, eh);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(sx(e.x + (e.dir > 0 ? e.w-4 : 3)), sy(e.y+5) + bob, Math.ceil(2*scale), Math.ceil(2*scale));
+    });
+  }
+
+  function drawSpikes() {
+    ctx.fillStyle = C.spike;
+    spikes.forEach(s => {
+      const bx = sx(s.x), by = sy(s.y), bw = sw(s.w), bh = sh(s.h);
+      ctx.beginPath();
+      ctx.moveTo(bx, by + bh);
+      ctx.lineTo(bx + bw/2, by);
+      ctx.lineTo(bx + bw, by + bh);
+      ctx.closePath(); ctx.fill();
+    });
   }
 
   /* ── DRAW: SKY ── */
@@ -437,6 +523,11 @@
     });
 
     updatePlayer();
+    updateEnemies();
+    if (state === 'DYING') {
+      deathTimer--;
+      if (deathTimer <= 0) { spawnPlayer(); state = 'PLAY'; }
+    }
   }
 
   /* ── RENDER ── */
@@ -445,6 +536,8 @@
     ctx.fillRect(0, 0, vw, vh);
     drawSky();
     drawPlatforms();
+    drawSpikes();
+    drawEnemies();
     drawPlayer();
   }
   let rafId;
