@@ -680,6 +680,28 @@
       margin-bottom: 28px;
     }
 
+    .project-metric {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.72;
+      margin-top: 14px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .project-metric::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
     .project-btn {
       display: inline-flex;
       align-items: center;
@@ -1276,6 +1298,7 @@
           </div>
           <h3 class="project-name">BuyingTeams</h3>
           <p class="project-desc">Redesigned a B2B fintech platform connecting businesses and banks — simplifying complex financial workflows into intuitive interfaces.</p>
+          <div class="project-metric">6× login conversion · 50+ features shipped</div>
           <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
         </div>
       </div>
@@ -1320,6 +1343,7 @@
           </div>
           <h3 class="project-name">CXFacts</h3>
           <p class="project-desc">Designed the Custom Question feature — giving bank-business users the freedom to build their own survey questions. Attracted 2 Major Nordic Banks.</p>
+          <div class="project-metric">2 Nordic banks · 30-day sprint</div>
           <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
         </div>
       </div>
