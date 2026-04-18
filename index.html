@@ -975,21 +975,22 @@
       position: absolute;
       width: 64px; height: 64px;
       border-radius: 50%;
-      background: var(--bg);
+      /* Inverted contrast: dark bubble in light mode, light bubble in dark mode */
+      background: var(--fg);
       border: 1px solid var(--border);
-      box-shadow: 0 6px 20px rgba(42, 37, 53, 0.06);
+      box-shadow: var(--shadow-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       top: 50%; left: 50%;
       margin-top: -32px; margin-left: -32px;
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.35s var(--ease);
       cursor: default;
       will-change: transform;
     }
     .tool-chip:hover {
       transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.08);
-      box-shadow: 0 10px 28px rgba(42, 37, 53, 0.12);
+      box-shadow: var(--shadow-md);
       z-index: 10;
     }
     .tool-chip-inner {
@@ -997,20 +998,25 @@
       font-style: italic;
       font-weight: 400;
       font-size: 20px;
-      color: var(--fg);
+      /* Fallback letter reads against the inverted chip bg */
+      color: var(--bg);
       letter-spacing: -0.02em;
     }
     .tool-logo {
       width: 28px;
       height: 28px;
       object-fit: contain;
-      opacity: 0.88;
+      opacity: 0.9;
       transition: opacity 0.25s var(--ease);
     }
-    .tool-logo.dark  { display: none; }
+    /* Chip bg is --fg, so logo must be tinted like --bg for contrast.
+       .light class = dark-tinted source (for LIGHT chip = dark mode);
+       .dark  class = light-tinted source (for DARK chip = light mode). */
+    .tool-logo.light { display: none; }
+    .tool-logo.dark  { display: block; }
     .tool-logo.brand { display: none; }
-    [data-theme="dark"] .tool-logo.light { display: none; }
-    [data-theme="dark"] .tool-logo.dark  { display: block; }
+    [data-theme="dark"] .tool-logo.dark  { display: none; }
+    [data-theme="dark"] .tool-logo.light { display: block; }
     /* Hover: swap mono for brand-color logo ("color splash") */
     .tool-chip:hover .tool-logo.light,
     .tool-chip:hover .tool-logo.dark  { display: none !important; }
