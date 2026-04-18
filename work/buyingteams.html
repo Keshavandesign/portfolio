@@ -27,7 +27,7 @@
       --border: rgba(42, 37, 53, 0.1);
       --border-strong: rgba(42, 37, 53, 0.35);
       --surface: #F4F1EC;
-      --nav-bg: rgba(237, 234, 227, 0.96);
+      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
       --sans: 'Inter', sans-serif;
       --serif: 'DM Serif Display', serif;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -110,7 +110,7 @@
       border: 1.5px solid var(--border-strong); padding: 9px 22px; border-radius: 100px;
       transition: background 0.3s var(--ease), color 0.3s, border-color 0.3s, transform 0.3s var(--ease);
     }
-    .nav-btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); transform: scale(1.03); }
+    .nav-btn:hover {  border-color: var(--fg); transform: scale(1.03); }
 
     .nav-hamburger {
       display: none; flex-direction: column; justify-content: center;
@@ -219,7 +219,6 @@
     ───────────────────────────────────────── */
     .cs-hero {
       min-height: 100svh;
-      background: var(--fg);
       display: flex; flex-direction: column;
       align-items: flex-start; justify-content: flex-end;
       padding: 120px 52px 80px;
@@ -252,8 +251,8 @@
     }
     .cs-tag {
       font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(237,234,227,0.5);
-      border: 1px solid rgba(237,234,227,0.2);
+      text-transform: uppercase; color: color-mix(in srgb, var(--fg) 50%, transparent);
+      border: 1px solid color-mix(in srgb, var(--fg) 20%, transparent);
       padding: 5px 14px; border-radius: 100px;
     }
     .cs-tag.accent { color: var(--accent); border-color: var(--accent); background: rgba(155,45,122,0.12); }
@@ -262,17 +261,17 @@
       font-family: var(--serif);
       font-size: clamp(48px, 7vw, 110px);
       font-weight: 400; letter-spacing: -0.04em; line-height: 0.95;
-      color: var(--bg);
+      color: var(--fg);
       animation: fadeSlideUp 0.7s var(--ease) 0.35s both;
     }
     .cs-hero-title em {
-      font-style: italic; color: rgba(237,234,227,0.45);
+      font-style: italic; color: color-mix(in srgb, var(--fg) 45%, transparent);
     }
 
     .cs-hero-sub {
       margin-top: 28px; max-width: 480px;
       font-size: 14px; font-weight: 300; line-height: 1.7;
-      color: rgba(237,234,227,0.55);
+      color: color-mix(in srgb, var(--fg) 55%, transparent);
       animation: fadeSlideUp 0.7s var(--ease) 0.5s both;
     }
 
@@ -283,11 +282,11 @@
     .cs-hero-scroll span {
       display: flex; flex-direction: column; align-items: center; gap: 8px;
       font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(237,234,227,0.3);
+      color: color-mix(in srgb, var(--fg) 30%, transparent);
     }
     .cs-hero-scroll-line {
       width: 1px; height: 48px;
-      background: linear-gradient(to bottom, rgba(237,234,227,0.3), transparent);
+      background: linear-gradient(to bottom, color-mix(in srgb, var(--fg) 30%, transparent), transparent);
       animation: floatY 2s ease-in-out infinite;
     }
 
@@ -384,7 +383,7 @@
       border: 1px solid var(--border); padding: 5px 14px; border-radius: 100px;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
-    .cs-tool-pill:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .cs-tool-pill:hover {  border-color: var(--fg); }
 
     .cs-time-display {
       font-family: var(--serif); font-style: italic;
@@ -769,7 +768,7 @@
     ───────────────────────────────────────── */
     .cs-results {
       padding: 120px 52px;
-      background: var(--fg); color: var(--bg);
+      
       scroll-snap-align: start;
       position: relative; overflow: hidden;
     }
@@ -780,7 +779,7 @@
       opacity: 0.08; filter: blur(60px); pointer-events: none;
     }
 
-    .cs-results .cs-section-title { color: var(--bg); }
+    .cs-results .cs-section-title { color: var(--fg); }
     .cs-results .cs-section-eyebrow { color: var(--accent); }
 
     .cs-results-grid {
@@ -788,15 +787,15 @@
       gap: 32px; margin-top: 64px;
     }
 
-    .cs-result-item { padding: 40px 0; border-top: 1px solid rgba(237,234,227,0.12); }
+    .cs-result-item { padding: 40px 0; border-top: 1px solid color-mix(in srgb, var(--fg) 12%, transparent); }
     .cs-result-number {
       font-family: var(--serif); font-size: clamp(48px, 6vw, 80px);
       font-weight: 400; letter-spacing: -0.04em; line-height: 1;
-      color: var(--bg); margin-bottom: 10px;
+      color: var(--fg); margin-bottom: 10px;
     }
     .cs-result-number span { color: var(--accent); }
     .cs-result-label {
-      font-size: 13px; color: rgba(237,234,227,0.55); line-height: 1.6;
+      font-size: 13px; color: color-mix(in srgb, var(--fg) 55%, transparent); line-height: 1.6;
     }
 
     /* ─────────────────────────────────────────
@@ -831,7 +830,7 @@
       display: inline-flex; align-items: center; gap: 8px;
     }
     .cs-next-link:hover {
-      background: var(--fg); color: var(--bg);
+      
       border-color: var(--fg); transform: scale(1.04);
     }
     .cs-next-link-arrow { transition: transform 0.3s var(--ease); }

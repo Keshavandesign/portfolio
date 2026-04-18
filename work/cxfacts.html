@@ -27,7 +27,7 @@
       --border: rgba(42, 37, 53, 0.1);
       --border-strong: rgba(42, 37, 53, 0.35);
       --surface: #F4F1EC;
-      --nav-bg: rgba(237, 234, 227, 0.96);
+      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
       --sans: 'Inter', sans-serif;
       --serif: 'DM Serif Display', serif;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -87,7 +87,7 @@
       border: 1.5px solid var(--border-strong); padding: 9px 22px; border-radius: 100px;
       transition: background 0.3s var(--ease), color 0.3s, border-color 0.3s, transform 0.3s var(--ease);
     }
-    .nav-btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); transform: scale(1.03); }
+    .nav-btn:hover {  border-color: var(--fg); transform: scale(1.03); }
     .nav-hamburger {
       display: none; flex-direction: column; justify-content: center;
       align-items: flex-end; gap: 5px; width: 32px; height: 32px;
@@ -154,7 +154,7 @@
 
     /* ─── HERO ─── */
     .cs-hero {
-      min-height: 100svh; background: var(--fg);
+      min-height: 100svh;
       display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
       padding: 120px 52px 80px; position: relative; overflow: hidden;
     }
@@ -167,24 +167,24 @@
     .cs-hero-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; animation: fadeSlideUp 0.6s var(--ease) 0.2s both; }
     .cs-tag {
       font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(237,234,227,0.5); border: 1px solid rgba(237,234,227,0.2);
+      color: color-mix(in srgb, var(--fg) 50%, transparent); border: 1px solid color-mix(in srgb, var(--fg) 20%, transparent);
       padding: 5px 14px; border-radius: 100px;
     }
     .cs-tag.accent { color: var(--accent); border-color: var(--accent); background: rgba(155,45,122,0.12); }
     .cs-hero-title {
       font-family: var(--serif); font-size: clamp(48px, 7vw, 110px);
-      font-weight: 400; letter-spacing: -0.04em; line-height: 0.95; color: var(--bg);
+      font-weight: 400; letter-spacing: -0.04em; line-height: 0.95; color: var(--fg);
       animation: fadeSlideUp 0.7s var(--ease) 0.35s both;
     }
-    .cs-hero-title em { font-style: italic; color: rgba(237,234,227,0.45); }
+    .cs-hero-title em { font-style: italic; color: color-mix(in srgb, var(--fg) 45%, transparent); }
     .cs-hero-sub {
       margin-top: 28px; max-width: 480px;
-      font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(237,234,227,0.55);
+      font-size: 14px; font-weight: 300; line-height: 1.7; color: color-mix(in srgb, var(--fg) 55%, transparent);
       animation: fadeSlideUp 0.7s var(--ease) 0.5s both;
     }
     .cs-hero-scroll { position: absolute; bottom: 48px; right: 52px; animation: fadeSlideUp 0.6s var(--ease) 0.8s both; }
-    .cs-hero-scroll-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,234,227,0.3); }
-    .cs-hero-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(237,234,227,0.3), transparent); animation: floatY 2s ease-in-out infinite; }
+    .cs-hero-scroll-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--fg) 30%, transparent); }
+    .cs-hero-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, color-mix(in srgb, var(--fg) 30%, transparent), transparent); animation: floatY 2s ease-in-out infinite; }
 
     /* ─── OVERVIEW ─── */
     .cs-overview { padding: 100px 52px; }
@@ -226,7 +226,7 @@
       background: var(--bg); border: 1px solid var(--border); padding: 5px 14px; border-radius: 100px;
       transition: background 0.2s, color 0.2s;
     }
-    .cs-tool-pill:hover { background: var(--fg); color: var(--bg); }
+    .cs-tool-pill:hover {  }
     .cs-time-display { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2vw, 30px); letter-spacing: -0.02em; color: var(--fg); line-height: 1.3; }
     .cs-time-sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
 
@@ -322,13 +322,13 @@
 
     /* ─── FINAL DESIGNS ─── */
     .cs-final {
-      background: var(--fg); padding: 100px 52px; text-align: center; position: relative; overflow: hidden;
+      padding: 100px 52px; text-align: center; position: relative; overflow: hidden;
     }
     .cs-final::before { content: ''; position: absolute; width: 500px; height: 500px; background: var(--accent); border-radius: 50%; opacity: 0.08; filter: blur(100px); top: -100px; right: -100px; pointer-events: none; }
-    .cs-final-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,234,227,0.4); margin-bottom: 16px; }
+    .cs-final-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--fg) 40%, transparent); margin-bottom: 16px; }
     .cs-final-quote {
       font-family: var(--serif); font-style: italic; font-size: clamp(24px, 3.5vw, 48px);
-      letter-spacing: -0.03em; line-height: 1.15; color: var(--bg);
+      letter-spacing: -0.03em; line-height: 1.15; color: var(--fg);
       max-width: 700px; margin: 0 auto 32px;
     }
     .cs-final-stats { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
@@ -339,11 +339,11 @@
     }
     .cs-final-illus {
       width: 100%; max-width: 900px; margin: 0 auto; min-height: 480px;
-      border: 1.5px dashed rgba(237,234,227,0.15); border-radius: 24px;
+      border: 1.5px dashed color-mix(in srgb, var(--fg) 15%, transparent); border-radius: 24px;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-      background: rgba(237,234,227,0.03);
+      background: color-mix(in srgb, var(--fg) 3%, transparent);
     }
-    .cs-final-illus-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(237,234,227,0.3); }
+    .cs-final-illus-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in srgb, var(--fg) 30%, transparent); }
 
     /* ─── CHALLENGES ─── */
     .cs-challenges { padding: 100px 52px; }
@@ -395,7 +395,7 @@
       border-radius: 100px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
       transition: background 0.3s var(--ease), color 0.3s, border-color 0.3s, transform 0.3s var(--ease);
     }
-    .cs-next-link:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); transform: scale(1.04); }
+    .cs-next-link:hover {  border-color: var(--fg); transform: scale(1.04); }
     .cs-next-link-arrow { transition: transform 0.3s var(--ease); }
     .cs-next-link:hover .cs-next-link-arrow { transform: translateX(4px); }
 
@@ -711,7 +711,7 @@
       <span class="cs-final-stat">Now Under Development</span>
     </div>
     <div class="cs-final-illus reveal reveal-d3">
-      <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="rgba(237,234,227,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="color-mix(in srgb, var(--fg) 20%, transparent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <div class="cs-final-illus-label">Final Designs — Illustration Coming Soon</div>
     </div>
   </section>
