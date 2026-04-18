@@ -1029,16 +1029,17 @@
       height: 28px;
       object-fit: contain;
       opacity: 0.88;
+      display: none; /* every state is explicit — no browser-default ambiguity */
       transition: opacity 0.25s var(--ease);
     }
-    /* Mono logo shows on the subtle resting bubble; matches the --fg tint */
-    .tool-logo.dark  { display: none; }
-    .tool-logo.brand { display: none; }
+    /* Light mode: show light-tinted mono */
+    .tool-logo.light { display: block; }
+    /* Dark mode: swap to dark-tinted mono */
     [data-theme="dark"] .tool-logo.light { display: none; }
     [data-theme="dark"] .tool-logo.dark  { display: block; }
-    /* Hover: swap mono for brand-color logo, unless brand img failed to load */
+    /* Hover: swap mono for brand-color splash */
     .tool-chip:not(.no-brand):hover .tool-logo.light,
-    .tool-chip:not(.no-brand):hover .tool-logo.dark  { display: none !important; }
+    .tool-chip:not(.no-brand):hover .tool-logo.dark  { display: none; }
     .tool-chip:not(.no-brand):hover .tool-logo.brand { display: block; }
     .tool-chip:hover .tool-logo { opacity: 1; }
     /* Fallback: show letter only when BOTH mono logos failed */
@@ -1552,130 +1553,130 @@
     <div class="tools-stage" id="toolsStage">
       <!-- Outer ring Ops / Thinking -->
       <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/linear/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/linear" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/linear/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/linear" alt="" />
         <span class="tool-chip-inner tool-fallback">Li</span>
         <span class="tool-chip-label">Linear</span>
       </div>
       <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/notion/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/notion/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/notion" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/notion/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/notion/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/notion" alt="" />
         <span class="tool-chip-inner tool-fallback">No</span>
         <span class="tool-chip-label">Notion</span>
       </div>
       <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/loom/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/loom/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/loom" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/loom/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/loom/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/loom" alt="" />
         <span class="tool-chip-inner tool-fallback">Lm</span>
         <span class="tool-chip-label">Loom</span>
       </div>
       <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/dovetail/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/dovetail/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/dovetail" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/dovetail/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/dovetail/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/dovetail" alt="" />
         <span class="tool-chip-inner tool-fallback">Dv</span>
         <span class="tool-chip-label">Dovetail</span>
       </div>
       <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/miro/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/miro/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/miro" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/miro/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/miro/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/miro" alt="" />
         <span class="tool-chip-inner tool-fallback">Mi</span>
         <span class="tool-chip-label">Miro</span>
       </div>
       <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/slack/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/slack/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/slack" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/slack/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/slack/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/slack" alt="" />
         <span class="tool-chip-inner tool-fallback">Sl</span>
         <span class="tool-chip-label">Slack</span>
       </div>
       <!-- Middle ring Design craft -->
       <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/figma" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/figma" alt="" />
         <span class="tool-chip-inner tool-fallback">Fg</span>
         <span class="tool-chip-label">Figma</span>
       </div>
       <div class="tool-chip" data-radius="200" data-angle="90"  data-speed="-7" data-bob="5">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/framer/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/framer/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/framer" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/framer/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/framer/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/framer" alt="" />
         <span class="tool-chip-inner tool-fallback">Fr</span>
         <span class="tool-chip-label">Framer</span>
       </div>
       <div class="tool-chip" data-radius="200" data-angle="150" data-speed="-7" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/protopie/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/protopie/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/protopie" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/protopie/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/protopie/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/protopie" alt="" />
         <span class="tool-chip-inner tool-fallback">Pp</span>
         <span class="tool-chip-label">Protopie</span>
       </div>
       <div class="tool-chip" data-radius="200" data-angle="210" data-speed="-7" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/spline/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/spline/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/spline" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/spline/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/spline/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/spline" alt="" />
         <span class="tool-chip-inner tool-fallback">Sp</span>
         <span class="tool-chip-label">Spline</span>
       </div>
       <div class="tool-chip" data-radius="200" data-angle="270" data-speed="-7" data-bob="5">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/rive/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/rive/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/rive" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/rive/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/rive/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/rive" alt="" />
         <span class="tool-chip-inner tool-fallback">Ri</span>
         <span class="tool-chip-label">Rive</span>
       </div>
       <div class="tool-chip" data-radius="200" data-angle="330" data-speed="-7" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/adobeaftereffects/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/adobeaftereffects/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/adobeaftereffects" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/adobeaftereffects/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/adobeaftereffects/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/adobeaftereffects" alt="" />
         <span class="tool-chip-inner tool-fallback">Ae</span>
         <span class="tool-chip-label">After Effects</span>
       </div>
       <!-- Inner ring AI builders -->
       <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/anthropic" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/anthropic" alt="" />
         <span class="tool-chip-inner tool-fallback">Cc</span>
         <span class="tool-chip-label">Claude Code</span>
       </div>
       <div class="tool-chip" data-radius="110" data-angle="60"  data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/openai/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/openai/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/openai" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/openai/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/openai/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/openai" alt="" />
         <span class="tool-chip-inner tool-fallback">Cx</span>
         <span class="tool-chip-label">Codex</span>
       </div>
       <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/cursor/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/cursor/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/cursor" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/cursor/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/cursor/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/cursor" alt="" />
         <span class="tool-chip-inner tool-fallback">Cu</span>
         <span class="tool-chip-label">Cursor</span>
       </div>
       <div class="tool-chip" data-radius="110" data-angle="180" data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/vercel/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/vercel/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/vercel" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/vercel/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/vercel/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/vercel" alt="" />
         <span class="tool-chip-inner tool-fallback">v0</span>
         <span class="tool-chip-label">v0</span>
       </div>
       <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/lovable/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/lovable/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/lovable" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/lovable/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/lovable/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/lovable" alt="" />
         <span class="tool-chip-inner tool-fallback">Lv</span>
         <span class="tool-chip-label">Lovable</span>
       </div>
       <div class="tool-chip" data-radius="110" data-angle="300" data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/codeium/2A2535" alt="" loading="lazy" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/codeium/F0EBE3" alt="" loading="lazy" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/codeium" alt="" loading="lazy" />
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/codeium/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/codeium/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/codeium" alt="" />
         <span class="tool-chip-inner tool-fallback">Ws</span>
         <span class="tool-chip-label">Windsurf</span>
       </div>
