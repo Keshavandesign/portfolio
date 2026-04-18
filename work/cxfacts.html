@@ -15,6 +15,19 @@
         document.documentElement.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
       } catch (e) {}
     })();
+
+    function qbSwitch(btn, type) {
+      btn.closest('.asset-qbuilder').querySelectorAll('.qb-type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.closest('.asset-qbuilder').querySelectorAll('.qb-preview').forEach(p => p.classList.remove('active'));
+      document.getElementById('qb-' + type).classList.add('active');
+    }
+    function hfSwitch(btn, view) {
+      btn.closest('.hf-toggle').querySelectorAll('.hf-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const frame = document.getElementById('hf-frame');
+      frame.classList.toggle('dev', view === 'dev');
+    }
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -449,14 +462,209 @@
       .breadcrumb { top: 76px; left: 24px; }
       .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; }
       .breadcrumb-back { display: flex; }
-      .cs-hero, .cs-overview, .cs-challenges, .cs-final, .cs-learnings, .cs-next, .cs-process-intro { padding: 72px 24px; }
-      .cs-stepper { padding: 0 24px 40px; flex-wrap: wrap; justify-content: flex-start; }
-      .cs-process-text { padding: 48px 24px; }
+      .cs-hero { padding: 80px 24px 52px; }
+      .cs-overview, .cs-challenges, .cs-final, .cs-learnings, .cs-next, .cs-process-intro { padding: 64px 24px; }
+      .cs-stepper { padding: 0 24px 36px; flex-wrap: wrap; justify-content: flex-start; gap: 8px; }
+      .cs-process-text { padding: 44px 24px; }
       .cs-meta-row { grid-template-columns: 1fr; }
       .cs-learnings-grid { grid-template-columns: 1fr; }
       .cs-ghost-num { display: none; }
-      footer { flex-direction: column; align-items: flex-start; padding: 24px 24px 36px; gap: 16px; }
+      .cs-illus-zone { padding: 24px 16px; }
+      footer { flex-direction: column; align-items: flex-start; padding: 28px 24px 36px; gap: 16px; }
     }
+    @media (max-width: 540px) {
+      /* Persona cards — stack at narrow width */
+      .asset-personas { grid-template-columns: 1fr; gap: 12px; }
+      .asset-brief { padding: 22px 20px; }
+      .qb-type-btns { flex-wrap: wrap; gap: 6px; }
+    }
+    @media (max-width: 480px) {
+      .cs-hero { padding: 72px 20px 44px; }
+      .cs-overview, .cs-challenges, .cs-final, .cs-learnings, .cs-next, .cs-process-intro { padding: 52px 20px; }
+      .cs-process-text { padding: 36px 20px; }
+      .cs-hero-title { font-size: clamp(38px, 9vw, 80px); }
+      .cs-section-title { font-size: clamp(26px, 7vw, 52px); }
+      .cs-process-heading { font-size: clamp(22px, 6vw, 40px); }
+      .cs-learnings-quote { font-size: clamp(17px, 5vw, 24px); padding: 0 4px; }
+      .cs-challenge-title { font-size: clamp(18px, 5vw, 28px); }
+      .cs-final-quote { font-size: clamp(20px, 6vw, 44px); }
+      .cs-next-title { font-size: clamp(28px, 8vw, 56px); }
+    }
+
+    /* ════════════════════════════════════════════
+       PROCESS ASSETS — CXFacts
+    ════════════════════════════════════════════ */
+
+    /* shared wrapper */
+    .asset-wrap {
+      width: 100%; display: flex; flex-direction: column;
+      align-items: center; padding: 16px 0; gap: 0;
+    }
+
+    /* ── Brief doc ── */
+    .asset-brief {
+      width: 100%; max-width: 400px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 28px 22px; font-family: var(--sans);
+    }
+    .brief-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .brief-overline { font-size: 9px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .brief-badge {
+      font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: #22C55E; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .brief-title { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--fg); letter-spacing: -.02em; margin-bottom: 18px; }
+    .brief-hr { height: 1px; background: var(--border); margin-bottom: 12px; }
+    .brief-row {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+      padding: 10px 10px; border-radius: 8px; cursor: default;
+      transition: background .2s;
+    }
+    .brief-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+    .brief-row:hover .brief-k { color: var(--accent); }
+    .brief-k { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 72px; transition: color .2s; }
+    .brief-v { font-size: 12px; color: var(--fg); text-align: right; line-height: 1.45; }
+    .brief-footer { display: flex; gap: 14px; padding-top: 18px; margin-top: 12px; border-top: 1px solid var(--border); }
+    .brief-signer { display: flex; align-items: center; gap: 8px; }
+    .brief-av {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; letter-spacing: .04em; color: var(--accent);
+    }
+    .brief-sname { font-size: 10px; color: var(--muted); }
+
+    /* ── Persona cards ── */
+    .asset-personas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+    .persona-card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px;
+      transition: border-color .25s, transform .25s; cursor: default;
+    }
+    .persona-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, transparent); transform: translateY(-3px); }
+    .persona-card:hover .pjourney-exit { background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: var(--accent); color: var(--accent); }
+    .persona-card:hover .persona-iq { border-left-color: var(--accent); }
+    .persona-av-ring {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-style: italic; font-size: 16px; margin-bottom: 12px;
+    }
+    .persona-av-ring.c { background: color-mix(in srgb, var(--accent) 10%, var(--bg)); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); }
+    .persona-av-ring.v { background: color-mix(in srgb, #4358F4 10%, var(--bg)); color: #4358F4; border: 1px solid color-mix(in srgb, #4358F4 20%, transparent); }
+    .persona-pname { font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 1px; }
+    .persona-prole { font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .persona-iq { font-family: var(--serif); font-style: italic; font-size: 11px; color: var(--muted); line-height: 1.5; padding: 8px 10px; border-left: 2px solid var(--border); margin-bottom: 16px; transition: border-left-color .25s; }
+    .persona-journey { display: flex; align-items: center; gap: 0; margin-bottom: 16px; flex-wrap: wrap; }
+    .pjourney-node {
+      font-size: 8px; letter-spacing: .04em; padding: 4px 8px; border-radius: 100px;
+      background: color-mix(in srgb, var(--fg) 5%, transparent); border: 1px solid var(--border); color: var(--muted);
+    }
+    .pjourney-arrow { font-size: 8px; color: var(--border); padding: 0 3px; }
+    .pjourney-exit { font-size: 8px; letter-spacing: .04em; padding: 4px 8px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); transition: all .25s; }
+    .persona-stat { display: flex; align-items: baseline; gap: 7px; }
+    .pstat-n { font-family: var(--serif); font-size: 26px; color: var(--fg); letter-spacing: -.03em; line-height: 1; }
+    .pstat-l { font-size: 9px; color: var(--muted); line-height: 1.35; }
+
+    /* ── Question builder ── */
+    .asset-qbuilder {
+      width: 100%; max-width: 440px;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    }
+    .qb-topbar { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .qb-topbar-label { font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .qb-type-btns { display: flex; gap: 5px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .qb-type-btn {
+      font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 100px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); cursor: pointer; font-family: var(--sans); transition: all .18s;
+    }
+    .qb-type-btn:hover { color: var(--fg); border-color: var(--fg); }
+    .qb-type-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .qb-body { padding: 20px; }
+    .qb-preview { display: none; }
+    .qb-preview.active { display: block; }
+    .qb-q { font-size: 12px; font-weight: 500; color: var(--fg); margin-bottom: 14px; line-height: 1.4; }
+    .qb-option {
+      display: flex; align-items: center; gap: 9px; padding: 8px 11px;
+      border: 1px solid var(--border); border-radius: 7px; margin-bottom: 5px;
+      cursor: default; transition: border-color .18s, background .18s;
+    }
+    .qb-option:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+    .qb-option-radio { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; transition: border-color .18s; }
+    .qb-option:hover .qb-option-radio { border-color: var(--accent); }
+    .qb-option-label { font-size: 11px; color: var(--fg); }
+    .qb-add-opt { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--accent); padding: 7px 11px; cursor: pointer; border-radius: 7px; transition: background .18s; margin-top: 4px; }
+    .qb-add-opt:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+    .qb-scale-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .qb-scale-pt {
+      flex: 1; aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted);
+      cursor: pointer; transition: all .18s;
+    }
+    .qb-scale-pt:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); }
+    .qb-scale-labs { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); letter-spacing: .04em; margin-bottom: 14px; }
+    .qb-textarea-mock {
+      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: transparent; font-size: 11px; color: var(--muted); min-height: 72px;
+      font-family: var(--sans); resize: none; transition: border-color .18s;
+    }
+    .qb-textarea-mock:hover { border-color: var(--accent); }
+    .qb-char-ctr { text-align: right; font-size: 9px; color: var(--muted); margin-top: 4px; letter-spacing: .04em; }
+
+    /* ── Handoff asset ── */
+    .asset-handoff { width: 100%; max-width: 440px; }
+    .hf-toggle {
+      display: flex; gap: 3px; background: var(--bg); padding: 4px;
+      border-radius: 100px; border: 1px solid var(--border); width: fit-content; margin-bottom: 18px;
+    }
+    .hf-toggle-btn {
+      font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 100px; border: none; background: transparent;
+      color: var(--muted); cursor: pointer; font-family: var(--sans); transition: all .2s;
+    }
+    .hf-toggle-btn.active { background: var(--fg); color: var(--bg); }
+    .hf-frame {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px; position: relative;
+    }
+    .hf-fieldset { margin-bottom: 18px; }
+    .hf-flabel { font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .hf-finput {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px;
+      background: color-mix(in srgb, var(--fg) 3%, transparent); font-size: 12px; color: var(--muted);
+      font-family: var(--sans); position: relative; transition: border-color .2s;
+    }
+    .hf-finput.placeholder { color: color-mix(in srgb, var(--fg) 28%, transparent); }
+    .hf-annot {
+      display: none; position: absolute; right: -148px; top: 0;
+      background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      border-radius: 8px; padding: 7px 11px; font-size: 9px; color: var(--accent); white-space: nowrap; z-index: 4;
+    }
+    .hf-annot::before {
+      content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
+      border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+      border-right: 6px solid color-mix(in srgb, var(--accent) 28%, transparent);
+    }
+    .hf-char-bar { display: none; text-align: right; font-size: 9px; color: var(--muted); margin-top: 4px; }
+    .hf-actions { display: flex; gap: 8px; justify-content: flex-end; position: relative; }
+    .hf-btn-c { padding: 8px 20px; border: 1.5px solid var(--border); border-radius: 100px; font-size: 10px; font-weight: 500; letter-spacing: .06em; background: transparent; color: var(--muted); cursor: default; font-family: var(--sans); }
+    .hf-btn-s { padding: 8px 20px; border: none; border-radius: 100px; font-size: 10px; font-weight: 600; letter-spacing: .06em; background: var(--accent); color: #fff; cursor: default; font-family: var(--sans); position: relative; }
+    .hf-btn-annot {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      border-radius: 8px; padding: 7px 11px; font-size: 9px; color: var(--accent); white-space: nowrap; z-index: 4;
+    }
+    .hf-ruler { display: none; font-size: 9px; color: var(--accent); text-align: center; margin-top: 12px; letter-spacing: .06em; opacity: .55; }
+    /* dev view overrides */
+    .hf-frame.dev .hf-finput { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+    .hf-frame.dev .hf-annot { display: block; }
+    .hf-frame.dev .hf-char-bar { display: block; }
+    .hf-frame.dev .hf-btn-annot { display: block; }
+    .hf-frame.dev .hf-ruler { display: block; }
+    @media (max-width: 600px) { .hf-annot { display: none !important; } }
+
   </style>
 </head>
 
@@ -610,12 +818,24 @@
       </div>
     </div>
     <div class="cs-illus-zone">
-      <div class="cs-illus-placeholder">
-        <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+      <div class="asset-wrap">
+        <div class="asset-brief">
+          <div class="brief-top">
+            <span class="brief-overline">Project Brief</span>
+            <span class="brief-badge">&#x2713; Approved</span>
+          </div>
+          <div class="brief-title">Custom Question Builder</div>
+          <div class="brief-hr"></div>
+          <div class="brief-row"><span class="brief-k">Timeline</span><span class="brief-v">30 days, no stretch</span></div>
+          <div class="brief-row"><span class="brief-k">Types</span><span class="brief-v">MCQ · Rating · Open text</span></div>
+          <div class="brief-row"><span class="brief-k">Constraint</span><span class="brief-v">Extend system, don't redesign</span></div>
+          <div class="brief-row"><span class="brief-k">Success</span><span class="brief-v">Users create & reuse their own questions</span></div>
+          <div class="brief-row"><span class="brief-k">Platform</span><span class="brief-v">Bank & Business (2 separate boards)</span></div>
+          <div class="brief-footer">
+            <div class="brief-signer"><div class="brief-av">KA</div><span class="brief-sname">Keshav Anand</span></div>
+            <div class="brief-signer"><div class="brief-av">CX</div><span class="brief-sname">CXFacts Founders</span></div>
+          </div>
         </div>
-        <div class="cs-illus-label">Project Brief</div>
-        <div class="cs-illus-sub">Illustration coming soon</div>
       </div>
     </div>
     <div class="cs-ghost-num">01</div>
@@ -636,12 +856,43 @@
       </div>
     </div>
     <div class="cs-illus-zone">
-      <div class="cs-illus-placeholder">
-        <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg>
+      <div class="asset-wrap">
+        <div class="asset-personas">
+          <div class="persona-card">
+            <div class="persona-av-ring c">C</div>
+            <div class="persona-pname">Carl</div>
+            <div class="persona-prole">Relationship Manager</div>
+            <div class="persona-iq">"The question I need isn't in the system. Again."</div>
+            <div class="persona-journey">
+              <div class="pjourney-node">Opens survey</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-node">Adds questions</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-exit">Exits. Emails team.</div>
+            </div>
+            <div class="persona-stat">
+              <span class="pstat-n">6</span>
+              <span class="pstat-l">months requesting<br>the same question</span>
+            </div>
+          </div>
+          <div class="persona-card">
+            <div class="persona-av-ring v">V</div>
+            <div class="persona-pname">Vanessa</div>
+            <div class="persona-prole">Business Dev Lead</div>
+            <div class="persona-iq">"I send manual email surveys because the platform won't let me ask what I need."</div>
+            <div class="persona-journey">
+              <div class="pjourney-node">Logs in</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-node">Reviews options</div>
+              <div class="pjourney-arrow">&rarr;</div>
+              <div class="pjourney-exit">Sends email instead.</div>
+            </div>
+            <div class="persona-stat">
+              <span class="pstat-n">0</span>
+              <span class="pstat-l">custom questions<br>in current version</span>
+            </div>
+          </div>
         </div>
-        <div class="cs-illus-label">User Personas &amp; Journey Map</div>
-        <div class="cs-illus-sub">Illustration coming soon</div>
       </div>
     </div>
     <div class="cs-ghost-num">02</div>
@@ -663,12 +914,40 @@
       </div>
     </div>
     <div class="cs-illus-zone">
-      <div class="cs-illus-placeholder">
-        <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <div class="asset-wrap">
+        <div class="asset-qbuilder">
+          <div class="qb-topbar">
+            <span class="qb-topbar-label">Question Builder</span>
+          </div>
+          <div class="qb-type-btns">
+            <button class="qb-type-btn active" onclick="qbSwitch(this,'mcq')">Multiple Choice</button>
+            <button class="qb-type-btn" onclick="qbSwitch(this,'rating')">Rating Scale</button>
+            <button class="qb-type-btn" onclick="qbSwitch(this,'open')">Open Text</button>
+          </div>
+          <div class="qb-body">
+            <div class="qb-preview active" id="qb-mcq">
+              <div class="qb-q">How satisfied are you with the response quality?</div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Very satisfied</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Satisfied</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Neutral</span></div>
+              <div class="qb-option"><div class="qb-option-radio"></div><span class="qb-option-label">Dissatisfied</span></div>
+              <div class="qb-add-opt">+ Add option</div>
+            </div>
+            <div class="qb-preview" id="qb-rating">
+              <div class="qb-q">Rate your overall experience with this feedback session.</div>
+              <div class="qb-scale-row">
+                <div class="qb-scale-pt">1</div><div class="qb-scale-pt">2</div><div class="qb-scale-pt">3</div>
+                <div class="qb-scale-pt">4</div><div class="qb-scale-pt">5</div>
+              </div>
+              <div class="qb-scale-labs"><span>Not at all</span><span>Extremely</span></div>
+            </div>
+            <div class="qb-preview" id="qb-open">
+              <div class="qb-q">What one thing could we improve most in this process?</div>
+              <textarea class="qb-textarea-mock" readonly placeholder="Respondent types here..."></textarea>
+              <div class="qb-char-ctr">0 / 280</div>
+            </div>
+          </div>
         </div>
-        <div class="cs-illus-label">Wireframes &amp; Design System</div>
-        <div class="cs-illus-sub">Illustration coming soon</div>
       </div>
     </div>
     <div class="cs-ghost-num">03</div>
@@ -689,12 +968,34 @@
       </div>
     </div>
     <div class="cs-illus-zone">
-      <div class="cs-illus-placeholder">
-        <div class="cs-illus-placeholder-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <div class="asset-wrap">
+        <div class="asset-handoff">
+          <div class="hf-toggle">
+            <button class="hf-toggle-btn active" onclick="hfSwitch(this,'design')">Design</button>
+            <button class="hf-toggle-btn" onclick="hfSwitch(this,'dev')">Dev Notes</button>
+          </div>
+          <div class="hf-frame" id="hf-frame">
+            <div class="hf-fieldset" style="position:relative;">
+              <div class="hf-flabel">Question text</div>
+              <div class="hf-finput placeholder">Type your question...</div>
+              <div class="hf-annot">font: Inter 12px / 500<br>padding: 9px 12px<br>border-radius: 7px</div>
+            </div>
+            <div class="hf-fieldset" style="position:relative;">
+              <div class="hf-flabel">Question type</div>
+              <div class="hf-finput">Multiple Choice</div>
+              <div class="hf-annot">height: 38px<br>border: 1.5px var(--border)<br>bg: fg @ 3%</div>
+            </div>
+            <div class="hf-char-bar">Character limit: 280 &nbsp;|&nbsp; Real-time counter on input</div>
+            <div class="hf-actions">
+              <button class="hf-btn-c">Cancel</button>
+              <button class="hf-btn-s">
+                Save Question
+                <div class="hf-btn-annot">bg: var(--accent)<br>color: #fff<br>hover: scale(1.03)</div>
+              </button>
+            </div>
+            <div class="hf-ruler">&#x2190; 16px padding all sides &#x2192;</div>
+          </div>
         </div>
-        <div class="cs-illus-label">Dev Handoff &amp; Jira</div>
-        <div class="cs-illus-sub">Illustration coming soon</div>
       </div>
     </div>
     <div class="cs-ghost-num">04</div>

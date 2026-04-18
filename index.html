@@ -1306,7 +1306,7 @@
     }
 
     @media (max-width: 768px) {
-      /* Nav: logo left, hamburger right */
+      /* Nav */
       nav {
         grid-template-columns: auto 1fr auto;
         padding: 20px 24px;
@@ -1316,26 +1316,36 @@
       .nav-right   { display: none; }
       .nav-hamburger { display: flex; }
 
-      /* Hero */
-      .hero { padding: 100px 24px 110px; }
+      /* Hero — tighter vertical, consistent 24px sides */
+      .hero { padding: 80px 24px 88px; }
       .hero-headline { font-size: clamp(28px, 7.5vw, 42px); }
+      .hero-eyebrow { font-size: 9px; letter-spacing: 0.08em; margin-bottom: 18px; }
+      .hero-meta { font-size: 9px; letter-spacing: 0.08em; margin-top: 20px; }
 
-      /* About */
-      .about-intro { padding: 80px 24px; }
-      .about-visual { width: min(220px, 55vw); }
+      /* About — same side margin as every other section */
+      .about-intro { padding: 72px 24px; }
+      .about-visual { width: min(200px, 52vw); }
+      .about-eyebrow { margin-bottom: 32px; }
 
-      /* Projects: tighten on mobile */
-      .projects { padding: 64px 16px; }
-      /* Testimonials: responsive on mobile */
-      .testimonials { padding: 80px 24px; min-height: 80vh; }
+      /* Client marquee — reduce letter-spacing on mobile */
+      .client-text { letter-spacing: 0.15em !important; }
+
+      /* Projects — fixed: was 16px (inconsistent); match all other 24px sections */
+      .projects { padding: 56px 24px; }
+
+      /* Testimonials */
+      .testimonials { padding: 72px 24px; min-height: 80vh; }
       .testimonial-quote { font-size: clamp(20px, 5vw, 32px); margin-bottom: 36px; }
-      .card-visual { aspect-ratio: 16/10; }
-      .card-body { grid-template-columns: 1fr; gap: 20px; }
-      .card-body-right { padding-top: 0; }
-      .card-body::before { font-size: 100px; }
-      .project-card { padding-top: 48px; padding-bottom: 52px; }
 
-      /* Footer: stack */
+      /* Work cards */
+      .card-visual { aspect-ratio: 16/9; border-radius: 14px; }
+      .card-body { grid-template-columns: 1fr; gap: 16px; padding-top: 24px; }
+      .card-body-right { padding-top: 0; }
+      .card-body::before { font-size: 88px; top: -8px; }
+      .project-card { padding-top: 40px; padding-bottom: 48px; }
+      .project-name { letter-spacing: -0.025em; }
+
+      /* Footer */
       footer {
         grid-template-columns: 1fr;
         text-align: left;
@@ -1345,15 +1355,31 @@
       .footer-nav { justify-content: flex-start; flex-wrap: wrap; gap: 16px; }
       .footer-links { justify-content: flex-start; }
 
-      /* Scroll badge smaller */
-      .scroll-badge { width: 72px; height: 72px; bottom: 40px; }
+      /* Tools — clip overflow, hide outer ring, smaller stage */
+      .tools-section { overflow: hidden; }
+      .tools-stage { height: 360px; }
+      .tools-stage::before { width: 200px; height: 200px; }
+      .tools-stage::after  { width: 310px; height: 310px; }
+      .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
+
+      /* Scroll badge */
+      .scroll-badge { width: 68px; height: 68px; bottom: 36px; }
     }
 
     @media (max-width: 480px) {
-      .hero-headline { font-size: clamp(24px, 8vw, 32px); }
-      .about-tagline { font-size: clamp(18px, 5vw, 22px); }
-      .projects-heading { font-size: clamp(28px, 8vw, 36px); margin-bottom: 56px; }
-      .project-name { font-size: clamp(32px, 9vw, 52px); }
+      .hero { padding: 72px 20px 80px; }
+      .hero-headline { font-size: clamp(24px, 8vw, 34px); }
+      .hero-eyebrow { font-size: 8.5px; }
+      .hero-meta { font-size: 8.5px; margin-top: 16px; }
+      .about-intro { padding: 60px 20px; }
+      .about-tagline { font-size: clamp(17px, 5vw, 22px); }
+      .about-tagline .tagline-second { font-size: 13px; }
+      .projects { padding: 48px 20px; }
+      .projects-heading { font-size: clamp(28px, 8vw, 36px); margin-bottom: 48px; }
+      .project-name { font-size: clamp(30px, 9vw, 52px); }
+      .card-body::before { font-size: 72px; }
+      .testimonials { padding: 60px 20px; }
+      .tools-section { padding: 52px 20px; }
     }
   </style>
 </head>
@@ -1920,7 +1946,10 @@
 
       const DESIGN_HEIGHT = 680;
       function currentScale() {
-        return Math.min(1, stage.clientHeight / DESIGN_HEIGHT);
+        // Constrain by both height and width so orbit never overflows horizontally
+        const byH = stage.clientHeight / DESIGN_HEIGHT;
+        const byW = (stage.clientWidth * 0.9) / DESIGN_HEIGHT;
+        return Math.min(1, byH, byW);
       }
 
       function place(chip, t, scale) {

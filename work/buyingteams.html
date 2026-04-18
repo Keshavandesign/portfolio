@@ -911,18 +911,34 @@
       .breadcrumb { top: 76px; left: 24px; }
       .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; }
       .breadcrumb-back { display: flex; }
-      .cs-hero { padding: 100px 24px 56px; }
-      .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding: 72px 24px; }
+      .cs-hero { padding: 80px 24px 52px; }
+      .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding: 64px 24px; }
       .cs-meta-row { grid-template-columns: 1fr; }
       .cs-insight-grid { grid-template-columns: 1fr; }
-      .cs-phase-tabs { gap: 0; }
-      .cs-phase-tab { padding: 12px 16px; font-size: 10px; }
+      /* Phase tabs: scrollable row so they never wrap or collapse */
+      .cs-phase-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 6px; padding-bottom: 4px; }
+      .cs-phase-tab { flex-shrink: 0; padding: 10px 16px; font-size: 10px; }
       .cs-phase-heading { display: none; }
       .cs-screens-grid { grid-template-columns: 1fr; }
       .cs-screen-item.wide { grid-column: span 1; }
-      .cs-results-grid { grid-template-columns: 1fr; gap: 0; }
+      .cs-results-grid { grid-template-columns: 1fr; gap: 0; margin-top: 40px; }
+      .cs-result-item { padding: 28px 0; }
       .cs-style-grid { grid-template-columns: repeat(2, 1fr); }
-      footer { flex-direction: column; align-items: flex-start; padding: 24px 24px 36px; gap: 16px; }
+      footer { flex-direction: column; align-items: flex-start; padding: 28px 24px 36px; gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      .cs-hero { padding: 72px 20px 44px; }
+      .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding: 52px 20px; }
+      .cs-hero-title { font-size: clamp(38px, 9vw, 80px); }
+      .cs-section-title { font-size: clamp(26px, 7vw, 56px); }
+      .cs-phase-title { font-size: clamp(24px, 7vw, 48px); }
+      .cs-phase-number { font-size: clamp(36px, 9vw, 80px); }
+      .cs-result-number { font-size: clamp(36px, 9vw, 72px); }
+      .cs-result-item { padding: 24px 0; }
+      .cs-next-title { font-size: clamp(28px, 8vw, 56px); }
+      .cs-quote { font-size: clamp(15px, 4vw, 20px); padding: 20px 24px; }
+      .cs-insight-card { padding: 24px 22px; }
+      .cs-feature-card { padding: 24px 22px; }
     }
   </style>
 </head>
