@@ -1316,10 +1316,11 @@
       .nav-right   { display: none; }
       .nav-hamburger { display: flex; }
 
-      /* Hero — center-aligned, larger headline, no meta clutter */
+      /* Hero — center-aligned, larger headline, trimmed eyebrow */
       .hero { padding: 80px 24px 88px; }
       .hero-headline { font-size: clamp(40px, 11vw, 54px); }
       .hero-eyebrow { font-size: 9px; letter-spacing: 0.07em; margin-bottom: 12px; }
+      .hero-eyebrow-extra { display: none; }
       .hero-meta { display: none; }
 
       /* About — same side margin as every other section */
@@ -1530,7 +1531,7 @@
   <section class="hero">
     <div class="hero-content">
       <div class="hero-eyebrow">
-        Senior Product Designer<span class="sep">·</span>Art, Psychology &amp; Code<span class="sep">·</span>4 years shipping
+        Senior Product Designer<span class="hero-eyebrow-extra"><span class="sep">·</span>Art, Psychology &amp; Code<span class="sep">·</span>4 years shipping</span>
       </div>
       <h1 class="hero-headline">
         I design <span class="accent" id="typed-word"></span><span class="typing-cursor" id="typing-cursor"></span>
