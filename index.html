@@ -1631,11 +1631,17 @@
         return;
       }
 
-      // Hover pause with eased speed factor (1 = normal, 0 = stopped)
+      // Hover pause: only when a chip itself is hovered (not empty space)
       let speedFactor = 1;
       let target = 1;
-      stage.addEventListener('mouseenter', () => { target = 0; });
-      stage.addEventListener('mouseleave', () => { target = 1; });
+      let hovered = 0;
+      chips.forEach(c => {
+        c.el.addEventListener('mouseenter', () => { hovered++; target = 0; });
+        c.el.addEventListener('mouseleave', () => {
+          hovered = Math.max(0, hovered - 1);
+          if (hovered === 0) target = 1;
+        });
+      });
 
       let accumT = 0;            // accumulated simulation seconds
       let lastNow = performance.now();
