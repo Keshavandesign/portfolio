@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <title>Spotify Redesign · Keshav Anand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function(){try{var s=localStorage.getItem('theme'),p=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',s||(p?'dark':'light'));}catch(e){}}());
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#EDEAE3;--fg:#2A2535;--muted:#7A7490;--accent:#9B2D7A;
+      --border:rgba(42,37,53,.10);--border-strong:rgba(42,37,53,.35);
+      --surface:#F4F1EC;--nav-bg:color-mix(in srgb,var(--fg) 96%,transparent);
+      --sans:'Inter',sans-serif;--serif:'DM Serif Display',serif;
+      --ease:cubic-bezier(.22,1,.36,1);
+      --spo:#121212;--spo-green:#1DB954;--spo-card:#181818;
+    }
+    [data-theme="dark"]{
+      --bg:#1F1E1B;--fg:#F0EBE3;--muted:#9E988E;--accent:#E569A9;
+      --border:rgba(240,235,227,.10);--border-strong:rgba(240,235,227,.28);
+      --surface:#2A2825;--nav-bg:rgba(31,30,27,.94);
+    }
+    html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;overflow-x:hidden;transition:background-color .35s var(--ease),color .35s var(--ease);}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:28px 52px;transform:translateZ(0);transition:transform .45s var(--ease),padding .4s var(--ease),background .35s ease;}
+    nav.hide{transform:translateY(-110%);}
+    nav.scrolled{padding:14px 52px;background:var(--nav-bg);backdrop-filter:blur(8px);}
+    .nav-logo{display:inline-flex;align-items:baseline;text-decoration:none;color:var(--fg);}
+    .logo-word{font-family:var(--serif);font-style:italic;font-size:24px;font-weight:400;letter-spacing:-.015em;line-height:1;color:var(--fg);transition:transform .35s var(--ease),letter-spacing .35s var(--ease);}
+    .logo-dot{color:var(--accent);font-style:normal;margin-left:1px;}
+    .nav-logo:hover .logo-word{transform:translateY(-1px);letter-spacing:0;}
+    .theme-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:color .2s,border-color .2s,transform .25s var(--ease);}
+    .theme-toggle:hover{color:var(--fg);border-color:var(--fg);transform:rotate(-15deg);}
+    .theme-icon{width:16px;height:16px;}
+    .theme-icon-sun{display:none;}.theme-icon-moon{display:block;}
+    [data-theme="dark"] .theme-icon-sun{display:block;}[data-theme="dark"] .theme-icon-moon{display:none;}
+    .nav-center{display:flex;justify-content:center;}
+    .nav-links{display:flex;gap:44px;list-style:none;}
+    .nav-links a{font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--muted);position:relative;transition:color .2s;}
+    .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);}
+    .nav-links a:hover{color:var(--fg);}
+    .nav-links a:hover::after{transform:scaleX(1);}
+    .nav-right{display:flex;justify-content:flex-end;}
+    .nav-btn{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--fg);border:1.5px solid var(--border-strong);padding:9px 22px;border-radius:100px;transition:border-color .3s,transform .3s var(--ease);}
+    .nav-btn:hover{border-color:var(--fg);transform:scale(1.03);}
+    .nav-hamburger{display:none;flex-direction:column;justify-content:center;align-items:flex-end;gap:5px;width:32px;height:32px;background:none;border:none;cursor:pointer;padding:0;margin-left:auto;}
+    .nav-hamburger span{display:block;height:1.5px;background:var(--fg);border-radius:2px;transform-origin:center;transition:transform .35s var(--ease),opacity .25s,width .3s var(--ease);}
+    .nav-hamburger span:nth-child(1){width:22px;}.nav-hamburger span:nth-child(2){width:16px;}.nav-hamburger span:nth-child(3){width:22px;}
+    .nav-hamburger.open span:nth-child(1){width:22px;transform:translateY(6.5px) rotate(45deg);}
+    .nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .nav-hamburger.open span:nth-child(3){width:22px;transform:translateY(-6.5px) rotate(-45deg);}
+    .mobile-nav{position:fixed;inset:0;z-index:99;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .35s var(--ease);}
+    .mobile-nav.open{pointer-events:all;opacity:1;}
+    .mobile-nav-links{list-style:none;text-align:center;}
+    .mobile-nav-links a{display:block;font-family:var(--serif);font-size:clamp(36px,8vw,56px);color:var(--fg);text-decoration:none;transform:translateY(110%);opacity:0;transition:color .2s,transform .5s var(--ease),opacity .5s var(--ease);}
+    .mobile-nav.open .mobile-nav-links a{transform:translateY(0);opacity:1;}
+    .mobile-nav-links a:hover{color:var(--accent);}
+    .breadcrumb{position:fixed;top:80px;left:52px;z-index:90;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:top .4s var(--ease);}
+    .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;}
+    .breadcrumb a:hover{color:var(--accent);}
+    .breadcrumb-sep{opacity:.4;}
+    .breadcrumb-current{color:var(--fg);font-weight:500;}
+    .breadcrumb-back{display:none;font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s,transform .3s var(--ease);}
+    .breadcrumb-back:hover{color:var(--fg);transform:translateX(-3px);}
+    @media(max-width:1024px){nav{padding:22px 36px;}nav.scrolled{padding:14px 36px;}.breadcrumb{left:36px;}}
+    @media(max-width:768px){nav{padding:20px 24px;}.nav-center,.nav-right{display:none;}.nav-hamburger{display:flex;}.breadcrumb{top:76px;left:24px;}.breadcrumb-sep,.breadcrumb a:not(:last-of-type){display:none;}.breadcrumb-back{display:flex;}}
+
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);transform-origin:left;transform:scaleX(0);z-index:200;transition:transform .1s linear;}
+
+    /* ── HERO ── */
+    .cs-hero{padding:190px 52px 80px;border-bottom:1px solid var(--border);}
+    .cs-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+    .cs-tag{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);padding:4px 10px;border-radius:100px;}
+    .cs-hero h1{font-family:var(--serif);font-size:clamp(40px,5.5vw,80px);font-weight:400;line-height:1.02;letter-spacing:-.03em;margin-bottom:24px;}
+    .cs-hero h1 em{font-style:italic;color:var(--accent);}
+    .cs-hero-sub{font-size:17px;font-weight:300;color:var(--muted);max-width:560px;line-height:1.75;margin-bottom:80px;}
+    .cs-meta-row{display:flex;gap:0;border-top:1px solid var(--border);padding-top:36px;}
+    .cs-meta-item{flex:1;padding-right:32px;}
+    .cs-meta-item+.cs-meta-item{padding-left:32px;border-left:1px solid var(--border);}
+    .cs-meta-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+    .cs-meta-value{font-size:14px;}
+    @media(max-width:768px){.cs-hero{padding:110px 24px 56px;}.cs-meta-row{flex-wrap:wrap;}.cs-meta-item{flex:1 1 50%;padding:16px 0 0!important;border-left:none!important;}}
+
+    /* ── SECTIONS ── */
+    .section{padding:120px clamp(52px, 9vw, 140px);border-top:1px solid var(--border);}
+    @media(max-width:768px){.section{padding:60px 24px;}}
+    .sec-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+    .sec-heading{font-family:var(--serif);font-size:clamp(28px,3.5vw,48px);font-weight:400;line-height:1.1;letter-spacing:-.025em;margin-bottom:20px;}
+    .sec-heading em{font-style:italic;color:var(--accent);}
+    .sec-body{font-size:15px;line-height:1.8;color:var(--muted);max-width:580px;}
+    .sec-body p+p{margin-top:14px;}
+    .sec-body strong{color:var(--fg);font-weight:500;}
+
+    /* ── SPOTIFY SHELL ── */
+    .spo-shell{display:flex;height:100%;background:var(--spo);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+    .spo-sidebar{width:180px;min-width:180px;background:#000;display:flex;flex-direction:column;padding:8px 0;}
+    .spo-nav-item{display:flex;align-items:center;gap:8px;padding:6px 12px;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);cursor:pointer;border-radius:4px;margin:0 6px;}
+    .spo-nav-item.active{color:#fff;}
+    .spo-nav-item:hover{color:#fff;}
+    .spo-nav-icon{width:16px;height:16px;display:grid;place-items:center;flex-shrink:0;}
+    .spo-library-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px 4px;font-size:11px;font-weight:700;color:rgba(255,255,255,.55);margin:0 6px;}
+    .spo-playlist{display:flex;align-items:center;gap:8px;padding:4px 12px;margin:0 6px;border-radius:4px;cursor:pointer;}
+    .spo-playlist:hover{background:rgba(255,255,255,.06);}
+    .spo-playlist-art{width:32px;height:32px;border-radius:3px;flex-shrink:0;}
+    .spo-playlist-info{}
+    .spo-playlist-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.2;}
+    .spo-playlist-meta{font-size:10px;color:rgba(255,255,255,.35);}
+    .spo-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#1a3a1a 0%,var(--spo) 40%);}
+    .spo-main-header{padding:12px 16px;display:flex;align-items:center;gap:8px;}
+    .spo-main-title{font-size:18px;font-weight:700;color:#fff;}
+    .spo-main-sub{font-size:11px;color:rgba(255,255,255,.45);}
+    .spo-green-btn{background:var(--spo-green);color:#000;font-size:10px;font-weight:700;border:none;border-radius:100px;padding:5px 14px;cursor:pointer;margin-top:6px;}
+    .spo-track-list{padding:4px 16px;display:flex;flex-direction:column;}
+    .spo-track{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+    .spo-track:last-child{border-bottom:none;}
+    .spo-track-num{font-size:11px;color:rgba(255,255,255,.35);width:14px;text-align:center;flex-shrink:0;}
+    .spo-track-art{width:32px;height:32px;border-radius:3px;flex-shrink:0;}
+    .spo-track-info{flex:1;}
+    .spo-track-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);}
+    .spo-track-artist{font-size:10px;color:rgba(255,255,255,.4);}
+    .spo-track-time{font-size:11px;color:rgba(255,255,255,.35);margin-left:auto;flex-shrink:0;}
+    .spo-track-badge{font-size:9px;font-weight:600;color:rgba(255,255,255,.3);flex-shrink:0;}
+
+    /* ── REDESIGNED COLLECTION VIEW ── */
+    .col-shell{display:flex;height:100%;background:var(--spo);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+    .col-sidebar{width:180px;min-width:180px;background:#000;display:flex;flex-direction:column;padding:8px 0;}
+    .col-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .col-header{padding:10px 14px;background:linear-gradient(180deg,#0d2b3e 0%,var(--spo) 100%);}
+    .col-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px;}
+    .col-tabs{display:flex;gap:4px;margin-top:8px;}
+    .col-tab{font-size:10px;font-weight:600;border-radius:100px;padding:4px 10px;border:1px solid;cursor:pointer;}
+    .col-tab.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff;}
+    .col-tab.inactive{background:transparent;border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.45);}
+    .col-eras{padding:8px 14px;flex:1;display:flex;flex-direction:column;gap:8px;overflow:hidden;}
+    .col-era{border-radius:6px;overflow:hidden;background:rgba(255,255,255,.05);}
+    .col-era-head{display:flex;align-items:center;gap:8px;padding:7px 10px;}
+    .col-era-art{display:flex;gap:2px;}
+    .col-era-art-sq{width:14px;height:14px;border-radius:2px;}
+    .col-era-label{font-size:12px;font-weight:700;color:#fff;}
+    .col-era-count{font-size:10px;color:rgba(255,255,255,.35);margin-left:auto;}
+    .col-era-tracks{padding:0 10px 8px;display:flex;flex-direction:column;gap:4px;}
+    .col-era-track{display:flex;align-items:center;gap:8px;}
+    .col-era-track-art{width:24px;height:24px;border-radius:2px;flex-shrink:0;}
+    .col-era-track-name{font-size:10px;color:rgba(255,255,255,.7);}
+    .col-era-track-age{font-size:9px;color:rgba(255,255,255,.3);margin-left:auto;white-space:nowrap;}
+
+    .col-forgotten{padding:8px 14px;border-top:1px solid rgba(255,255,255,.07);}
+    .col-forgotten-head{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--spo-green);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+    .col-forgotten-item{display:flex;align-items:center;gap:8px;padding:4px 0;}
+    .col-forgotten-art{width:28px;height:28px;border-radius:3px;flex-shrink:0;}
+    .col-forgotten-info{flex:1;}
+    .col-forgotten-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.8);}
+    .col-forgotten-last{font-size:9px;color:rgba(255,255,255,.3);}
+    .col-forgotten-btn{font-size:9px;font-weight:600;color:var(--spo-green);border:1px solid rgba(29,185,84,.3);border-radius:4px;padding:2px 6px;cursor:pointer;}
+
+    /* ── SPLIT ── */
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:64px;align-items:start;}
+    .split+.split{margin-top:0;padding-top:64px;border-top:1px solid var(--border);}
+    .split-n{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+    .split-heading{font-family:var(--serif);font-size:clamp(22px,2.5vw,32px);font-weight:400;line-height:1.15;letter-spacing:-.02em;margin-bottom:14px;}
+    .split-heading em{font-style:italic;color:var(--accent);}
+    .split-body{font-size:13px;line-height:1.75;color:var(--muted);}
+    .split-body p+p{margin-top:10px;}
+    .split-body strong{color:var(--fg);font-weight:500;}
+    .screens{display:flex;flex-direction:column;gap:10px;}
+    .screen-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+    .screen-lbl.after{color:var(--accent);}
+    .screen{border:1px solid var(--border-strong);border-radius:10px;overflow:hidden;height:280px;position:relative;}
+    @media(max-width:900px){.split{grid-template-columns:1fr;}}
+
+    /* ── PRINCIPLE CARDS ── */
+    .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;border-top:1px solid var(--border-strong);}
+    .principle{padding:32px 32px 32px 0;border-right:1px solid var(--border);}
+    .principle:last-child{border-right:none;}
+    .principle+.principle{padding-left:32px;}
+    .principle-n{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--accent);opacity:.22;line-height:1;margin-bottom:12px;}
+    .principle-head{font-size:14px;font-weight:600;color:var(--fg);margin-bottom:6px;}
+    .principle-body{font-size:13px;line-height:1.7;color:var(--muted);}
+    @media(max-width:768px){.principles{grid-template-columns:1fr;}.principle{border-right:none;padding:24px 0!important;border-bottom:1px solid var(--border);}.principle:last-child{border-bottom:none;}}
+
+    /* ── PULL QUOTE ── */
+    .pull{padding:90px clamp(52px, 9vw, 140px);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .pull p{font-family:var(--serif);font-size:clamp(18px,2.2vw,28px);font-style:italic;line-height:1.45;letter-spacing:-.01em;max-width:760px;}
+    .pull cite{display:block;margin-top:14px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-style:normal;}
+    @media(max-width:768px){.pull{padding:32px 24px;}}
+
+    /* ── CTA BANNER ── */
+    .cta-banner{padding:100px 52px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-start;gap:0;}
+    .cta-banner-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .cta-banner-heading{font-family:var(--serif);font-size:clamp(36px,5vw,72px);font-weight:400;line-height:1.0;letter-spacing:-.04em;margin-bottom:24px;}
+    .cta-banner-heading em{font-style:italic;color:var(--accent);}
+    .cta-banner-sub{font-size:15px;font-weight:300;color:var(--muted);max-width:420px;line-height:1.75;margin-bottom:40px;}
+    .cta-open-btn{display:inline-flex;align-items:center;gap:12px;background:var(--fg);color:var(--bg);font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;padding:16px 36px;cursor:pointer;transition:transform .3s var(--ease),opacity .2s;}
+    .cta-open-btn:hover{transform:scale(1.04);}
+    @media(max-width:768px){.cta-banner{padding:60px 24px;}}
+
+    /* ── NEXT ── */
+    .next-section{padding:90px 52px;border-top:1px solid var(--border);}
+    .next-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:36px;}
+    .next-link{display:flex;align-items:baseline;gap:16px;text-decoration:none;color:var(--fg);transition:color .25s;}
+    .next-link:hover{color:var(--accent);}
+    .next-title{font-family:var(--serif);font-size:clamp(32px,4.5vw,64px);font-weight:400;letter-spacing:-.03em;}
+    .next-arrow{font-size:clamp(28px,4vw,52px);transition:transform .35s var(--ease);}
+    .next-link:hover .next-arrow{transform:translateX(10px);}
+    @media(max-width:768px){.next-section{padding:60px 24px;}}
+
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease);}
+    .reveal.visible{opacity:1;transform:none;}
+    .rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
+
+    /* ── CONTACT MODAL ── */
+    .contact-modal{position:fixed;inset:0;z-index:500;background:#14111a;display:flex;align-items:center;justify-content:center;padding:40px;pointer-events:none;opacity:0;transition:opacity .4s var(--ease);}
+    .contact-modal.open{opacity:1;pointer-events:all;}
+    
+    
+    
+    .contact-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+    .contact-title{font-family:var(--serif);font-size:clamp(44px,5.5vw,80px);font-weight:400;line-height:1;letter-spacing:-.04em;color:#F0EBE3;margin-bottom:20px;}
+    .contact-title em{font-style:italic;color:#E569A9;}
+    .contact-avail{font-size:14px;line-height:1.7;color:rgba(255,255,255,.45);margin-bottom:36px;}
+    .contact-links{display:flex;flex-direction:column;gap:8px;}
+    .contact-link-tile{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 16px;text-decoration:none;color:rgba(255,255,255,.55);transition:border-color .2s,color .2s;}
+    .contact-link-tile:hover{border-color:rgba(255,255,255,.3);color:#fff;}
+    .contact-link-label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+    .contact-link-arrow{font-size:14px;opacity:.4;}
+    .contact-form{display:flex;flex-direction:column;gap:16px;}
+    .contact-field{display:flex;flex-direction:column;gap:6px;}
+    .contact-field input,.contact-field textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 18px;font-size:14px;font-family:var(--sans);color:#F0EBE3;outline:none;transition:border-color .2s,background .2s;resize:none;}
+    .contact-field input::placeholder,.contact-field textarea::placeholder{color:rgba(255,255,255,.25);}
+    .contact-field input:focus,.contact-field textarea:focus{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.09);}
+    .contact-submit{background:#EDEAE3;color:#2A2535;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:8px;padding:16px 32px;cursor:pointer;transition:opacity .2s,transform .3s var(--ease);}
+    .contact-submit:hover{opacity:.9;transform:translateY(-1px);}
+    .contact-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .contact-success{display:none;text-align:center;padding:40px 0;}
+    .contact-success-icon{font-size:40px;margin-bottom:16px;}
+    .contact-success-msg{font-family:var(--serif);font-size:24px;color:#F0EBE3;margin-bottom:8px;}
+    .contact-success-sub{font-size:14px;color:rgba(255,255,255,.45);}
+    }
+      @media(max-width:600px){
+      .contact-modal{top:auto;bottom:0;left:0;right:0;border-radius:20px 20px 0 0;flex-direction:column;align-items:center;padding:0 20px calc(32px + env(safe-area-inset-bottom));max-height:88dvh;overflow-y:auto;opacity:1;transform:translateY(100%);transition:transform .4s var(--ease);}
+      .contact-modal.open{transform:translateY(0);}
+      .contact-modal::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:14px 0 20px;flex-shrink:0;}
+      .contact-inner,
+      
+      .cta-open-btn{width:100%;justify-content:center;}
+      .cs-next-link{width:100%;justify-content:center;}
+    }
+
+    .contact-modal-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;width:100%;max-width:960px;align-items:center;}
+    .contact-close{position:fixed;top:32px;right:40px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s,transform .3s var(--ease);}
+    .contact-close:hover{border-color:rgba(255,255,255,.6);color:#fff;transform:rotate(90deg);}
+    .contact-modal-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+    .contact-modal-title{font-family:var(--serif);font-size:clamp(52px,6vw,92px);font-weight:400;line-height:.95;letter-spacing:-.04em;color:#F0EBE3;margin-bottom:24px;}
+    .contact-modal-title em{font-style:italic;color:#E569A9;}
+    .contact-modal-avail{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:40px;}
+    .contact-social-tiles{display:flex;flex-direction:column;gap:8px;}
+    .contact-social-tile{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 18px;text-decoration:none;color:rgba(255,255,255,.5);transition:border-color .2s,color .2s;}
+    .contact-social-tile:hover{border-color:rgba(255,255,255,.35);color:#fff;}
+    .contact-social-tile-label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+    .contact-social-tile-arrow{font-size:14px;opacity:.4;}
+    .contact-form{display:flex;flex-direction:column;gap:14px;}
+    .c-field{display:flex;flex-direction:column;}
+    .c-field input,.c-field textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 18px;font-size:14px;font-family:var(--sans);color:#F0EBE3;outline:none;resize:none;transition:border-color .2s,background .2s;}
+    .c-field input::placeholder,.c-field textarea::placeholder{color:rgba(255,255,255,.22);}
+    .c-field input:focus,.c-field textarea:focus{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.09);}
+    .contact-form-submit{background:#EDEAE3;color:#2A2535;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:8px;padding:17px 32px;cursor:pointer;margin-top:4px;transition:opacity .2s,transform .3s var(--ease);width:100%;}
+    .contact-form-submit:hover{opacity:.9;transform:translateY(-1px);}
+    .contact-form-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .contact-success-state{display:none;text-align:center;padding:48px 0;}
+    .contact-success-check{width:48px;height:48px;border-radius:50%;background:rgba(29,185,84,.15);border:1px solid rgba(29,185,84,.3);display:grid;place-items:center;margin:0 auto 16px;}
+    .contact-success-heading{font-family:var(--serif);font-size:28px;color:#F0EBE3;margin-bottom:8px;}
+    .contact-success-body{font-size:14px;color:rgba(255,255,255,.4);}
+    @media(max-width:900px){.contact-modal-inner{grid-template-columns:1fr;gap:40px;}.contact-modal{padding:24px;overflow-y:auto;align-items:flex-start;padding-top:80px;}}
+    /* ─── FOOTER ─── */
+    footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
+    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
+    .footer-brand{display:flex;flex-direction:column;gap:20px;}
+    .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
+    .footer-logo-dot{color:var(--accent);font-style:normal;}
+    .footer-tagline{font-size:12px;color:var(--muted);line-height:1.6;max-width:220px;}
+    .footer-col-head{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg);margin-bottom:28px;}
+    .footer-nav{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-nav a{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-nav a:hover{color:var(--fg);}
+    .footer-socials{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-socials a{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);transition:color 0.2s;}
+    .footer-socials a:hover{color:var(--fg);}
+    .footer-socials a:hover .soc-icon{border-color:var(--fg);}
+    .soc-icon{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.2s;}
+    .soc-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    .soc-label{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;}
+    .footer-bottom{border-top:1px solid var(--border);padding:24px 0;display:flex;align-items:center;justify-content:space-between;}
+    .footer-copy{font-size:12px;color:var(--muted);font-weight:400;}
+    .footer-totop{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+    .footer-totop:hover{color:var(--fg);}
+    .footer-totop:hover .totop-circle{border-color:var(--fg);}
+    .totop-circle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;}
+    .totop-circle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    @media(max-width:900px){.footer-main{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1 / -1;}.footer-sig{height:100%;right:-4%;}}
+    @media(max-width:640px){footer{padding:56px 24px 0;}.footer-main{grid-template-columns:1fr;gap:40px;padding-bottom:56px;}.footer-brand{grid-column:auto;}.footer-sig{height:80%;right:-6%;}}
+
+    @media(max-width:600px){
+      .cs-hero{padding:110px 20px 56px;}
+      .spotify-shell,.app-shell{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    }
+    </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav id="nav">
+    <a href="../index.html" class="nav-logo" aria-label="Keshav Anand home"><span class="logo-word">Keshav<span class="logo-dot">.</span></span></a>
+    <div class="nav-center"><ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul></div>
+    <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../index.html">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="../index.html#mini">Mini Projects</a><span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Spotify</span>
+    <a href="../index.html#mini" class="breadcrumb-back">← Back</a>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+      <li><a href="../index.html#about" class="mobile-link">About</a></li>
+      <li><a href="../index.html#work" class="mobile-link">Work</a></li>
+      <li><a href="../index.html" class="mobile-link">Home</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="cs-tags reveal">
+      <span class="cs-tag">Mini Project</span>
+      <span class="cs-tag">Spotify</span>
+      <span class="cs-tag">Personal Music Experience</span>
+    </div>
+    <h1 class="reveal rd1">Spotify knows your taste.<br>It just <em>hides it from you.</em></h1>
+    <p class="cs-hero-sub reveal rd2">You've liked 4,700 songs over six years. Spotify has perfect data on all of them. But the Liked Songs list shows them newest-first in a flat scroll with no context, no eras, no way to navigate your own collection. Discovery pulls you forward. Your history doesn't exist.</p>
+    <div class="cs-meta-row reveal rd3">
+      <div class="cs-meta-item"><p class="cs-meta-label">Type</p><p class="cs-meta-value">Mini Project · 2 days</p></div>
+      <div class="cs-meta-item"><p class="cs-meta-label">Problem</p><p class="cs-meta-value">Liked Songs is unnavigable</p></div>
+      <div class="cs-meta-item"><p class="cs-meta-label">Root cause</p><p class="cs-meta-value">No temporal or contextual structure</p></div>
+    </div>
+  </section>
+
+  <!-- ROOT CAUSE -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">The real problem</p>
+    <h2 class="sec-heading reveal rd1">A flat list doesn't scale<br>to <em>4,700 songs.</em></h2>
+    <div class="sec-body reveal rd2">
+      <p>Liked Songs is the most personal playlist on Spotify. It spans years of life events, phases, and moods. But it's navigated exactly like a newly-created playlist: newest first, no grouping, no signal about what's buried at the bottom.</p>
+      <p>Spotify invests heavily in algorithmic discovery to pull you toward new music. But there's no parallel investment in helping you navigate what you already own. <strong>Your collection grows every year and becomes less usable every year.</strong></p>
+    </div>
+
+    <div class="principles">
+      <div class="principle reveal">
+        <div class="principle-n">01</div>
+        <div class="principle-head">Recency always wins</div>
+        <div class="principle-body">The newest saves play first. Songs from 2019 (music you loved enough to save) effectively disappear. The shuffle function is random, not intentional.</div>
+      </div>
+      <div class="principle reveal rd1">
+        <div class="principle-n">02</div>
+        <div class="principle-head">Context evaporates</div>
+        <div class="principle-body">You save in context ("this is my gym song," "this fits that road trip"), but when you return, that context is gone. It's just a title and an artist. You've lost the thread.</div>
+      </div>
+      <div class="principle reveal rd2">
+        <div class="principle-n">03</div>
+        <div class="principle-head">Discovery vs. rediscovery</div>
+        <div class="principle-body">Spotify's entire recommendation engine pushes new content. There is no "rediscover what you already love" system. Algorithmic playlists rarely resurface your own Liked Songs.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pull reveal">
+    <p>"I have 3,000 liked songs. I basically just use Spotify Radio because I can't find anything in my actual library anymore."</p>
+    <cite>Synthesised from 9 people with Liked Songs libraries over 1,000 tracks</cite>
+  </div>
+
+  <!-- REDESIGN -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">The redesign</p>
+    <h2 class="sec-heading reveal rd1">Your Collection.<br><em>Navigable by era.</em></h2>
+    <p class="sec-body reveal rd2">Instead of a flat list, Your Collection groups music by the year you saved it, creating "eras" of your taste that are browsable like albums. A separate Forgotten Favorites panel surfaces songs you loved and lost. No AI, no magic. Just structure that was always possible with the data Spotify already has.</p>
+    <p class="sec-body reveal rd3" style="margin-top:16px;">I chose <strong>temporal grouping</strong> over mood or genre because it maps to how people actually remember saving music: by life period, not abstract category. "My 2021 playlist" means something personal. "Sad indie rock" is a Spotify construct, not a memory.</p>
+
+    <div class="split">
+      <div class="split-text reveal">
+        <p class="split-n">The Problem</p>
+        <h3 class="split-heading">4,700 songs.<br>One <em>flat scroll.</em></h3>
+        <div class="split-body">
+          <p>Open Liked Songs today. The list starts with what you saved last week. It ends with a song from 2018. There's no chapter structure, no way to say "show me what I liked in my final year of college." No grouping by era, mood, or energy.</p>
+          <p>Songs at the bottom have a badge that might as well say "forgotten." The interface has no mechanism to resurface them except random shuffle.</p>
+        </div>
+      </div>
+      <div class="screens reveal rd1">
+        <div class="screen-lbl">Current experience</div>
+        <div class="screen">
+          <div class="spo-shell">
+            <div class="spo-sidebar">
+              <div class="spo-nav-item active">
+                <div class="spo-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+                Home
+              </div>
+              <div class="spo-nav-item" style="margin-top:4px;">
+                <div class="spo-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                Search
+              </div>
+              <div class="spo-library-head">Your Library</div>
+              <div class="spo-playlist">
+                <div class="spo-playlist-art" style="background:linear-gradient(135deg,#450af5,#c4efd9);"></div>
+                <div class="spo-playlist-info"><div class="spo-playlist-name">Liked Songs</div><div class="spo-playlist-meta">Playlist · 4,700</div></div>
+              </div>
+              <div class="spo-playlist">
+                <div class="spo-playlist-art" style="background:linear-gradient(135deg,#1DB954,#052e10);"></div>
+                <div class="spo-playlist-info"><div class="spo-playlist-name">Road trip 2022</div><div class="spo-playlist-meta">Playlist · 34</div></div>
+              </div>
+              <div class="spo-playlist">
+                <div class="spo-playlist-art" style="background:linear-gradient(135deg,#e13300,#4a0000);"></div>
+                <div class="spo-playlist-info"><div class="spo-playlist-name">Gym</div><div class="spo-playlist-meta">Playlist · 18</div></div>
+              </div>
+            </div>
+            <div class="spo-main">
+              <div class="spo-main-header">
+                <div>
+                  <div class="spo-main-title">Liked Songs</div>
+                  <div class="spo-main-sub">4,700 songs · 12 days, 4 hours</div>
+                  <button class="spo-green-btn">Shuffle play</button>
+                </div>
+              </div>
+              <div class="spo-track-list">
+                <div class="spo-track"><div class="spo-track-num">1</div><div class="spo-track-art" style="background:linear-gradient(135deg,#1a1a2e,#16213e);"></div><div class="spo-track-info"><div class="spo-track-name">Blinding Lights</div><div class="spo-track-artist">The Weeknd</div></div><div class="spo-track-badge">3d</div><div class="spo-track-time">3:20</div></div>
+                <div class="spo-track"><div class="spo-track-num">2</div><div class="spo-track-art" style="background:linear-gradient(135deg,#2d1b69,#11998e);"></div><div class="spo-track-info"><div class="spo-track-name">Levitating</div><div class="spo-track-artist">Dua Lipa</div></div><div class="spo-track-badge">1w</div><div class="spo-track-time">3:23</div></div>
+                <div class="spo-track"><div class="spo-track-num">3</div><div class="spo-track-art" style="background:linear-gradient(135deg,#434343,#000);"></div><div class="spo-track-info"><div class="spo-track-name">As It Was</div><div class="spo-track-artist">Harry Styles</div></div><div class="spo-track-badge">2w</div><div class="spo-track-time">2:37</div></div>
+                <div class="spo-track" style="opacity:.35;"><div class="spo-track-num">4,700</div><div class="spo-track-art" style="background:#333;"></div><div class="spo-track-info"><div class="spo-track-name">Something from 2018</div><div class="spo-track-artist">Someone you loved</div></div><div class="spo-track-badge">2018</div><div class="spo-track-time">???</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split" style="margin-top:0;padding-top:48px;border-top:1px solid var(--border);">
+      <div class="split-text reveal">
+        <p class="split-n">The Redesign</p>
+        <h3 class="split-heading">Your Collection.<br>Three <em>ways in.</em></h3>
+        <div class="split-body">
+          <p>The new "Your Collection" view groups Liked Songs by year saved. Each era is a visual chapter: a compact block with an ambient collage of that year's album art. Tap an era to browse it as a focused playlist.</p>
+          <p>A persistent "Forgotten Favorites" section at the bottom surfaces songs liked before last year that you haven't played in 6+ months, with a single tap to queue them up again.</p>
+        </div>
+      </div>
+      <div class="screens reveal rd1">
+        <div class="screen-lbl after">Your Collection</div>
+        <div class="screen">
+          <div class="col-shell">
+            <div class="col-sidebar">
+              <div class="spo-nav-item active">
+                <div class="spo-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+                Home
+              </div>
+              <div class="spo-library-head">Your Library</div>
+              <div class="spo-playlist">
+                <div class="spo-playlist-art" style="background:linear-gradient(135deg,#1a3a5c,#0d2b3e);"></div>
+                <div class="spo-playlist-info"><div class="spo-playlist-name" style="color:#fff;">Your Collection</div><div class="spo-playlist-meta">4,700 · 6 eras</div></div>
+              </div>
+              <div class="spo-playlist" style="opacity:.5;">
+                <div class="spo-playlist-art" style="background:linear-gradient(135deg,#1DB954,#052e10);"></div>
+                <div class="spo-playlist-info"><div class="spo-playlist-name">Road trip</div></div>
+              </div>
+            </div>
+            <div class="col-main">
+              <div class="col-header">
+                <div class="col-title">Your Collection</div>
+                <div class="col-tabs">
+                  <div class="col-tab active">Eras</div>
+                  <div class="col-tab inactive">Forgotten</div>
+                  <div class="col-tab inactive">Patterns</div>
+                </div>
+              </div>
+              <div class="col-eras">
+                <div class="col-era">
+                  <div class="col-era-head">
+                    <div class="col-era-art">
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#1a3a5c,#0d2b3e);"></div>
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#e13300,#4a0000);"></div>
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#2d1b69,#11998e);"></div>
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#1DB954,#052e10);"></div>
+                    </div>
+                    <span class="col-era-label">2024</span>
+                    <span class="col-era-count">340 songs</span>
+                  </div>
+                </div>
+                <div class="col-era">
+                  <div class="col-era-head">
+                    <div class="col-era-art">
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#450af5,#c4efd9);"></div>
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#434343,#000);"></div>
+                      <div class="col-era-art-sq" style="background:linear-gradient(135deg,#833ab4,#fd1d1d);"></div>
+                    </div>
+                    <span class="col-era-label">2022</span>
+                    <span class="col-era-count">891 songs</span>
+                  </div>
+                  <div class="col-era-tracks">
+                    <div class="col-era-track"><div class="col-era-track-art" style="background:linear-gradient(135deg,#450af5,#c4efd9);"></div><span class="col-era-track-name">Stay With Me</span><span class="col-era-track-age">2y ago</span></div>
+                    <div class="col-era-track"><div class="col-era-track-art" style="background:linear-gradient(135deg,#434343,#000);"></div><span class="col-era-track-name">Running Up That Hill</span><span class="col-era-track-age">2y ago</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-forgotten">
+                <div class="col-forgotten-head"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Forgotten favorites · 47</div>
+                <div class="col-forgotten-item"><div class="col-forgotten-art" style="background:linear-gradient(135deg,#e8662c,#8b1a1a);"></div><div class="col-forgotten-info"><div class="col-forgotten-name">Bohemian Rhapsody</div><div class="col-forgotten-last">Last played 14 months ago</div></div><div class="col-forgotten-btn">Play</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT I LEFT OUT -->
+  <section class="section" style="background:var(--surface);">
+    <p class="sec-eyebrow reveal">Decisions made</p>
+    <h2 class="sec-heading reveal rd1">What I<br><em>left out.</em></h2>
+    <p class="sec-body reveal rd2" style="margin-bottom:56px;">The ideas I considered and rejected. Each rejection is a clarity decision. It tells you more about the design than what made it in.</p>
+    <div style="display:flex;flex-direction:column;gap:0;max-width:720px;" class="reveal rd3">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;padding:24px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-strong);border-radius:4px;padding:4px 10px;white-space:nowrap;margin-top:3px;">Not built</span>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--fg);margin-bottom:6px;">Mood and energy tagging</p>
+          <p style="font-size:13px;line-height:1.75;color:var(--muted);">Requires users to label their saves, a behavior Spotify can't guarantee at scale. Era grouping is zero-friction: the save timestamp is already there. Good design uses data that already exists before asking users to create new data.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;padding:24px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-strong);border-radius:4px;padding:4px 10px;white-space:nowrap;margin-top:3px;">Not built</span>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--fg);margin-bottom:6px;">AI-generated "taste chapters"</p>
+          <p style="font-size:13px;line-height:1.75;color:var(--muted);">I considered letting an algorithm define your eras: "Your Indie Phase", "Your Workout Year." Rejected it. The point is to let your own memory do the navigating. The design should reference your experience, not interpret it for you.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;padding:24px 0;">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-strong);border-radius:4px;padding:4px 10px;white-space:nowrap;margin-top:3px;">Not built</span>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--fg);margin-bottom:6px;">Listen history editing / "I don't like this anymore"</p>
+          <p style="font-size:13px;line-height:1.75;color:var(--muted);">A way to un-mark songs from old eras. Left out intentionally. The Forgotten Favorites surface is enough. Letting users edit their history introduces complexity and doesn't solve the core problem, which is navigation, not curation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner reveal">
+    <p class="cta-banner-eyebrow">Let's work together</p>
+    <h2 class="cta-banner-heading">Want to build something<br>worth <em>coming back to?</em></h2>
+    <p class="cta-banner-sub">The best products are the ones users grow a relationship with. If that's the kind of work you're doing, I want in.</p>
+    <button class="cta-open-btn open-contact">Start the conversation →</button>
+  </div>
+
+  <!-- NEXT -->
+  <section class="next-section reveal">
+    <p class="next-label">Next mini project</p>
+    <a href="figma-redesign.html" class="next-link">
+      <span class="next-title">Figma Comments</span>
+      <span class="next-arrow">→</span>
+    </a>
+  </section>
+
+  <!-- CONTACT MODAL -->
+  <!-- SETUP: Create a free account at formspree.io, create a new form, and replace YOUR_FORM_ID below with the form ID from your dashboard -->
+    <footer>
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo">Keshav<span class="footer-logo-dot">.</span></a>
+        <p class="footer-tagline">Senior Product Designer.<br>Hyderabad, India.</p>
+      </div>
+      <div>
+        <p class="footer-col-head">Quick links</p>
+        <ul class="footer-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#work">Work</a></li>
+          <li><a href="../index.html#mini">Mini Projects</a></li>
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../docs/Keshav_Anand_Resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-head">Socials</p>
+        <ul class="footer-socials">
+          <li>
+            <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+              <span class="soc-label">LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg></span>
+              <span class="soc-label">Behance</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:keshavanand100@gmail.com">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg></span>
+              <span class="soc-label">Email</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <img src="../Assets/shdw.png" alt="" aria-hidden="true" class="footer-sig" />
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Keshav Anand. All Rights Reserved.</span>
+      <a href="#" class="footer-totop">
+        To top
+        <span class="totop-circle">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </footer>
+
+  <div class="contact-modal" id="contactModal" aria-modal="true" role="dialog" aria-label="Contact Keshav">
+    <button class="contact-close" id="contactClose" aria-label="Close contact form">✕</button>
+    <div class="contact-modal-inner">
+      <div>
+        <p class="contact-modal-eyebrow">Contact</p>
+        <h2 class="contact-modal-title">Let's<br><em>Talk.</em></h2>
+        <p class="contact-modal-avail">Currently open to new projects and collaborations.<br>Based in Hyderabad, works globally.</p>
+        <div class="contact-social-tiles">
+          <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="mailto:keshavanand100@gmail.com" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Email directly
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg>
+              Behance
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm">
+          <div class="c-field">
+            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="c-field">
+            <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+          </div>
+          <div class="c-field">
+            <textarea name="message" placeholder="What are you working on?" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="contact-form-submit" id="contactSubmit">Send Message</button>
+        </form>
+        <div class="contact-success-state" id="contactSuccess">
+          <div class="contact-success-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="contact-success-heading">Message sent.</p>
+          <p class="contact-success-body">I'll get back to you within a day or two.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){const btn=document.getElementById('themeToggle');if(!btn)return;btn.addEventListener('click',()=>{const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}});})();
+    const nav=document.getElementById('nav'),bar=document.getElementById('progressBar');let lastY=0;
+    window.addEventListener('scroll',()=>{const y=window.scrollY;if(nav){nav.classList.toggle('hide',y>lastY&&y>120);nav.classList.toggle('scrolled',y>48);}if(bar){const t=document.documentElement.scrollHeight-window.innerHeight;bar.style.transform=`scaleX(${t>0?y/t:0})`;}lastY=y;},{passive:true});
+    const hamburger=document.getElementById('hamburger'),mobileNav=document.getElementById('mobileNav');let menuOpen=false;
+    function toggleMenu(open){menuOpen=open;if(hamburger)hamburger.classList.toggle('open',open);if(mobileNav)mobileNav.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
+    if(hamburger)hamburger.addEventListener('click',()=>toggleMenu(!menuOpen));
+    document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>toggleMenu(false)));
+    const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:.08,rootMargin:'-24px'});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    // Contact modal
+    const modal=document.getElementById('contactModal'),closeBtn=document.getElementById('contactClose'),form=document.getElementById('contactForm'),successEl=document.getElementById('contactSuccess'),submitBtn=document.getElementById('contactSubmit');
+    function openModal(){modal.classList.add('open');document.body.style.overflow='hidden';}
+    function closeModal(){modal.classList.remove('open');document.body.style.overflow='';}
+    document.querySelectorAll('.open-contact').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openModal();}));
+    if(closeBtn)closeBtn.addEventListener('click',closeModal);
+    modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+    if(form)form.addEventListener('submit',async e=>{e.preventDefault();submitBtn.disabled=true;submitBtn.textContent='Sending...';const data=new FormData(form);try{const r=await fetch('https://formspree.io/f/YOUR_FORM_ID',{method:'POST',body:data,headers:{Accept:'application/json'}});if(r.ok){form.style.display='none';successEl.style.display='block';}else{throw new Error('Send failed');}}catch{submitBtn.disabled=false;submitBtn.textContent='Send Message';alert('Something went wrong. Please email me directly at keshavanand100@gmail.com');}});
+  </script>
+</body>
+</html>

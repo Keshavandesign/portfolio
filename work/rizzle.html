@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <title>Rizzle Design System · Keshav Anand</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,21 +32,66 @@
       --surface: #2A2825; --nav-bg: rgba(31,30,27,0.94);
     }
 
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
     body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; transition: background .35s var(--ease), color .35s var(--ease); }
 
     /* ─── NAV ─── */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: grid; grid-template-columns: auto 1fr auto; align-items: center; padding: 28px 52px; transition: padding .4s var(--ease), background .3s; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+      padding: 28px 52px; transform: translateZ(0);
+      transition: transform 0.45s var(--ease), padding 0.4s var(--ease), background 0.35s ease;
+    }
+    nav.hide { transform: translateY(-110%); }
     nav.scrolled { padding: 14px 52px; background: var(--nav-bg); backdrop-filter: blur(8px); }
     .nav-logo { display: inline-flex; align-items: baseline; text-decoration: none; color: var(--fg); }
-    .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -0.015em; line-height: 1; }
-    .logo-dot { color: var(--accent); font-style: normal; }
-    .nav-right { display: flex; align-items: center; gap: 24px; }
-    .nav-back { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--muted); transition: color .2s; }
-    .nav-back:hover { color: var(--fg); }
-    .theme-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; transition: border-color .2s, color .2s; }
-    .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
-    @media (max-width:768px) { nav, nav.scrolled { padding: 18px 24px; } }
+    .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -0.015em; line-height: 1; color: var(--fg); transition: transform 0.35s var(--ease), letter-spacing 0.35s var(--ease); }
+    .logo-dot { color: var(--accent); font-style: normal; margin-left: 1px; }
+    .nav-logo:hover .logo-word { transform: translateY(-1px); letter-spacing: 0; }
+    .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0; transition: color 0.2s, border-color 0.2s, transform 0.25s var(--ease); }
+    .theme-toggle:hover { color: var(--fg); border-color: var(--fg); transform: rotate(-15deg); }
+    .theme-icon { width: 16px; height: 16px; }
+    .theme-icon-sun  { display: none; }
+    .theme-icon-moon { display: block; }
+    [data-theme="dark"] .theme-icon-sun  { display: block; }
+    [data-theme="dark"] .theme-icon-moon { display: none; }
+    .nav-center { display: flex; justify-content: center; }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a { font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--muted); position: relative; transition: color 0.2s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-btn { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; color: var(--fg); border: 1.5px solid var(--border-strong); padding: 9px 22px; border-radius: 100px; transition: background 0.3s var(--ease), color 0.3s, border-color 0.3s, transform 0.3s var(--ease); }
+    .nav-btn:hover { border-color: var(--fg); transform: scale(1.03); }
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; align-items: flex-end; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; }
+    .nav-hamburger span { display: block; height: 1.5px; background: var(--fg); border-radius: 2px; transform-origin: center; transition: transform 0.35s var(--ease), opacity 0.25s, width 0.3s var(--ease); }
+    .nav-hamburger span:nth-child(1) { width: 22px; }
+    .nav-hamburger span:nth-child(2) { width: 16px; }
+    .nav-hamburger span:nth-child(3) { width: 22px; }
+    .nav-hamburger.open span:nth-child(1) { width: 22px; transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { width: 22px; transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-nav { position: fixed; inset: 0; z-index: 99; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.35s var(--ease); }
+    .mobile-nav.open { pointer-events: all; opacity: 1; }
+    .mobile-nav-links { list-style: none; text-align: center; }
+    .mobile-nav-links li { overflow: hidden; }
+    .mobile-nav-links a { display: block; font-family: var(--serif); font-size: clamp(36px, 8vw, 56px); font-weight: 400; letter-spacing: -0.03em; color: var(--fg); text-decoration: none; transform: translateY(110%); opacity: 0; transition: color 0.2s, transform 0.5s var(--ease), opacity 0.5s var(--ease); }
+    .mobile-nav.open .mobile-nav-links li:nth-child(1) a { transition-delay: 0.05s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(2) a { transition-delay: 0.10s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(3) a { transition-delay: 0.15s; }
+    .mobile-nav.open .mobile-nav-links li:nth-child(4) a { transition-delay: 0.20s; }
+    .mobile-nav.open .mobile-nav-links a { transform: translateY(0); opacity: 1; }
+    .mobile-nav-links a:hover { color: var(--accent); }
+    .breadcrumb { position: fixed; top: 80px; left: 52px; z-index: 90; display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); transition: top 0.4s var(--ease); }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { opacity: 0.4; }
+    .breadcrumb-current { color: var(--fg); font-weight: 500; }
+    .breadcrumb-back { display: none; align-items: center; gap: 4px; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); text-decoration: none; transition: color 0.2s, transform 0.3s var(--ease); }
+    .breadcrumb-back:hover { color: var(--fg); transform: translateX(-3px); }
+    @media (max-width: 1024px) { nav { padding: 22px 36px; } nav.scrolled { padding: 14px 36px; } .breadcrumb { left: 36px; } }
+    @media (max-width: 768px) { nav { padding: 20px 24px; } .nav-center, .nav-right { display: none; } .nav-hamburger { display: flex; } .breadcrumb { top: 76px; left: 24px; } .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; } .breadcrumb-back { display: flex; } }
 
     /* ─── HERO ─── */
     .hero { padding: 160px 52px 100px; border-bottom: 1px solid var(--border-strong); }
@@ -320,6 +366,43 @@
     .type-spec { font-size: 11px; color: var(--muted); margin-top: 2px; }
     .type-sample { font-family: var(--work); flex: 1; }
 
+    /* ── Typography specimen upgrade ── */
+    .rz-type-hero { padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .rz-type-overline { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .rz-type-numerals { font-family: var(--work); font-size: clamp(26px, 4vw, 42px); font-weight: 700; letter-spacing: -.02em; line-height: 1; color: var(--fg); margin-bottom: 12px; }
+    .rz-type-numerals span { color: var(--accent); }
+    .rz-type-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .rz-type-pill { font-size: 9px; font-weight: 500; color: var(--muted); background: color-mix(in srgb, var(--fg) 5%, transparent); border: 1px solid var(--border); padding: 3px 8px; border-radius: 100px; }
+    .rz-wf-section { padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .rz-wf-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .rz-wf-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .rz-wf-sample { font-family: var(--work); font-size: 18px; letter-spacing: -.01em; line-height: 1.45; color: var(--fg); }
+    .rz-wf-weight { font-size: 9px; color: var(--muted); letter-spacing: .06em; flex-shrink: 0; }
+    .rz-ed-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+    .rz-ed-step { padding: 14px 0; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 16px; }
+    .rz-ed-ann { flex-shrink: 0; min-width: 72px; }
+    .rz-ed-tok { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+    .rz-ed-spec { font-size: 8px; color: var(--muted); letter-spacing: .02em; line-height: 1.4; }
+
+    /* ── Token visual upgrade ── */
+    .rz-ladder { display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 4px; }
+    .rz-ladder-unit { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
+    .rz-ladder-block { background: var(--accent); opacity: .65; border-radius: 3px; }
+    .rz-ladder-tok { font-size: 7.5px; font-weight: 700; color: var(--fg); letter-spacing: .04em; font-family: var(--work); }
+    .rz-ladder-px { font-size: 7px; color: var(--muted); }
+    .rz-sp-ctx { padding: 14px 0 4px; border-top: 1px solid var(--border); margin-top: 8px; }
+    .rz-sp-ctx-label { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .rz-rad-gallery { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px; }
+    .rz-rad-unit { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+    .rz-rad-box { width: 48px; height: 48px; background: color-mix(in srgb, var(--accent) 12%, transparent); border: 2px solid var(--accent); }
+    .rz-rad-name { font-size: 8px; font-weight: 700; color: var(--fg); letter-spacing: .04em; font-family: var(--work); }
+    .rz-rad-val { font-size: 7px; color: var(--muted); }
+
+    /* ── Semantic color groups ── */
+    .sem-group { margin-bottom: 20px; }
+    .sem-group-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; margin-top: 16px; }
+    .sem-group:first-child .sem-group-label { margin-top: 4px; }
+
     /* ── Color swatches ── */
     .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(66px,1fr)); gap: 10px; margin-top: 20px; }
     .swatch { cursor: pointer; }
@@ -373,24 +456,169 @@
 
     /* ── Trigger btn util (for modal/toast demo launchers) ── */
     .trigger-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  </style>
+
+    /* ── CTA Banner ── */
+    .cta-banner{padding:100px 52px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-start;gap:0;}
+    .cta-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .cta-heading{font-family:var(--serif);font-size:clamp(36px,5vw,72px);font-weight:400;line-height:1.0;letter-spacing:-.04em;margin-bottom:24px;}
+    .cta-heading em{font-style:italic;color:var(--accent);}
+    .cta-sub{font-size:15px;font-weight:300;color:var(--muted);max-width:440px;line-height:1.75;margin-bottom:40px;}
+    .cta-open-btn{display:inline-flex;align-items:center;gap:12px;background:var(--fg);color:var(--bg);font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;padding:16px 36px;cursor:pointer;transition:transform .35s var(--ease),opacity .2s;}
+    .cta-open-btn:hover{transform:scale(1.04);}
+    @media(max-width:768px){.cta-banner{padding:64px 24px;}}
+
+    /* ── Contact Modal ── */
+    .contact-modal{position:fixed;inset:0;z-index:500;background:#14111a;display:flex;align-items:center;justify-content:center;padding:40px;pointer-events:none;opacity:0;transition:opacity .4s var(--ease);}
+    .contact-modal.open{opacity:1;pointer-events:all;}
+    
+    .contact-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+    .contact-title{font-family:var(--serif);font-size:clamp(36px,4.5vw,64px);font-weight:400;line-height:1.0;letter-spacing:-.03em;color:#F0EBE3;margin-bottom:20px;}
+    .contact-title em{font-style:italic;color:var(--accent);}
+    .contact-avail{font-size:13px;color:rgba(255,255,255,.4);line-height:1.6;margin-bottom:36px;}
+    .contact-links{display:flex;flex-direction:column;gap:8px;}
+    .contact-link-tile{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid rgba(255,255,255,.1);border-radius:10px;text-decoration:none;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;transition:border-color .2s,color .2s,background .2s;}
+    .contact-link-tile:hover{border-color:rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.04);}
+    .contact-link-label{display:flex;align-items:center;gap:8px;}
+    
+    
+    .contact-form{display:flex;flex-direction:column;gap:16px;}
+    .contact-field{display:flex;flex-direction:column;gap:6px;}
+    .contact-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+    .contact-input,.contact-textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;font-size:14px;color:#F0EBE3;font-family:var(--sans);transition:border-color .2s,background .2s;outline:none;resize:none;}
+    .contact-input:focus,.contact-textarea:focus{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.09);}
+    .contact-textarea{min-height:110px;line-height:1.6;}
+    .contact-submit{background:var(--accent);color:#fff;border:none;border-radius:100px;padding:14px 32px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:transform .3s var(--ease),opacity .2s;align-self:flex-start;}
+    .contact-submit:hover{transform:scale(1.04);}
+    .contact-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .contact-success{display:none;text-align:center;padding:40px 0;}
+    .contact-success p.heading{font-family:var(--serif);font-size:24px;color:#F0EBE3;margin-bottom:8px;}
+    .contact-success p.sub{font-size:14px;color:rgba(255,255,255,.45);}
+    }
+      @media(max-width:600px){
+      .contact-modal{top:auto;bottom:0;left:0;right:0;border-radius:20px 20px 0 0;flex-direction:column;align-items:center;padding:0 20px calc(32px + env(safe-area-inset-bottom));max-height:88dvh;overflow-y:auto;opacity:1;transform:translateY(100%);transition:transform .4s var(--ease);}
+      .contact-modal.open{transform:translateY(0);}
+      .contact-modal::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:14px 0 20px;flex-shrink:0;}
+      .contact-inner,
+      
+      .cta-open-btn{width:100%;justify-content:center;}
+      .cs-next-link{width:100%;justify-content:center;}
+    }
+
+    .contact-modal-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;width:100%;max-width:960px;align-items:center;}
+    .contact-close{position:fixed;top:32px;right:40px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s,transform .3s var(--ease);}
+    .contact-close:hover{border-color:rgba(255,255,255,.6);color:#fff;transform:rotate(90deg);}
+    .contact-modal-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+    .contact-modal-title{font-family:var(--serif);font-size:clamp(52px,6vw,92px);font-weight:400;line-height:.95;letter-spacing:-.04em;color:#F0EBE3;margin-bottom:24px;}
+    .contact-modal-title em{font-style:italic;color:#E569A9;}
+    .contact-modal-avail{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:40px;}
+    .contact-social-tiles{display:flex;flex-direction:column;gap:8px;}
+    .contact-social-tile{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 18px;text-decoration:none;color:rgba(255,255,255,.5);transition:border-color .2s,color .2s;}
+    .contact-social-tile:hover{border-color:rgba(255,255,255,.35);color:#fff;}
+    .contact-social-tile-label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+    .contact-social-tile-arrow{font-size:14px;opacity:.4;}
+    .contact-form{display:flex;flex-direction:column;gap:14px;}
+    .c-field{display:flex;flex-direction:column;}
+    .c-field input,.c-field textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 18px;font-size:14px;font-family:var(--sans);color:#F0EBE3;outline:none;resize:none;transition:border-color .2s,background .2s;}
+    .c-field input::placeholder,.c-field textarea::placeholder{color:rgba(255,255,255,.22);}
+    .c-field input:focus,.c-field textarea:focus{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.09);}
+    .contact-form-submit{background:#EDEAE3;color:#2A2535;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:8px;padding:17px 32px;cursor:pointer;margin-top:4px;transition:opacity .2s,transform .3s var(--ease);width:100%;}
+    .contact-form-submit:hover{opacity:.9;transform:translateY(-1px);}
+    .contact-form-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .contact-success-state{display:none;text-align:center;padding:48px 0;}
+    .contact-success-check{width:48px;height:48px;border-radius:50%;background:rgba(29,185,84,.15);border:1px solid rgba(29,185,84,.3);display:grid;place-items:center;margin:0 auto 16px;}
+    .contact-success-heading{font-family:var(--serif);font-size:28px;color:#F0EBE3;margin-bottom:8px;}
+    .contact-success-body{font-size:14px;color:rgba(255,255,255,.4);}
+    @media(max-width:900px){.contact-modal-inner{grid-template-columns:1fr;gap:40px;}.contact-modal{padding:24px;overflow-y:auto;align-items:flex-start;padding-top:80px;}}    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);transform-origin:left;transform:scaleX(0);z-index:200;transition:transform .1s linear;}
+
+    /* ─── FOOTER ─── */
+    footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
+    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
+    .footer-brand{display:flex;flex-direction:column;gap:20px;}
+    .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
+    .footer-logo-dot{color:var(--accent);font-style:normal;}
+    .footer-tagline{font-size:12px;color:var(--muted);line-height:1.6;max-width:220px;}
+    .footer-col-head{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg);margin-bottom:28px;}
+    .footer-nav{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-nav a{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-nav a:hover{color:var(--fg);}
+    .footer-socials{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-socials a{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);transition:color 0.2s;}
+    .footer-socials a:hover{color:var(--fg);}
+    .footer-socials a:hover .soc-icon{border-color:var(--fg);}
+    .soc-icon{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.2s;}
+    .soc-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    .soc-label{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;}
+    .footer-bottom{border-top:1px solid var(--border);padding:24px 0;display:flex;align-items:center;justify-content:space-between;}
+    .footer-copy{font-size:12px;color:var(--muted);font-weight:400;}
+    .footer-totop{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+    .footer-totop:hover{color:var(--fg);}
+    .footer-totop:hover .totop-circle{border-color:var(--fg);}
+    .totop-circle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;}
+    .totop-circle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    @media(max-width:900px){.footer-main{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1 / -1;}.footer-sig{height:100%;right:-4%;}}
+    @media(max-width:640px){footer{padding:56px 24px 0;}.footer-main{grid-template-columns:1fr;gap:40px;padding-bottom:56px;}.footer-brand{grid-column:auto;}.footer-sig{height:80%;right:-6%;}}
+
+    @media(max-width:600px){
+      .demo-card-body{padding:16px;}
+      .demo-card-body-sm{padding:12px;}
+      .btn-col{flex-direction:row;flex-wrap:wrap;}
+      .tab-bar{gap:0;}
+      .hero-sub{font-size:15px;}
+      .col-heading{font-size:clamp(22px,6vw,36px);}
+      .rz-ed-step { flex-direction: column; gap: 4px; }
+      .rz-ed-ann { min-width: unset; }
+      .rz-type-numerals { font-size: clamp(20px, 5vw, 36px); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+      .rz-ladder { gap: 5px; }
+      .tab-btn { padding: 8px 10px; font-size: 10px; }
+    }
+    </style>
 </head>
 <body>
 
-  <nav id="mainNav">
-    <a href="../index.html" class="nav-logo"><span class="logo-word">Keshav<span class="logo-dot">.</span></span></a>
-    <div></div>
-    <div class="nav-right">
-      <a href="../index.html#work" class="nav-back">All work</a>
-      <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">◑</button>
+    <div class="progress-bar" id="progressBar"></div>
+<nav id="nav">
+    <a href="../index.html" class="nav-logo" aria-label="Keshav Anand home">
+      <span class="logo-word">Keshav<span class="logo-dot">.</span></span>
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul>
     </div>
+    <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+      </button>
+      <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="../index.html#work">Work</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Rizzle Design System</span>
+    <a href="../index.html#work" class="breadcrumb-back">← Back</a>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+      <li><a href="../index.html#about" class="mobile-link">About</a></li>
+      <li><a href="../index.html#work" class="mobile-link">Work</a></li>
+      <li><a href="../index.html" class="mobile-link">Home</a></li>
+    </ul>
+  </div>
 
   <!-- HERO -->
   <header class="hero">
     <p class="hero-eyebrow reveal">Rizzle · Design Systems · 2023</p>
     <h1 class="hero-headline reveal rd1">One language.<br><em>Every surface.</em></h1>
-    <p class="hero-sub reveal rd2">Rizzle had ten designers, three front-end squads, and no shared source of truth. I built the system from tokens to organisms — six months, ground up.</p>
+    <p class="hero-sub reveal rd2">Rizzle had ten designers, three front-end squads, and no shared source of truth. I built the system from tokens to organisms. Six months, ground up.</p>
     <div class="hero-meta reveal rd3">
       <div class="meta-item"><div class="meta-label">Role</div><div class="meta-value">Lead Product Designer</div></div>
       <div class="meta-item"><div class="meta-label">Timeline</div><div class="meta-value">6 months</div></div>
@@ -411,7 +639,7 @@
         <h2 class="col-heading reveal">Four teams.<br>Four button styles.<br><em>Zero alignment.</em></h2>
         <div class="col-body reveal rd1">
           <p>Rizzle's product moved fast. Every squad pulled from its own Figma library or copied components off existing screens. After two years: <strong>four distinct button styles</strong>, three spacing systems, values that lived only in engineers' memory.</p>
-          <p>I joined to fix it. Tokens first. Components second. Documentation last — because docs nobody reads are just debt with better formatting.</p>
+          <p>I joined to fix it. Tokens first. Components second. Documentation last, because docs nobody reads are just debt with better formatting.</p>
         </div>
         <div class="stat-row reveal rd2" style="margin-top:48px; padding-top:28px;">
           <div class="stat-item"><div class="stat-n">4×</div><div class="stat-d">fewer handoff questions per sprint</div></div>
@@ -424,7 +652,7 @@
         <div class="process-list">
           <div class="proc-item"><span class="proc-n">1</span><div><div class="proc-heading">Audit the existing product</div><div class="proc-body">Two weeks of screenshots, tagging every unique spacing value, color, and component variant. Found 23 different shades of purple being used across the product.</div></div></div>
           <div class="proc-item"><span class="proc-n">2</span><div><div class="proc-heading">Define the token architecture</div><div class="proc-body">Primitive tokens first (raw values), then semantic tokens (what they mean: surface, interactive, error). Engineers adopted the semantic layer directly into CSS custom properties.</div></div></div>
-          <div class="proc-item"><span class="proc-n">3</span><div><div class="proc-heading">Build molecules from atoms</div><div class="proc-body">Every state documented explicitly — idle, hover, active, disabled, error. If it wasn't in the library, it didn't exist.</div></div></div>
+          <div class="proc-item"><span class="proc-n">3</span><div><div class="proc-heading">Build molecules from atoms</div><div class="proc-body">Every state documented explicitly: idle, hover, active, disabled, error. If it wasn't in the library, it didn't exist.</div></div></div>
           <div class="proc-item"><span class="proc-n">4</span><div><div class="proc-heading">Test inside real product flows</div><div class="proc-body">Embedded the library into three ongoing builds while still in progress. Gaps showed up fast. Better then than after 40 engineers have adopted draft one.</div></div></div>
           <div class="proc-item"><span class="proc-n">5</span><div><div class="proc-heading">Ship the docs as a product</div><div class="proc-body">Built inside Rizzle's own stack, not Notion. If designers had to leave their environment to read the rules, they wouldn't.</div></div></div>
         </div>
@@ -491,7 +719,7 @@
         <h3 class="col-heading reveal rd1">Named values beat<br><em>magic numbers.</em></h3>
         <div class="col-body reveal rd2">
           <p>Twenty spacing steps from 0 to 160px. Designers stop debating 16px vs 18px. They pick <code>spacing-sm</code> and move on.</p>
-          <p>Radius tokens follow: none through full. A product-wide rounding decision is a single token swap — not a ticket.</p>
+          <p>Radius tokens follow: none through full. A product-wide rounding decision is a single token swap, not a ticket.</p>
         </div>
       </div>
       <div class="col-demo reveal rd1">
@@ -500,37 +728,38 @@
           <button class="tab-btn" data-panel="tp-rad">Radius</button>
         </div>
         <div id="tp-sp" class="tab-panel active">
-          <table class="token-tbl">
-            <thead><tr><th>Token</th><th>px</th><th>Visual</th></tr></thead>
-            <tbody>
-              <tr><td><span class="tok-pill">spacing-none</span></td><td>0</td><td></td></tr>
-              <tr><td><span class="tok-pill">spacing-xxs</span></td><td>2</td><td><div class="sp-bar" style="width:2px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-xs</span></td><td>4</td><td><div class="sp-bar" style="width:4px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-sm</span></td><td>8</td><td><div class="sp-bar" style="width:8px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-md</span></td><td>12</td><td><div class="sp-bar" style="width:12px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-lg</span></td><td>16</td><td><div class="sp-bar" style="width:16px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-xl</span></td><td>20</td><td><div class="sp-bar" style="width:20px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-2xl</span></td><td>24</td><td><div class="sp-bar" style="width:24px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-3xl</span></td><td>32</td><td><div class="sp-bar" style="width:32px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-4xl</span></td><td>40</td><td><div class="sp-bar" style="width:40px"></div></td></tr>
-              <tr><td><span class="tok-pill">spacing-5xl</span></td><td>48</td><td><div class="sp-bar" style="width:48px"></div></td></tr>
-            </tbody>
-          </table>
+          <div class="rz-wf-label" style="margin-top:4px;">8pt base grid — ascending proof</div>
+          <div class="rz-ladder">
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:4px;height:4px;"></div><div class="rz-ladder-tok">xs</div><div class="rz-ladder-px">4</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:8px;height:8px;"></div><div class="rz-ladder-tok">sm</div><div class="rz-ladder-px">8</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:12px;height:12px;"></div><div class="rz-ladder-tok">md</div><div class="rz-ladder-px">12</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:16px;height:16px;"></div><div class="rz-ladder-tok">lg</div><div class="rz-ladder-px">16</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:20px;height:20px;"></div><div class="rz-ladder-tok">xl</div><div class="rz-ladder-px">20</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:24px;height:24px;"></div><div class="rz-ladder-tok">2xl</div><div class="rz-ladder-px">24</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:32px;height:32px;"></div><div class="rz-ladder-tok">3xl</div><div class="rz-ladder-px">32</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:40px;height:40px;"></div><div class="rz-ladder-tok">4xl</div><div class="rz-ladder-px">40</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:48px;height:48px;"></div><div class="rz-ladder-tok">5xl</div><div class="rz-ladder-px">48</div></div>
+          </div>
+          <div class="rz-sp-ctx">
+            <div class="rz-sp-ctx-label">Used in product</div>
+            <div style="font-size:10px;color:var(--muted);line-height:1.8;font-family:var(--work);">
+              <code>spacing-sm (8px)</code> — icon-to-label gap<br>
+              <code>spacing-lg (16px)</code> — card inner padding<br>
+              <code>spacing-3xl (32px)</code> — section dividers
+            </div>
+          </div>
         </div>
         <div id="tp-rad" class="tab-panel">
-          <table class="token-tbl">
-            <thead><tr><th>Token</th><th>px</th><th>Preview</th></tr></thead>
-            <tbody>
-              <tr><td><span class="tok-pill">radius-none</span></td><td>0</td><td><div class="rad-prev" style="border-radius:0"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-xs</span></td><td>2</td><td><div class="rad-prev" style="border-radius:2px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-sm</span></td><td>4</td><td><div class="rad-prev" style="border-radius:4px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-md</span></td><td>8</td><td><div class="rad-prev" style="border-radius:8px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-lg</span></td><td>12</td><td><div class="rad-prev" style="border-radius:12px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-xl</span></td><td>16</td><td><div class="rad-prev" style="border-radius:16px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-2xl</span></td><td>20</td><td><div class="rad-prev" style="border-radius:20px"></div></td></tr>
-              <tr><td><span class="tok-pill">radius-full</span></td><td>9999</td><td><div class="rad-prev" style="border-radius:9999px"></div></td></tr>
-            </tbody>
-          </table>
+          <div class="rz-wf-label" style="margin-top:4px;">Corner character — same box, different personality</div>
+          <div class="rz-rad-gallery">
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:0;"></div><div class="rz-rad-name">None</div><div class="rz-rad-val">0</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:2px;"></div><div class="rz-rad-name">XS</div><div class="rz-rad-val">2px</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:4px;"></div><div class="rz-rad-name">SM</div><div class="rz-rad-val">4px</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:8px;"></div><div class="rz-rad-name">MD ★</div><div class="rz-rad-val">8px</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:12px;"></div><div class="rz-rad-name">LG</div><div class="rz-rad-val">12px</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:20px;"></div><div class="rz-rad-name">2XL</div><div class="rz-rad-val">20px</div></div>
+            <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:9999px;"></div><div class="rz-rad-name">Full</div><div class="rz-rad-val">pill</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,25 +777,53 @@
         <p class="col-eyebrow reveal">Work Sans</p>
         <h3 class="col-heading reveal rd1">One typeface.<br><em>Eight weights.</em></h3>
         <div class="col-body reveal rd2">
-          <p>Work Sans reads neutral at small sizes, confident at display scale. Rizzle's product lives at 12–18px, so every weight decision was tested there first — not at 72px in a brand spec.</p>
+          <p>Work Sans reads neutral at small sizes, confident at display scale. Rizzle's product lives at 12–18px, so every weight decision was tested there first, not at 72px in a brand spec.</p>
           <p>Semibold is reserved for interactive labels. Never decoration.</p>
         </div>
       </div>
       <div class="col-demo reveal rd1">
-        <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:16px;padding-bottom:20px;border-bottom:1px solid var(--border);">
-          <span style="font-family:var(--work);font-size:52px;font-weight:600;line-height:1;letter-spacing:-.02em;">Ag</span>
-          <div>
-            <div style="font-family:var(--work);font-size:15px;font-weight:600;">Work Sans</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;">300 · 400 · 500 · 600 · 700</div>
-            <div style="font-family:var(--work);font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.02em;line-height:1.6;">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789</div>
+        <!-- Hero specimen -->
+        <div class="rz-type-hero">
+          <div class="rz-type-overline">Work Sans — Video platform sans</div>
+          <div class="rz-type-numerals"><span>120+</span> components &nbsp;&nbsp; <span>4×</span> fewer handoffs &nbsp;&nbsp; <span>3</span> squads</div>
+          <div class="rz-type-pills">
+            <span class="rz-type-pill">Work Sans Variable</span>
+            <span class="rz-type-pill">Weights 300–700</span>
+            <span class="rz-type-pill">Semibold: interactive only</span>
+            <span class="rz-type-pill">Tested at 12–18px first</span>
           </div>
         </div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 1</div><div class="type-spec">Semibold · 32/40</div></div><div class="type-sample" style="font-size:28px;font-weight:600;line-height:1.2;">Headline 1</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 2</div><div class="type-spec">Bold · 24/32</div></div><div class="type-sample" style="font-size:22px;font-weight:700;line-height:1.3;">Headline 2</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Headline 3</div><div class="type-spec">Semibold · 20/28</div></div><div class="type-sample" style="font-size:18px;font-weight:600;">Headline 3</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Body 1</div><div class="type-spec">Regular · 16/24</div></div><div class="type-sample" style="font-size:15px;font-weight:400;color:var(--muted);">The quick brown fox jumps.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Body 2</div><div class="type-spec">Regular · 14/24</div></div><div class="type-sample" style="font-size:13px;font-weight:400;color:var(--muted);">The quick brown fox jumps.</div></div>
-        <div class="type-row"><div class="type-meta"><div class="type-tok">Quote</div><div class="type-spec">Regular italic · 16/24</div></div><div class="type-sample" style="font-size:14px;font-style:italic;color:var(--muted);">"Creating together, naturally."</div></div>
+        <!-- Weight waterfall -->
+        <div class="rz-wf-section">
+          <div class="rz-wf-label">Weight scale — same size, same text</div>
+          <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:300;">Creating together</span><span class="rz-wf-weight">Light · 300</span></div>
+          <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:400;">Creating together</span><span class="rz-wf-weight">Regular · 400</span></div>
+          <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:500;">Creating together</span><span class="rz-wf-weight">Medium · 500</span></div>
+          <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:600;">Creating together</span><span class="rz-wf-weight">Semibold · 600</span></div>
+          <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:700;">Creating together</span><span class="rz-wf-weight">Bold · 700</span></div>
+        </div>
+        <!-- Editorial scale -->
+        <div class="rz-ed-label">Type scale</div>
+        <div class="rz-ed-step">
+          <div class="rz-ed-ann"><div class="rz-ed-tok">H1</div><div class="rz-ed-spec">600 · 32/40 · –.02em</div></div>
+          <div style="font-family:var(--work);font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1.25;color:var(--fg);">Headline 1</div>
+        </div>
+        <div class="rz-ed-step">
+          <div class="rz-ed-ann"><div class="rz-ed-tok">H2</div><div class="rz-ed-spec">700 · 24/32 · –.02em</div></div>
+          <div style="font-family:var(--work);font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.33;color:var(--fg);">Headline 2</div>
+        </div>
+        <div class="rz-ed-step">
+          <div class="rz-ed-ann"><div class="rz-ed-tok">H3</div><div class="rz-ed-spec">600 · 20/28 · –.01em</div></div>
+          <div style="font-family:var(--work);font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.4;color:var(--fg);">Headline 3</div>
+        </div>
+        <div class="rz-ed-step">
+          <div class="rz-ed-ann"><div class="rz-ed-tok">Body</div><div class="rz-ed-spec">400 · 16/24 · 0em</div></div>
+          <div style="font-family:var(--work);font-size:15px;font-weight:400;letter-spacing:0;line-height:1.6;color:var(--muted);">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="rz-ed-step" style="border-bottom:none;">
+          <div class="rz-ed-ann"><div class="rz-ed-tok">Label</div><div class="rz-ed-spec">600 · 12/16 · .05em ↑</div></div>
+          <div style="font-family:var(--work);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);">Upload · Schedule · Publish</div>
+        </div>
       </div>
     </div>
   </section>
@@ -583,7 +840,7 @@
         <p class="col-eyebrow reveal">Color system</p>
         <h3 class="col-heading reveal rd1">Purple is the brand.<br><em>Semantics</em> are the system.</h3>
         <div class="col-body reveal rd2">
-          <p>Full tonal scale — 50 to 900. Every surface, from subtle tints to vibrant CTAs, pulls from the same source.</p>
+          <p>Full tonal scale: 50 to 900. Every surface, from subtle tints to vibrant CTAs, pulls from the same source.</p>
           <p>Semantic tokens sit on top: <code>color.interactive.idle</code>, <code>color.error.idle</code>. State behavior is a token decision, not a one-off. When Rizzle refreshed their brand, we swapped values under the tokens and the whole product updated in a day.</p>
           <p style="margin-top:10px;font-size:12px;">Click any swatch to copy its hex value.</p>
         </div>
@@ -634,15 +891,38 @@
           </div>
         </div>
         <div id="cp-sem" class="tab-panel">
-          <div class="swatch-grid">
-            <div class="swatch" data-hex="#22C55E"><div class="swatch-chip" style="background:#22C55E"><div class="copy-hint">COPY</div></div><div class="swatch-name">success.500</div><div class="swatch-hex">#22C55E</div></div>
-            <div class="swatch" data-hex="#16A34A"><div class="swatch-chip" style="background:#16A34A"><div class="copy-hint">COPY</div></div><div class="swatch-name">success.600</div><div class="swatch-hex">#16A34A</div></div>
-            <div class="swatch" data-hex="#EF4444"><div class="swatch-chip" style="background:#EF4444"><div class="copy-hint">COPY</div></div><div class="swatch-name">error.500</div><div class="swatch-hex">#EF4444</div></div>
-            <div class="swatch" data-hex="#DC2626"><div class="swatch-chip" style="background:#DC2626"><div class="copy-hint">COPY</div></div><div class="swatch-name">error.600</div><div class="swatch-hex">#DC2626</div></div>
-            <div class="swatch" data-hex="#EAB308"><div class="swatch-chip" style="background:#EAB308"><div class="copy-hint">COPY</div></div><div class="swatch-name">warning.500</div><div class="swatch-hex">#EAB308</div></div>
-            <div class="swatch" data-hex="#CA8A04"><div class="swatch-chip" style="background:#CA8A04"><div class="copy-hint">COPY</div></div><div class="swatch-name">warning.600</div><div class="swatch-hex">#CA8A04</div></div>
-            <div class="swatch" data-hex="#3B82F6"><div class="swatch-chip" style="background:#3B82F6"><div class="copy-hint">COPY</div></div><div class="swatch-name">info.500</div><div class="swatch-hex">#3B82F6</div></div>
-            <div class="swatch" data-hex="#2563EB"><div class="swatch-chip" style="background:#2563EB"><div class="copy-hint">COPY</div></div><div class="swatch-name">info.600</div><div class="swatch-hex">#2563EB</div></div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;font-family:var(--work);margin-top:4px;margin-bottom:4px;padding-bottom:12px;border-bottom:1px solid var(--border);">Semantic tokens sit on top of primitives. Engineers reference intent — <code>color.error.idle</code> — not values. One token swap updates the whole product.</div>
+          <div class="sem-group">
+            <div class="sem-group-label">Success</div>
+            <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(56px,1fr));">
+              <div class="swatch" data-hex="#DCFCE7"><div class="swatch-chip" style="background:#DCFCE7;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">bg</div><div class="swatch-hex">#DCFCE7</div></div>
+              <div class="swatch" data-hex="#22C55E"><div class="swatch-chip" style="background:#22C55E"><div class="copy-hint">COPY</div></div><div class="swatch-name">default</div><div class="swatch-hex">#22C55E</div></div>
+              <div class="swatch" data-hex="#16A34A"><div class="swatch-chip" style="background:#16A34A"><div class="copy-hint">COPY</div></div><div class="swatch-name">hover</div><div class="swatch-hex">#16A34A</div></div>
+            </div>
+          </div>
+          <div class="sem-group">
+            <div class="sem-group-label">Error</div>
+            <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(56px,1fr));">
+              <div class="swatch" data-hex="#FEE2E2"><div class="swatch-chip" style="background:#FEE2E2;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">bg</div><div class="swatch-hex">#FEE2E2</div></div>
+              <div class="swatch" data-hex="#EF4444"><div class="swatch-chip" style="background:#EF4444"><div class="copy-hint">COPY</div></div><div class="swatch-name">default</div><div class="swatch-hex">#EF4444</div></div>
+              <div class="swatch" data-hex="#DC2626"><div class="swatch-chip" style="background:#DC2626"><div class="copy-hint">COPY</div></div><div class="swatch-name">hover</div><div class="swatch-hex">#DC2626</div></div>
+            </div>
+          </div>
+          <div class="sem-group">
+            <div class="sem-group-label">Warning</div>
+            <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(56px,1fr));">
+              <div class="swatch" data-hex="#FEF9C3"><div class="swatch-chip" style="background:#FEF9C3;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">bg</div><div class="swatch-hex">#FEF9C3</div></div>
+              <div class="swatch" data-hex="#EAB308"><div class="swatch-chip" style="background:#EAB308"><div class="copy-hint">COPY</div></div><div class="swatch-name">default</div><div class="swatch-hex">#EAB308</div></div>
+              <div class="swatch" data-hex="#CA8A04"><div class="swatch-chip" style="background:#CA8A04"><div class="copy-hint">COPY</div></div><div class="swatch-name">hover</div><div class="swatch-hex">#CA8A04</div></div>
+            </div>
+          </div>
+          <div class="sem-group">
+            <div class="sem-group-label">Info</div>
+            <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(56px,1fr));">
+              <div class="swatch" data-hex="#DBEAFE"><div class="swatch-chip" style="background:#DBEAFE;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">bg</div><div class="swatch-hex">#DBEAFE</div></div>
+              <div class="swatch" data-hex="#3B82F6"><div class="swatch-chip" style="background:#3B82F6"><div class="copy-hint">COPY</div></div><div class="swatch-name">default</div><div class="swatch-hex">#3B82F6</div></div>
+              <div class="swatch" data-hex="#2563EB"><div class="swatch-chip" style="background:#2563EB"><div class="copy-hint">COPY</div></div><div class="swatch-name">hover</div><div class="swatch-hex">#2563EB</div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -662,7 +942,7 @@
         <h3 class="col-heading reveal rd1">Every state.<br><em>Explicitly built.</em></h3>
         <div class="col-body reveal rd2">
           <p>Primary, secondary, ghost, and icon-only. All ship with four states. Hover and click the components to see them respond live.</p>
-          <p>Three sizes — large (15px), medium (13px), small (11px) — all sharing the same state contract.</p>
+          <p>Three sizes: large (15px), medium (13px), small (11px), all sharing the same state contract.</p>
         </div>
       </div>
       <div class="col-demo reveal rd1">
@@ -708,7 +988,7 @@
         <p class="col-eyebrow reveal">Inputs &amp; dropdowns</p>
         <h3 class="col-heading reveal rd1">Six states.<br><em>All documented.</em></h3>
         <div class="col-body reveal rd2">
-          <p>Empty, hover, focused, filled, error, disabled. Every field ships with all six documented. If a state isn't in the library, an engineer invents it at implementation time — differently every time.</p>
+          <p>Empty, hover, focused, filled, error, disabled. Every field ships with all six documented. If a state isn't in the library, an engineer invents it at implementation time, differently every time.</p>
           <p>Click into fields, type, and interact with the dropdowns.</p>
         </div>
       </div>
@@ -927,7 +1207,7 @@
     <div class="learn-grid">
       <div class="learn-item reveal">
         <div class="learn-n">01</div>
-        <div class="learn-text"><strong>Token adoption requires trust, not enforcement.</strong> Engineers used the system because it made their work easier. The docs had to answer questions they were already asking — not questions I assumed they had.</div>
+        <div class="learn-text"><strong>Token adoption requires trust, not enforcement.</strong> Engineers used the system because it made their work easier. The docs had to answer questions they were already asking, not questions I assumed they had.</div>
       </div>
       <div class="learn-item reveal rd1">
         <div class="learn-n">02</div>
@@ -940,10 +1220,18 @@
     </div>
   </section>
 
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <p class="cta-eyebrow">Let's work together</p>
+    <h2 class="cta-heading">Systems thinking<br>is a <em>design skill.</em></h2>
+    <p class="cta-sub">If your team is building something that needs to scale across surfaces and stay coherent under pressure, that's exactly the kind of problem I want to be inside of.</p>
+    <button class="cta-open-btn open-contact">Start the conversation →</button>
+  </section>
+
   <!-- NEXT -->
   <div class="next-section">
     <p class="next-label">Next case study</p>
-    <a href="buyingteams.html" class="next-link">
+    <a href="cxfacts.html" class="next-link">
       <span class="next-title">CXFacts</span>
       <span class="next-arrow">→</span>
     </a>
@@ -973,6 +1261,114 @@
     </div>
   </div>
 
+  <!-- CONTACT MODAL -->
+    <footer>
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo">Keshav<span class="footer-logo-dot">.</span></a>
+        <p class="footer-tagline">Senior Product Designer.<br>Hyderabad, India.</p>
+      </div>
+      <div>
+        <p class="footer-col-head">Quick links</p>
+        <ul class="footer-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#work">Work</a></li>
+          <li><a href="../index.html#mini">Mini Projects</a></li>
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../docs/Keshav_Anand_Resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-head">Socials</p>
+        <ul class="footer-socials">
+          <li>
+            <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+              <span class="soc-label">LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg></span>
+              <span class="soc-label">Behance</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:keshavanand100@gmail.com">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg></span>
+              <span class="soc-label">Email</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <img src="../Assets/shdw.png" alt="" aria-hidden="true" class="footer-sig" loading="lazy" decoding="async" />
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Keshav Anand. All Rights Reserved.</span>
+      <a href="#" class="footer-totop">
+        To top
+        <span class="totop-circle">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </footer>
+
+  <div class="contact-modal" id="contactModal" aria-modal="true" role="dialog" aria-label="Contact Keshav">
+    <button class="contact-close" id="contactClose" aria-label="Close contact form">✕</button>
+    <div class="contact-modal-inner">
+      <div>
+        <p class="contact-modal-eyebrow">Contact</p>
+        <h2 class="contact-modal-title">Let's<br><em>Talk.</em></h2>
+        <p class="contact-modal-avail">Currently open to new projects and collaborations.<br>Based in Hyderabad, works globally.</p>
+        <div class="contact-social-tiles">
+          <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="mailto:keshavanand100@gmail.com" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Email directly
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg>
+              Behance
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm">
+          <div class="c-field">
+            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="c-field">
+            <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+          </div>
+          <div class="c-field">
+            <textarea name="message" placeholder="What are you working on?" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="contact-form-submit" id="contactSubmit">Send Message</button>
+        </form>
+        <div class="contact-success-state" id="contactSuccess">
+          <div class="contact-success-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="contact-success-heading">Message sent.</p>
+          <p class="contact-success-body">I'll get back to you within a day or two.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST STACK -->
   <div class="toast-stack" id="toastStack"></div>
 
@@ -981,16 +1377,40 @@
 
   <script>
     /* theme */
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch(e){}
-    });
+    (function initThemeToggle() {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch(e){}
+      });
+    })();
 
-    /* nav scroll */
+    /* nav scroll-hide + scrolled */
+    const nav = document.getElementById('nav');
+    let lastY = 0;
     window.addEventListener('scroll', () => {
-      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+      const y = window.scrollY;
+      if (nav) {
+        nav.classList.toggle('hide', y > lastY && y > 120);
+        nav.classList.toggle('scrolled', y > 48);
+      }
+      lastY = y;
     }, { passive: true });
+
+    /* hamburger */
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    let menuOpen = false;
+    function toggleMenu(open) {
+      menuOpen = open;
+      if (hamburger) hamburger.classList.toggle('open', open);
+      if (mobileNav) mobileNav.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    if (hamburger) hamburger.addEventListener('click', () => toggleMenu(!menuOpen));
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => toggleMenu(false)));
 
     /* reveal */
     const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } }), { threshold: 0.1 });
@@ -1082,6 +1502,30 @@
         setTimeout(dismiss, 5000);
       });
     });
+
+    /* contact modal */
+    const contactModal = document.getElementById('contactModal');
+    const contactClose = document.getElementById('contactClose');
+    function openContact() { contactModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeContact() { contactModal.classList.remove('open'); document.body.style.overflow = ''; }
+    document.querySelectorAll('.open-contact').forEach(el => el.addEventListener('click', openContact));
+    if (contactClose) contactClose.addEventListener('click', closeContact);
+    if (contactModal) contactModal.addEventListener('click', e => { if (e.target === contactModal) closeContact(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && contactModal?.classList.contains('open')) closeContact(); });
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('.contact-submit');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+        try {
+          const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(contactForm) });
+          if (res.ok) { contactForm.innerHTML = '<p style="color:var(--fg);font-size:1.1rem;line-height:1.6">Message sent. I\'ll be in touch.</p>'; }
+          else { btn.textContent = 'Try again'; btn.disabled = false; }
+        } catch { btn.textContent = 'Try again'; btn.disabled = false; }
+      });
+    }
 
     /* color copy */
     const cpToast = document.getElementById('cpToast');

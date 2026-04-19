@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#2A2535"/>
+  <!-- K vertical stroke -->
+  <rect x="8" y="7" width="3" height="18" rx="1.5" fill="#EDEAE3"/>
+  <!-- K upper arm -->
+  <path d="M10.5 16 L21 7.5" stroke="#EDEAE3" stroke-width="2.8" stroke-linecap="round"/>
+  <!-- K lower arm -->
+  <path d="M10.5 16 L21 24.5" stroke="#EDEAE3" stroke-width="2.8" stroke-linecap="round"/>
+  <!-- Brand dot — accent pink -->
+  <circle cx="23.5" cy="24.5" r="2.8" fill="#9B2D7A"/>
+</svg>

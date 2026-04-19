@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <title>Keshav Anand · Product Designer</title>
   <meta name="description" content="Senior Product Designer with 4 years shipping B2B SaaS and fintech products. Currently Founding Designer at FinalLayer. Based in Hyderabad, India." />
   <meta name="keywords" content="product designer, UX designer, UI designer, B2B SaaS, fintech, AI products, senior designer, Hyderabad, Keshav Anand" />
@@ -525,7 +526,7 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 44px;
+      margin-bottom: 72px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -552,18 +553,18 @@
 
     /* Sculpture */
     .about-visual {
-      width: min(260px, 60vw);
+      width: min(210px, 48vw);
       margin: 0 auto 44px;
       position: relative;
     }
 
     /* Playful tooltip on hover */
     .about-visual::after {
-      content: '🎮 Psst… click me to play a secret game & win a free call!';
+      content: '🎮 Psst… click me to play a secret game!';
       position: absolute;
-      bottom: -48px;
-      left: 50%;
-      transform: translateX(-50%) translateY(6px);
+      top: 42%;
+      left: calc(100% + 14px);
+      transform: translateX(-6px);
       background: var(--fg);
       color: var(--bg);
       font-size: 11px;
@@ -577,25 +578,51 @@
       transition:
         opacity 0.35s var(--ease),
         transform 0.35s var(--ease);
-      z-index: 5;
+      z-index: 10;
     }
     .about-visual:hover::after {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(0);
     }
 
     /* Float lives on wrapper so hover scale doesn't fight it */
     .sculpture-float {
-      animation: sculptureFloat 5s ease-in-out infinite;
+      animation: sculptureFloat 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     }
 
-    .sculpture-img {
-      width: 100%;
+    .sculpture-float {
+      border-radius: 28px;
+      overflow: visible;
+      position: relative;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 65%);
+    }
+    .sculpture-float::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--fg);
+      border-radius: 28px;
+      opacity: 0;
+      transition: opacity 0.5s var(--ease);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .about-visual:hover .sculpture-float::before { opacity: 1; }
+
+.sculpture-img {
+      width: 125%;
+      margin-left: -12.5%;
+      margin-top: -12%;
       height: auto;
       display: block;
-      filter: drop-shadow(0 20px 44px rgba(42,37,53,0.12));
+      position: relative;
+      z-index: 1;
+      filter: none;
       transform-origin: center bottom;
-      transition: transform 0.55s var(--ease);
+      transition: transform 0.55s var(--ease), filter 0.5s var(--ease);
+    }
+    .about-visual:hover .sculpture-img {
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
     }
 
     .about-visual:hover .sculpture-img {
@@ -603,8 +630,10 @@
     }
 
     @keyframes sculptureFloat {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
+      0%   { transform: translateY(0) rotate(0deg); }
+      30%  { transform: translateY(-14px) rotate(0.6deg); }
+      60%  { transform: translateY(-6px) rotate(-0.4deg); }
+      100% { transform: translateY(0) rotate(0deg); }
     }
 
     /* Tagline: muted base, bold emphasis on "Art & Psychology."
@@ -685,8 +714,8 @@
     }
 
     .project-card {
-      padding-top: 72px;
-      padding-bottom: 80px;
+      padding-top: 96px;
+      padding-bottom: 104px;
       position: relative;
       border-bottom: 1px solid var(--border);
       background: transparent;
@@ -721,10 +750,10 @@
 
     /* Two-column text row below visual */
     .card-body {
-      padding: 32px 2px 0;
+      padding: 44px 2px 0;
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 0 52px;
+      gap: 0 64px;
       align-items: start;
       position: relative;
     }
@@ -748,12 +777,25 @@
     .card-body-right {
       position: relative; z-index: 1;
       padding-top: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 14px;
+    }
+
+    .project-read {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      opacity: 0.65;
+      white-space: nowrap;
     }
 
     .project-tags {
       display: flex;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
     .project-tag {
       font-size: 10px;
@@ -769,18 +811,18 @@
 
     .project-name {
       font-family: var(--serif);
-      font-size: clamp(40px, 5.5vw, 76px);
+      font-size: clamp(34px, 4.6vw, 64px);
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 0.95;
       color: var(--fg);
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
 
     .project-desc {
       font-size: 13px;
       font-weight: 400;
-      line-height: 1.72;
+      line-height: 1.8;
       color: var(--muted);
       max-width: 520px;
     }
@@ -792,7 +834,7 @@
       text-transform: uppercase;
       color: var(--accent);
       opacity: 0.8;
-      margin-top: 20px;
+      margin-top: 32px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -838,6 +880,37 @@
       border-color: var(--fg);
       gap: 13px;
     }
+    .project-card--soon {
+      cursor: not-allowed;
+    }
+    .project-card--soon:hover .card-visual-inner {
+      transform: none !important;
+    }
+    .project-card--soon .project-tags,
+    .project-card--soon .project-desc,
+    .project-card--soon .project-metric,
+    .project-card--soon .card-body-right {
+      opacity: 0.35;
+    }
+    .card-visual-soon-badge {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      z-index: 10;
+      background: rgba(10, 13, 20, 0.75);
+      border: 1px solid rgba(99, 179, 237, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 4px;
+      padding: 5px 11px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: rgba(99, 179, 237, 0.95);
+      font-family: Inter, sans-serif;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
 
     /* ── Mockup ── */
     .mockup-wrap { width: 86%; position: relative; }
@@ -875,6 +948,209 @@
     .screen-bt-line { height: 5px; border-radius: 2px; background: rgba(255,255,255,0.5); }
 
     /* ─────────────────────────────────────────
+       CONTACT CTA + MODAL
+    ───────────────────────────────────────── */
+    .contact-cta-section {
+      padding: 120px clamp(52px, 18vw, 320px);
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      scroll-snap-align: start;
+    }
+    .contact-cta-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .contact-cta-heading {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5.5vw, 88px);
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -.04em;
+      margin-bottom: 28px;
+    }
+    .contact-cta-heading em { font-style: italic; color: var(--accent); }
+    .contact-cta-sub {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+    }
+    .contact-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--fg);
+      color: var(--bg);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 36px;
+      cursor: pointer;
+      transition: transform .35s var(--ease), opacity .2s;
+    }
+    .contact-cta-btn:hover { transform: scale(1.04); }
+    .contact-cta-avail {
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avail-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1DB954;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(29, 185, 84, .2);
+      animation: pulse-green 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(29, 185, 84, .2); }
+      50% { box-shadow: 0 0 0 6px rgba(29, 185, 84, .06); }
+    }
+    @media(max-width: 768px) {
+      .contact-cta-section { padding: 80px 24px; }
+    }
+
+    /* ── Contact Modal ── */
+    .contact-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: #14111a;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px;
+      pointer-events: none; opacity: 0;
+      transition: opacity .4s var(--ease);
+    }
+    .contact-modal.open { opacity: 1; pointer-events: all; }
+    .contact-modal-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      width: 100%;
+      max-width: 1000px;
+      align-items: center;
+    }
+    .contact-close {
+      position: fixed; top: 32px; right: 40px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.2);
+      background: transparent;
+      color: rgba(255,255,255,.6);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, color .2s, transform .3s var(--ease);
+    }
+    .contact-close:hover { border-color: rgba(255,255,255,.6); color: #fff; transform: rotate(90deg); }
+    .contact-modal-eyebrow {
+      font-size: 10px; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 16px;
+    }
+    .contact-modal-title {
+      font-family: var(--serif);
+      font-size: clamp(52px, 6vw, 92px);
+      font-weight: 400; line-height: .95;
+      letter-spacing: -.04em; color: #F0EBE3;
+      margin-bottom: 24px;
+    }
+    .contact-modal-title em { font-style: italic; color: #E569A9; }
+    .contact-modal-avail {
+      font-size: 14px; line-height: 1.75;
+      color: rgba(255,255,255,.4); margin-bottom: 40px;
+    }
+    .contact-social-tiles { display: flex; flex-direction: column; gap: 8px; }
+    .contact-social-tile {
+      display: flex; align-items: center; justify-content: space-between;
+      border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+      padding: 13px 18px; text-decoration: none; color: rgba(255,255,255,.5);
+      transition: border-color .2s, color .2s;
+    }
+    .contact-social-tile:hover { border-color: rgba(255,255,255,.35); color: #fff; }
+    .contact-social-tile-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .contact-social-tile-arrow { font-size: 14px; opacity: .4; }
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .c-field { display: flex; flex-direction: column; }
+    .c-field input, .c-field textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 14px; font-family: var(--sans);
+      color: #F0EBE3; outline: none; resize: none;
+      transition: border-color .2s, background .2s;
+    }
+    .c-field input::placeholder, .c-field textarea::placeholder { color: rgba(255,255,255,.22); }
+    .c-field input:focus, .c-field textarea:focus {
+      border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.09);
+    }
+    .contact-form-submit {
+      background: #EDEAE3; color: #2A2535;
+      font-family: var(--sans); font-size: 13px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      border: none; border-radius: 8px; padding: 17px 32px;
+      cursor: pointer; margin-top: 4px;
+      transition: opacity .2s, transform .3s var(--ease);
+    }
+    .contact-form-submit:hover { opacity: .9; transform: translateY(-1px); }
+    .contact-form-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .contact-success-state {
+      display: none; text-align: center; padding: 48px 0;
+    }
+    .contact-success-check {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(29,185,84,.15); border: 1px solid rgba(29,185,84,.3);
+      display: grid; place-items: center; margin: 0 auto 16px;
+    }
+    .contact-success-heading {
+      font-family: var(--serif); font-size: 28px; color: #F0EBE3; margin-bottom: 8px;
+    }
+    .contact-success-body { font-size: 14px; color: rgba(255,255,255,.4); }
+    @media(max-width: 960px) {
+      .contact-modal-inner { grid-template-columns: 1fr; gap: 40px; }
+      .contact-modal { padding: 24px; overflow-y: auto; align-items: flex-start; padding-top: 80px; }
+    }
+    @media(max-width: 600px) {
+      .contact-modal {
+        top: auto; bottom: 0; left: 0; right: 0;
+        border-radius: 20px 20px 0 0;
+        flex-direction: column; align-items: center;
+        padding: 0 20px calc(32px + env(safe-area-inset-bottom));
+        max-height: 88dvh; overflow-y: auto;
+        opacity: 1; transform: translateY(100%);
+        transition: transform .4s var(--ease);
+        padding-top: 0;
+      }
+      .contact-modal.open { transform: translateY(0); }
+      .contact-modal::before {
+        content: ''; display: block;
+        width: 36px; height: 4px; border-radius: 2px;
+        background: rgba(255,255,255,.18);
+        margin: 14px 0 20px; flex-shrink: 0;
+      }
+      .contact-modal-inner, .contact-inner { width: 100%; }
+      .contact-close { position: absolute; top: 14px; right: 16px; }
+    }
+
+    /* ─────────────────────────────────────────
        FOOTER
     ───────────────────────────────────────── */
     footer {
@@ -882,6 +1158,26 @@
       border-top: 1px solid var(--border);
       padding: 80px 52px 0;
       scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+    }
+    .footer-sig {
+      position: absolute;
+      top: 0;
+      right: -2%;
+      height: 130%;
+      width: auto;
+      pointer-events: none;
+      filter: brightness(0) opacity(0.055);
+    }
+    [data-theme="dark"] .footer-sig {
+      filter: brightness(0) invert(1) opacity(0.04);
+    }
+    @media (max-width: 900px) {
+      .footer-sig { height: 100%; right: -4%; }
+    }
+    @media (max-width: 640px) {
+      .footer-sig { height: 80%; right: -6%; }
     }
     .footer-main {
       display: grid;
@@ -1057,23 +1353,33 @@
       50%       { box-shadow: 0 0 18px 6px color-mix(in srgb, var(--accent) 15%, transparent); transform: scale(1.35); }
     }
 
-    /* Ambient color bloom — soft light source behind the orbital */
+    /* Ambient color bloom — activates on scroll entry */
     .tools-bloom {
       position: absolute;
-      width: 480px; height: 480px;
+      width: 560px; height: 400px;
       border-radius: 50%;
       background: radial-gradient(
-        circle,
-        color-mix(in srgb, var(--accent) 9%, transparent) 0%,
-        transparent 65%
+        ellipse at 52% 48%,
+        color-mix(in srgb, var(--accent) 7%, transparent) 0%,
+        color-mix(in srgb, var(--accent) 3%, transparent) 45%,
+        transparent 70%
       );
+      filter: blur(12px);
       pointer-events: none;
-      animation: bloomBreathe 9s ease-in-out infinite;
+      opacity: 0;
+      animation: none;
+      transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1);
       z-index: 0;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+    .tools-bloom.active {
+      opacity: 1;
+      animation: bloomBreathe 11s ease-in-out infinite;
     }
     @keyframes bloomBreathe {
-      0%, 100% { transform: scale(0.82); opacity: 0.55; }
-      50%       { transform: scale(1.08); opacity: 1; }
+      0%, 100% { transform: scale(0.88) translateY(4px); opacity: 0.6; }
+      50%       { transform: scale(1.06) translateY(-6px); opacity: 1; }
     }
     @media (prefers-reduced-motion: reduce) {
       .tools-center-dot, .tools-bloom { animation: none; }
@@ -1090,18 +1396,69 @@
       justify-content: center;
       top: 50%; left: 50%;
       margin-top: -32px; margin-left: -32px;
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.35s var(--ease);
+      overflow: hidden;
+      transition:
+        transform 0.3s var(--ease),
+        box-shadow 0.35s var(--ease),
+        background 0.35s var(--ease),
+        width 0.42s var(--ease),
+        border-radius 0.42s var(--ease),
+        margin-left 0.42s var(--ease),
+        padding 0.35s var(--ease);
       cursor: default;
       will-change: transform;
     }
-    /* Hover: invert bubble to contrast + swap mono logo for brand-color splash */
+    /* Hover: expand chip into info pill */
     .tool-chip:hover {
-      transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.08);
+      width: 230px;
+      height: auto;
+      min-height: 64px;
+      overflow: visible;
+      border-radius: 20px;
+      margin-top: -32px;
+      margin-left: -115px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 12px 14px;
+      gap: 12px;
       box-shadow: var(--shadow-md);
       background: var(--fg);
       z-index: 10;
     }
     .tool-chip:hover .tool-chip-inner { color: var(--bg); }
+    /* Expand content */
+    .tool-chip-expand {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 0.18s var(--ease), max-width 0.38s var(--ease);
+      flex-shrink: 0;
+    }
+    .tool-chip:hover .tool-chip-expand {
+      opacity: 1;
+      max-width: 160px;
+      transition: opacity 0.28s var(--ease) 0.18s, max-width 0.38s var(--ease);
+    }
+    .tool-chip-expand-name {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bg);
+      white-space: nowrap;
+    }
+    .tool-chip-expand-desc {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--bg);
+      opacity: 0.62;
+      line-height: 1.45;
+      max-width: 152px;
+    }
     .tool-chip-inner {
       font-family: var(--serif);
       font-style: italic;
@@ -1128,7 +1485,10 @@
     .tool-chip:not(.no-brand):hover .tool-logo.light,
     .tool-chip:not(.no-brand):hover .tool-logo.dark  { display: none; }
     .tool-chip:not(.no-brand):hover .tool-logo.brand { display: block; }
-    .tool-chip:hover .tool-logo { opacity: 1; }
+    /* Light mode hover: white logo instead of brand color */
+    :root:not([data-theme="dark"]) .tool-chip:hover .tool-logo.brand { display: none; }
+    :root:not([data-theme="dark"]) .tool-chip:hover .tool-logo.dark  { display: block; }
+    .tool-chip:hover .tool-logo { opacity: 1; width: 24px; height: 24px; flex-shrink: 0; }
     /* Fallback: show letter only when BOTH mono logos failed */
     .tool-chip .tool-fallback { display: none; }
     .tool-chip.no-logo .tool-fallback { display: inline-block; }
@@ -1152,7 +1512,7 @@
       transition: opacity 0.25s var(--ease);
       white-space: nowrap;
     }
-    .tool-chip:hover .tool-chip-label { opacity: 1; }
+    .tool-chip:hover .tool-chip-label { opacity: 0; }
     @media (prefers-reduced-motion: reduce) {
       .tool-chip { animation: none !important; }
     }
@@ -1224,6 +1584,152 @@
 
 
     /* ─────────────────────────────────────────
+       MINI PROJECTS grid section
+    ───────────────────────────────────────── */
+    .mini-projects {
+      padding: 100px clamp(52px, 18vw, 320px) 80px;
+      border-top: 1px solid var(--border);
+      scroll-snap-align: start;
+    }
+    .mini-header {
+      margin-bottom: 56px;
+    }
+    .mini-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .mini-heading {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    .mini-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      grid-auto-rows: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .mini-card {
+      background: var(--bg);
+      padding: 32px 28px;
+      text-decoration: none;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: background .25s var(--ease);
+      position: relative;
+    }
+    .mini-card:hover { background: var(--surface); }
+    .mini-card-preview {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .mini-card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .mini-card-title {
+      font-family: var(--serif);
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .mini-card-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--muted);
+      flex: 1;
+    }
+    .mini-card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s, gap .25s var(--ease);
+    }
+    .mini-card:hover .mini-card-cta { color: var(--fg); gap: 10px; }
+    .mini-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .mini-card-meta .project-read { opacity: 0.55; margin: 0; }
+    .mini-ux-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 5px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: 100px;
+      padding: 4px 10px;
+      margin-bottom: 0;
+    }
+    .mini-section-note {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Bento layout: Notion wide (2/3) | Spotify narrow (1/3) / Slack narrow (1/3) | Essay wide (2/3) */
+    .mini-grid .mini-card:nth-child(1) { grid-column: span 2; }
+    .mini-grid .mini-card:nth-child(2) { grid-column: span 1; }
+    .mini-grid .mini-card:nth-child(3) { grid-column: span 1; }
+    .mini-grid .mini-card:nth-child(4) { grid-column: span 2; }
+    .mini-card--wide .mini-card-preview { aspect-ratio: 16 / 7; }
+    @media(max-width: 900px) { .mini-grid { grid-template-columns: 1fr 1fr; } .mini-grid .mini-card { grid-column: span 1 !important; } .mini-card--wide .mini-card-preview { aspect-ratio: 4 / 3; } }
+    @media(max-width: 600px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .mini-grid .mini-card { grid-column: span 1 !important; }
+      .mini-projects { padding: 72px 24px; }
+    }
+
+    /* ─────────────────────────────────────────
        TESTIMONIALS hero-style full-viewport carousel
     ───────────────────────────────────────── */
     .testimonials {
@@ -1260,11 +1766,11 @@
 
     .testimonial-quote {
       font-family: var(--serif);
-      font-size: clamp(28px, 3.2vw, 48px);
+      font-size: clamp(18px, 2vw, 28px);
       font-weight: 400;
       font-style: italic;
-      letter-spacing: -0.03em;
-      line-height: 1.5;
+      letter-spacing: 0.01em;
+      line-height: 1.85;
       color: var(--fg);
       margin-bottom: 48px;
     }
@@ -1281,6 +1787,12 @@
       font-weight: 600;
       color: var(--fg);
     }
+    a.attribution-name {
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-strong);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    a.attribution-name:hover { color: var(--accent); border-color: var(--accent); }
 
     .attribution-sep {
       opacity: 0.4;
@@ -1396,6 +1908,7 @@
       .about-intro { padding: 72px 24px; }
       .about-visual { width: min(200px, 52vw); }
       .about-eyebrow { margin-bottom: 32px; }
+      .about-eyebrow-now::before { display: none; }
 
       /* Client marquee — reduce letter-spacing on mobile */
       .client-text { letter-spacing: 0.15em !important; }
@@ -1405,7 +1918,7 @@
 
       /* Testimonials */
       .testimonials { padding: 72px 24px; min-height: 80vh; }
-      .testimonial-quote { font-size: clamp(20px, 5vw, 32px); margin-bottom: 36px; }
+      .testimonial-quote { font-size: clamp(16px, 4vw, 22px); margin-bottom: 28px; }
 
       /* Work cards */
       .card-visual { aspect-ratio: 16/9; border-radius: 14px; }
@@ -1435,10 +1948,7 @@
       /* Outer ring (r=290) hidden — too wide at mobile scale */
       .tool-chip[data-radius="290"] { opacity: 0; pointer-events: none; }
       /* Middle ring (r=200) visible — all 6 chips including Figma */
-      /* Inner ring (r=110): keep 3 evenly spaced (Claude Code 0°, Cursor 120°, Lovable 240°) */
-      .tool-chip[data-radius="110"][data-angle="60"]  { opacity: 0; pointer-events: none; }
-      .tool-chip[data-radius="110"][data-angle="180"] { opacity: 0; pointer-events: none; }
-      .tool-chip[data-radius="110"][data-angle="300"] { opacity: 0; pointer-events: none; }
+      /* Inner ring (r=110): all 3 chips visible — Claude Code 0°, Cursor 120°, Figma 240° */
       .tools-header { margin-bottom: 20px; }
       .tools-heading { font-size: clamp(28px, 7vw, 48px); }
 
@@ -1576,7 +2086,7 @@
       <li><a href="#about" class="mobile-link">About</a></li>
       <li><a href="#work"  class="mobile-link">Work</a></li>
       <li><a href="docs/Keshav_Anand_Resume.pdf" class="mobile-link" data-resume>Resume</a></li>
-      <li><a href="#"      class="mobile-link">Contact</a></li>
+      <li><a href="#" class="mobile-link open-contact">Contact</a></li>
     </ul>
     <div class="mobile-nav-footer">keshavanand.com</div>
   </div>
@@ -1594,7 +2104,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#work">Work</a></li>
         <li><a href="docs/Keshav_Anand_Resume.pdf" data-resume>Resume</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#" class="open-contact">Contact</a></li>
       </ul>
     </div>
 
@@ -1734,9 +2244,10 @@
       <div class="sculpture-float">
         <img
           id="sculptureEgg"
-          src="assets/sculpture.png"
-          alt="Classical sculpture Keshav Anand"
+          src="Assets/mee.png"
+          alt="Keshav Anand"
           class="sculpture-img"
+          loading="lazy" decoding="async"
           style="cursor: pointer;"
         />
       </div>
@@ -1747,7 +2258,7 @@
       <span class="tagline-second">Building AI-native products that actually ship.</span>
     </p>
 
-    <a href="#" class="about-btn reveal reveal-d3">About me</a>
+    <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener" class="about-btn reveal reveal-d3">About me</a>
   </section>
 
   <!-- ── Tools ── -->
@@ -1769,134 +2280,106 @@
       <div class="tools-orbit-guide tools-ring-inner"></div>
       <div class="tools-orbit-guide tools-ring-middle"></div>
       <div class="tools-orbit-guide tools-ring-outer"></div>
-      <!-- Outer ring Ops / Thinking -->
-      <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/linear/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/linear/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/linear" alt="" />
-        <span class="tool-chip-inner tool-fallback">Li</span>
-        <span class="tool-chip-label">Linear</span>
+      <!-- Outer ring Ops / Thinking — 6 tools, 60° spacing -->
+      <div class="tool-chip" data-radius="290" data-angle="0"   data-speed="4"  data-bob="3" data-desc="Every sprint, every ticket, every dependency. Trust it more than my own memory.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/clickup/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/clickup/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/clickup" alt="" />
+        <span class="tool-chip-inner tool-fallback">Cu</span>
+        <span class="tool-chip-label">ClickUp</span>
       </div>
-      <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4">
+      <div class="tool-chip" data-radius="290" data-angle="60"  data-speed="4"  data-bob="4" data-desc="Second brain for everything. Design docs, research notes, the stray ideas at 2am.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/notion/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/notion/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/notion" alt="" />
         <span class="tool-chip-inner tool-fallback">No</span>
         <span class="tool-chip-label">Notion</span>
       </div>
-      <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3">
+      <div class="tool-chip" data-radius="290" data-angle="120" data-speed="4"  data-bob="3" data-desc="Walk-throughs replaced most of our meetings. Engineers watch on their own time, feedback lands faster.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/loom/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/loom/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/loom" alt="" />
         <span class="tool-chip-inner tool-fallback">Lm</span>
         <span class="tool-chip-label">Loom</span>
       </div>
-      <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/dovetail/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/dovetail/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/dovetail" alt="" />
-        <span class="tool-chip-inner tool-fallback">Dv</span>
-        <span class="tool-chip-label">Dovetail</span>
+      <div class="tool-chip" data-radius="290" data-angle="180" data-speed="4"  data-bob="4" data-desc="Where everything lives — code, designs, PRs. The one tab that's always open.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/github/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/github/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/github" alt="" />
+        <span class="tool-chip-inner tool-fallback">Gh</span>
+        <span class="tool-chip-label">GitHub</span>
       </div>
-      <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3">
+      <div class="tool-chip" data-radius="290" data-angle="240" data-speed="4"  data-bob="3" data-desc="Digital whiteboard for workshops and journey mapping. Align the room before opening Figma.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/miro/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/miro/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/miro" alt="" />
         <span class="tool-chip-inner tool-fallback">Mi</span>
         <span class="tool-chip-label">Miro</span>
       </div>
-      <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4">
+      <div class="tool-chip" data-radius="290" data-angle="300" data-speed="4"  data-bob="4" data-desc="Less messaging, more closing loops. A quick thread beats a long meeting every time.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/slack/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/slack/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/slack" alt="" />
         <span class="tool-chip-inner tool-fallback">Sl</span>
         <span class="tool-chip-label">Slack</span>
       </div>
-      <!-- Middle ring Design craft -->
-      <div class="tool-chip" data-radius="200" data-angle="30"  data-speed="-7" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/figma" alt="" />
-        <span class="tool-chip-inner tool-fallback">Fg</span>
-        <span class="tool-chip-label">Figma</span>
-      </div>
-      <div class="tool-chip" data-radius="200" data-angle="90"  data-speed="-7" data-bob="5">
+      <!-- Middle ring Design craft — 5 tools, 72° spacing -->
+      <div class="tool-chip" data-radius="200" data-angle="0"   data-speed="-7" data-bob="5" data-desc="Figma prototypes are great until stakeholders need to feel it. Framer closes that gap.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/framer/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/framer/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/framer" alt="" />
         <span class="tool-chip-inner tool-fallback">Fr</span>
         <span class="tool-chip-label">Framer</span>
       </div>
-      <div class="tool-chip" data-radius="200" data-angle="150" data-speed="-7" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/protopie/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/protopie/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/protopie" alt="" />
-        <span class="tool-chip-inner tool-fallback">Pp</span>
-        <span class="tool-chip-label">Protopie</span>
-      </div>
-      <div class="tool-chip" data-radius="200" data-angle="210" data-speed="-7" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/spline/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/spline/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/spline" alt="" />
-        <span class="tool-chip-inner tool-fallback">Sp</span>
-        <span class="tool-chip-label">Spline</span>
-      </div>
-      <div class="tool-chip" data-radius="200" data-angle="270" data-speed="-7" data-bob="5">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/rive/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/rive/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/rive" alt="" />
-        <span class="tool-chip-inner tool-fallback">Ri</span>
-        <span class="tool-chip-label">Rive</span>
-      </div>
-      <div class="tool-chip" data-radius="200" data-angle="330" data-speed="-7" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/adobeaftereffects/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/adobeaftereffects/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/adobeaftereffects" alt="" />
-        <span class="tool-chip-inner tool-fallback">Ae</span>
-        <span class="tool-chip-label">After Effects</span>
-      </div>
-      <!-- Inner ring AI builders -->
-      <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/anthropic" alt="" />
-        <span class="tool-chip-inner tool-fallback">Cc</span>
-        <span class="tool-chip-label">Claude Code</span>
-      </div>
-      <div class="tool-chip" data-radius="110" data-angle="60"  data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/openai/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/openai/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/openai" alt="" />
-        <span class="tool-chip-inner tool-fallback">Cx</span>
-        <span class="tool-chip-label">Codex</span>
-      </div>
-      <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/cursor/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/cursor/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/cursor" alt="" />
-        <span class="tool-chip-inner tool-fallback">Cu</span>
-        <span class="tool-chip-label">Cursor</span>
-      </div>
-      <div class="tool-chip" data-radius="110" data-angle="180" data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/vercel/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/vercel/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/vercel" alt="" />
-        <span class="tool-chip-inner tool-fallback">v0</span>
-        <span class="tool-chip-label">v0</span>
-      </div>
-      <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="3">
+      <div class="tool-chip" data-radius="200" data-angle="72"  data-speed="-7" data-bob="4" data-desc="Used it once to ship a client MVP in a day. Not a daily driver, but nice to have in the bag.">
         <img class="tool-logo light" src="https://cdn.simpleicons.org/lovable/2A2535" alt="" />
         <img class="tool-logo dark"  src="https://cdn.simpleicons.org/lovable/F0EBE3" alt="" />
         <img class="tool-logo brand" src="https://cdn.simpleicons.org/lovable" alt="" />
         <span class="tool-chip-inner tool-fallback">Lv</span>
         <span class="tool-chip-label">Lovable</span>
       </div>
-      <div class="tool-chip" data-radius="110" data-angle="300" data-speed="10" data-bob="4">
-        <img class="tool-logo light" src="https://cdn.simpleicons.org/codeium/2A2535" alt="" />
-        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/codeium/F0EBE3" alt="" />
-        <img class="tool-logo brand" src="https://cdn.simpleicons.org/codeium" alt="" />
-        <span class="tool-chip-inner tool-fallback">Ws</span>
-        <span class="tool-chip-label">Windsurf</span>
+      <div class="tool-chip" data-radius="200" data-angle="144" data-speed="-7" data-bob="4" data-desc="3D without the production pipeline nightmare. Drag, light, export.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/spline/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/spline/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/spline" alt="" />
+        <span class="tool-chip-inner tool-fallback">Sp</span>
+        <span class="tool-chip-label">Spline</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="216" data-speed="-7" data-bob="5" data-desc="Animations that actually ship. No more 'can you export this for dev' conversations.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/rive/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/rive/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/rive" alt="" />
+        <span class="tool-chip-inner tool-fallback">Ri</span>
+        <span class="tool-chip-label">Rive</span>
+      </div>
+      <div class="tool-chip" data-radius="200" data-angle="288" data-speed="-7" data-bob="3" data-desc="Hobby, not work. Motion for the joy of it, not because a sprint demands it.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/adobeaftereffects/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/adobeaftereffects/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/adobeaftereffects" alt="" />
+        <span class="tool-chip-inner tool-fallback">Ae</span>
+        <span class="tool-chip-label">After Effects</span>
+      </div>
+      <!-- Inner ring AI builders — 3 tools, 120° spacing -->
+      <div class="tool-chip" data-radius="110" data-angle="0"   data-speed="10" data-bob="3" data-desc="Built this whole portfolio with it. What happens when design and code collapse into one.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/anthropic/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/anthropic/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/anthropic" alt="" />
+        <span class="tool-chip-inner tool-fallback">Cc</span>
+        <span class="tool-chip-label">Claude Code</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="120" data-speed="10" data-bob="3" data-desc="Writing code that keeps up with how fast I think in design. That's the bar and it clears it.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/cursor/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/cursor/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/cursor" alt="" />
+        <span class="tool-chip-inner tool-fallback">Cu</span>
+        <span class="tool-chip-label">Cursor</span>
+      </div>
+      <div class="tool-chip" data-radius="110" data-angle="240" data-speed="10" data-bob="4" data-desc="Home base. Been in it every single day for four years and counting.">
+        <img class="tool-logo light" src="https://cdn.simpleicons.org/figma/2A2535" alt="" />
+        <img class="tool-logo dark"  src="https://cdn.simpleicons.org/figma/F0EBE3" alt="" />
+        <img class="tool-logo brand" src="https://cdn.simpleicons.org/figma" alt="" />
+        <span class="tool-chip-inner tool-fallback">Fg</span>
+        <span class="tool-chip-label">Figma</span>
       </div>
     </div>
   </section>
@@ -1907,32 +2390,39 @@
 
     <div class="projects-grid">
 
-      <!-- Card 1 CXFacts -->
-      <div class="project-card reveal">
-        <div class="card-visual" style="background: linear-gradient(145deg, #DEDAD4 0%, #C9C2DC 100%);">
+      <!-- Card 1 FinalLayer — Coming Soon -->
+      <div class="project-card project-card--soon reveal">
+        <div class="card-visual" style="background: linear-gradient(145deg, #0A0D14 0%, #111827 100%);">
+          <div class="card-visual-soon-badge">Coming Soon</div>
           <div class="card-visual-inner">
             <div class="mockup-wrap">
-              <div class="mockup-browser">
-                <div class="mockup-bar-top">
+              <div class="mockup-browser" style="border-color: rgba(99,179,237,0.2);">
+                <div class="mockup-bar-top" style="background: #0D1117;">
                   <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-                  <div class="mockup-url"></div>
+                  <div class="mockup-url" style="background: rgba(99,179,237,0.1); color: rgba(99,179,237,0.6);">finallayer.app · workspace</div>
                 </div>
-                <div class="mockup-screen screen-bt">
-                  <div class="screen-bt-sidebar">
-                    <div class="screen-bt-sidebar-item" style="width:62%;"></div>
-                    <div class="screen-bt-sidebar-item" style="width:80%;opacity:0.6;"></div>
-                    <div class="screen-bt-sidebar-item" style="width:50%;opacity:0.6;"></div>
-                    <div class="screen-bt-sidebar-item" style="width:72%;opacity:0.6;"></div>
+                <div class="mockup-screen" style="background: #0A0D14; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                    <div style="font-size:7px;font-weight:700;color:rgba(99,179,237,0.8);letter-spacing:.1em;font-family:Inter,sans-serif;">FINALLAYER</div>
+                    <div style="font-size:6px;font-weight:500;color:rgba(240,235,227,0.3);letter-spacing:.06em;font-family:Inter,sans-serif;">Founding Designer</div>
                   </div>
-                  <div class="screen-bt-main">
-                    <div style="color:white;font-size:8px;font-weight:600;opacity:0.9;font-family:Inter,sans-serif;line-height:1.5;">Business & Bank<br/>Collaboration Simplified</div>
-                    <div class="screen-bt-card"><div class="screen-bt-line" style="width:60%;"></div></div>
-                    <div class="screen-bt-card"><div class="screen-bt-line" style="width:38%;"></div></div>
-                    <div style="display:flex;gap:4px;margin-top:4px;">
-                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
-                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
-                      <div style="flex:1;height:20px;background:rgba(255,255,255,0.1);border-radius:3px;"></div>
+                  <div style="height:1px;background:rgba(99,179,237,0.12);"></div>
+                  <div style="display:flex;gap:6px;margin-top:2px;">
+                    <div style="flex:1;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.12);border-radius:5px;padding:7px;">
+                      <div style="width:60%;height:5px;background:rgba(240,235,227,0.2);border-radius:2px;margin-bottom:5px;"></div>
+                      <div style="width:80%;height:4px;background:rgba(240,235,227,0.1);border-radius:2px;margin-bottom:3px;"></div>
+                      <div style="width:50%;height:4px;background:rgba(240,235,227,0.08);border-radius:2px;"></div>
                     </div>
+                    <div style="flex:1;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.12);border-radius:5px;padding:7px;">
+                      <div style="width:40%;height:5px;background:rgba(99,179,237,0.4);border-radius:2px;margin-bottom:5px;"></div>
+                      <div style="width:70%;height:4px;background:rgba(240,235,227,0.1);border-radius:2px;margin-bottom:3px;"></div>
+                      <div style="width:55%;height:4px;background:rgba(240,235,227,0.08);border-radius:2px;"></div>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:4px;align-items:center;margin-top:2px;">
+                    <div style="padding:3px 8px;background:rgba(99,179,237,0.15);border:1px solid rgba(99,179,237,0.25);border-radius:3px;font-size:6px;font-weight:600;color:rgba(99,179,237,0.9);font-family:Inter,sans-serif;">Active</div>
+                    <div style="padding:3px 8px;background:transparent;border:1px solid rgba(240,235,227,0.15);border-radius:3px;font-size:6px;font-weight:600;color:rgba(240,235,227,0.4);font-family:Inter,sans-serif;">Draft</div>
+                    <div style="padding:3px 8px;background:transparent;border:1px solid rgba(240,235,227,0.1);border-radius:3px;font-size:6px;font-weight:600;color:rgba(240,235,227,0.25);font-family:Inter,sans-serif;">Archived</div>
                   </div>
                 </div>
               </div>
@@ -1942,16 +2432,16 @@
         <div class="card-body" data-num="01">
           <div class="card-body-left">
             <div class="project-tags">
-              <span class="project-tag">B2B Fintech</span>
-              <span class="project-tag">Platform + Feature</span>
-              <span class="project-tag">3 months + 30 days</span>
+              <span class="project-tag">Founding Designer</span>
+              <span class="project-tag">0 → 1 Product</span>
+              <span class="project-tag">2024 – Present</span>
             </div>
-            <h3 class="project-name">CXFacts</h3>
-            <p class="project-desc">Full platform redesign for a B2B fintech connecting banks and businesses, plus a 30-day feature sprint that attracted 2 Nordic banks.</p>
-            <div class="project-metric">6× login · 95% task completion · 2 Nordic banks</div>
+            <h3 class="project-name">FinalLayer</h3>
+            <p class="project-desc">Building the product, design system, and user experience from the ground up as the founding designer at FinalLayer.</p>
+            <div class="project-metric">Case study in progress</div>
           </div>
           <div class="card-body-right">
-            <a href="work/buyingteams.html" class="project-btn">View Case Study →</a>
+            <span class="project-read">Coming soon</span>
           </div>
         </div>
       </div>
@@ -1967,14 +2457,12 @@
                   <div class="mockup-url" style="background: rgba(155,89,255,0.15); color: rgba(155,89,255,0.7);">rizzle.com · design system</div>
                 </div>
                 <div class="mockup-screen" style="background: #0D0B14; padding: 12px; display: flex; gap: 8px;">
-                  <!-- Sidebar -->
                   <div style="width: 32px; background: rgba(155,89,255,0.08); border-radius: 4px; display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 6px;">
                     <div style="width: 16px; height: 16px; border-radius: 50%; background: #9B59FF; opacity: 0.9;"></div>
                     <div style="width: 14px; height: 2px; background: rgba(240,235,227,0.3); border-radius: 1px;"></div>
                     <div style="width: 14px; height: 2px; background: rgba(240,235,227,0.2); border-radius: 1px;"></div>
                     <div style="width: 14px; height: 2px; background: rgba(240,235,227,0.15); border-radius: 1px;"></div>
                   </div>
-                  <!-- Main content -->
                   <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
                     <div style="font-size: 7px; font-weight: 700; color: #9B59FF; letter-spacing: 0.08em; font-family: Inter, sans-serif;">TOKENS · COLORS</div>
                     <div style="display: flex; gap: 4px; flex-wrap: wrap;">
@@ -2011,16 +2499,206 @@
               <span class="project-tag">6 months</span>
             </div>
             <h3 class="project-name">Rizzle Design System</h3>
-            <p class="project-desc">Built a full design system for a video creation platform — tokens, type scale, color system, and 120+ components across desktop and tablet.</p>
+            <p class="project-desc">Built a full design system for a video creation platform: tokens, type scale, color system, and 120+ components across desktop and tablet.</p>
             <div class="project-metric">4× fewer handoff questions · 120+ components · 3 squads adopted sprint 1</div>
           </div>
           <div class="card-body-right">
+            <span class="project-read">Read 6m</span>
             <a href="work/rizzle.html" class="project-btn">View Case Study →</a>
           </div>
         </div>
       </div>
 
+      <!-- Card 3 CXFacts -->
+      <div class="project-card reveal">
+        <div class="card-visual" style="background: #F0EEE9; aspect-ratio: 16/9;">
+          <div class="card-visual-inner">
+            <img src="Assets/cxfacts.png" alt="CXFacts platform" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" />
+          </div>
+        </div>
+        <div class="card-body" data-num="03">
+          <div class="card-body-left">
+            <div class="project-tags">
+              <span class="project-tag">B2B Fintech</span>
+              <span class="project-tag">Platform + Feature</span>
+              <span class="project-tag">3 months + 30 days</span>
+            </div>
+            <h3 class="project-name">CXFacts</h3>
+            <p class="project-desc">Full platform redesign for a B2B fintech connecting banks and businesses, plus a 30-day feature sprint that attracted 2 Nordic banks.</p>
+            <div class="project-metric">6× login · 95% task completion · 2 Nordic banks</div>
+          </div>
+          <div class="card-body-right">
+            <span class="project-read">Read 12m</span>
+            <a href="work/cxfacts.html" class="project-btn">View Case Study →</a>
+          </div>
+        </div>
+      </div>
+
+
     </div>
+  </section>
+
+  <!-- ── Mini Projects ── -->
+  <section class="mini-projects" id="mini">
+    <div class="mini-header reveal">
+      <p class="mini-eyebrow">Design thinking, applied</p>
+      <h2 class="mini-heading">Problem Studies.</h2>
+      <p class="mini-sub">I pick products with real friction, name the actual problem, and propose a structural fix. Not UI polish. Diagnosis.</p>
+    </div>
+
+    <div class="mini-grid">
+
+      <!-- Notion -->
+      <a href="work/notion-redesign.html" class="mini-card reveal">
+        <div class="mini-card-preview" style="background:linear-gradient(135deg,#F7F7F5 0%,#EAE9E4 100%);">
+          <!-- Notion mini mockup -->
+          <div style="display:flex;height:100%;font-family:Inter,sans-serif;">
+            <div style="width:72px;background:#F0F0EC;border-right:1px solid #E4E4E0;padding:8px 0;display:flex;flex-direction:column;gap:2px;">
+              <div style="padding:4px 8px;font-size:5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(55,53,47,.3);">Pinned</div>
+              <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;background:rgba(55,53,47,.08);border-radius:3px;margin:0 4px;">
+                <div style="width:6px;height:6px;border-radius:1px;background:rgba(55,53,47,.5);flex-shrink:0;"></div>
+                <div style="height:3px;background:rgba(55,53,47,.5);border-radius:1px;flex:1;"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;margin:0 4px;">
+                <div style="width:6px;height:6px;border-radius:1px;background:rgba(55,53,47,.2);flex-shrink:0;"></div>
+                <div style="height:3px;background:rgba(55,53,47,.2);border-radius:1px;flex:1;"></div>
+              </div>
+            </div>
+            <div style="flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:7px;font-weight:600;color:rgba(55,53,47,.5);">Start from a template</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+                <div style="background:#fff;border:1px solid rgba(55,53,47,.12);border-radius:4px;padding:6px;"><div style="width:10px;height:10px;border-radius:2px;background:#2EAADC;margin-bottom:4px;"></div><div style="height:3px;background:rgba(55,53,47,.3);border-radius:1px;width:80%;"></div></div>
+                <div style="background:#fff;border:1px solid rgba(55,53,47,.12);border-radius:4px;padding:6px;"><div style="width:10px;height:10px;border-radius:2px;background:#DFAB01;margin-bottom:4px;"></div><div style="height:3px;background:rgba(55,53,47,.3);border-radius:1px;width:65%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-card-meta">
+          <span class="mini-ux-badge">UX Exercise</span>
+          <span class="project-read">Read 8m</span>
+        </div>
+        <p class="mini-card-tag">Notion · Onboarding</p>
+        <h3 class="mini-card-title">Blank Canvas Problem</h3>
+        <p class="mini-card-desc">Notion's empty state causes week-1 churn. Three interventions to guide new users past the intimidating blank page without removing flexibility.</p>
+        <span class="mini-card-cta">Read →</span>
+      </a>
+
+      <!-- Spotify -->
+      <a href="work/spotify-redesign.html" class="mini-card reveal rd1">
+        <div class="mini-card-preview" style="background:#121212;">
+          <!-- Spotify mini mockup -->
+          <div style="display:flex;height:100%;font-family:-apple-system,sans-serif;">
+            <div style="width:60px;background:#000;padding:8px 0;display:flex;flex-direction:column;gap:4px;">
+              <div style="padding:3px 8px;font-size:5px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.06em;">YOUR LIBRARY</div>
+              <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;background:rgba(255,255,255,.07);border-radius:3px;margin:0 4px;">
+                <div style="width:14px;height:14px;border-radius:2px;background:linear-gradient(135deg,#1a3a5c,#0d2b3e);flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:3px;background:#fff;border-radius:1px;width:90%;margin-bottom:2px;"></div><div style="height:2px;background:rgba(255,255,255,.3);border-radius:1px;width:65%;"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;opacity:.5;margin:0 4px;">
+                <div style="width:14px;height:14px;border-radius:2px;background:linear-gradient(135deg,#1DB954,#052e10);flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:3px;background:rgba(255,255,255,.5);border-radius:1px;width:70%;"></div></div>
+              </div>
+            </div>
+            <div style="flex:1;background:linear-gradient(180deg,#0d2b3e 0%,#121212 60%);padding:6px 8px;display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:7px;font-weight:700;color:#fff;">Your Collection</div>
+              <div style="display:flex;gap:3px;margin-bottom:2px;">
+                <div style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:2px 6px;font-size:5px;color:#fff;font-weight:600;">Eras</div>
+                <div style="border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:2px 6px;font-size:5px;color:rgba(255,255,255,.4);">Forgotten</div>
+              </div>
+              <div style="background:rgba(255,255,255,.05);border-radius:4px;padding:4px 6px;">
+                <div style="display:flex;align-items:center;gap:3px;margin-bottom:3px;">
+                  <div style="width:8px;height:8px;border-radius:1px;background:linear-gradient(135deg,#450af5,#c4efd9);"></div>
+                  <div style="width:8px;height:8px;border-radius:1px;background:linear-gradient(135deg,#e13300,#4a0000);"></div>
+                  <span style="font-size:6px;font-weight:700;color:#fff;margin-left:2px;">2022</span>
+                  <span style="font-size:5px;color:rgba(255,255,255,.35);margin-left:auto;">891</span>
+                </div>
+                <div style="height:2px;background:rgba(255,255,255,.12);border-radius:1px;width:80%;"></div>
+              </div>
+              <div style="padding:3px 0;border-top:1px solid rgba(255,255,255,.07);">
+                <div style="font-size:5px;font-weight:700;color:#1DB954;letter-spacing:.06em;">FORGOTTEN FAVORITES · 47</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-card-meta">
+          <span class="mini-ux-badge">UX Exercise</span>
+          <span class="project-read">Read 6m</span>
+        </div>
+        <p class="mini-card-tag">Spotify · Personal Music Experience</p>
+        <h3 class="mini-card-title">The Collection Graveyard</h3>
+        <p class="mini-card-desc">Spotify knows your taste perfectly, but Liked Songs is a flat scroll that buries 6 years of music. Redesigning library navigation with era-based structure and a forgotten favorites surface.</p>
+        <span class="mini-card-cta">Read →</span>
+      </a>
+
+      <!-- Figma -->
+      <a href="work/figma-redesign.html" class="mini-card reveal rd2">
+        <div class="mini-card-preview" style="background:#1E1E1E;">
+          <!-- Figma mini mockup -->
+          <div style="display:flex;height:100%;font-family:-apple-system,sans-serif;">
+            <div style="flex:1;background:#2a2a2a;display:grid;place-items:center;position:relative;">
+              <div style="background:#f5f5f5;width:70px;height:55px;border-radius:1px;box-shadow:0 4px 16px rgba(0,0,0,.6);position:relative;">
+                <div style="position:absolute;top:-12px;left:4px;width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#F24822;display:grid;place-items:center;">
+                  <span style="transform:rotate(45deg);font-size:5px;color:#fff;font-weight:700;">!</span>
+                </div>
+                <div style="position:absolute;top:-12px;right:6px;width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#A259FF;display:grid;place-items:center;">
+                  <span style="transform:rotate(45deg);font-size:5px;color:#fff;">2</span>
+                </div>
+              </div>
+            </div>
+            <div style="width:80px;background:#2C2C2C;border-left:1px solid rgba(255,255,255,.08);padding:6px;">
+              <div style="font-size:5px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.08em;margin-bottom:5px;">COMMENTS</div>
+              <div style="background:rgba(242,72,34,.12);border-left:2px solid #F24822;border-radius:2px;padding:3px 5px;margin-bottom:3px;font-size:5px;color:rgba(255,255,255,.7);">Blocking · 1</div>
+              <div style="background:rgba(162,89,255,.1);border-left:2px solid #A259FF;border-radius:2px;padding:3px 5px;margin-bottom:3px;font-size:5px;color:rgba(255,255,255,.6);">Open · 2</div>
+              <div style="background:rgba(20,174,92,.08);border-left:2px solid #14AE5C;border-radius:2px;padding:3px 5px;font-size:5px;color:rgba(255,255,255,.4);">Accepted · 3</div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-card-meta">
+          <span class="mini-ux-badge">UX Exercise</span>
+          <span class="project-read">Read 5m</span>
+        </div>
+        <p class="mini-card-tag">Figma · Collaboration</p>
+        <h3 class="mini-card-title">Comment Graveyard</h3>
+        <p class="mini-card-desc">Figma comments have no lifecycle. Design reviews never formally close. Adding a state machine that auto-generates handoff checklists.</p>
+        <span class="mini-card-cta">Read →</span>
+      </a>
+
+      <!-- The Blinking Cursor — wide essay card -->
+      <a href="work/blinking-cursor.html" class="mini-card mini-card--wide reveal rd3">
+        <div class="mini-card-preview" style="background: #0D1117; display: flex; align-items: stretch; overflow: hidden;">
+          <!-- Terminal side -->
+          <div style="flex: 1; padding: 20px 18px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,0.07);">
+            <div style="font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(88,166,255,0.5); margin-bottom: 12px; font-family: Inter, sans-serif;">Terminal · 1969</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: rgba(126,231,135,0.8); line-height: 1.6;">
+              <span style="color:rgba(88,166,255,0.7);">user@shell:~$ </span>find . -name<br>
+              &nbsp;&nbsp;"*.pdf" -mtime -7<br>
+              <span style="color:rgba(126,231,135,0.4);">report-final.pdf<br>invoice-april.pdf</span>
+            </div>
+          </div>
+          <!-- Equals divider -->
+          <div style="display: flex; align-items: center; justify-content: center; padding: 0 12px; border-right: 1px solid rgba(255,255,255,0.07);">
+            <span style="font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,0.2); writing-mode: vertical-rl; font-family: Inter, sans-serif;">same</span>
+          </div>
+          <!-- Chat side -->
+          <div style="flex: 1; padding: 20px 18px; display: flex; flex-direction: column; justify-content: center; background: rgba(255,255,255,0.03);">
+            <div style="font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(229,105,169,0.5); margin-bottom: 12px; font-family: Inter, sans-serif;">Chat AI · 2022</div>
+            <div style="background: rgba(255,255,255,0.08); border-radius: 8px 8px 8px 2px; padding: 8px 10px; display: inline-block; font-family: Inter, sans-serif; font-size: 10px; color: rgba(255,255,255,0.7); line-height: 1.5; max-width: 160px;">Find all PDFs I modified last week.</div>
+          </div>
+        </div>
+        <div class="mini-card-meta">
+          <span class="mini-ux-badge" style="background: rgba(155,45,122,0.08); color: var(--accent);">Design Essay</span>
+          <span class="project-read">Read 7m</span>
+        </div>
+        <p class="mini-card-tag">AI · Interface History</p>
+        <h3 class="mini-card-title">The Blinking Cursor</h3>
+        <p class="mini-card-desc">Why chat AI was inevitable, what current interfaces are still getting wrong, and what the next 40 years might look like.</p>
+        <span class="mini-card-cta">Read →</span>
+      </a>
+
+    </div>
+    <p class="mini-section-note reveal">
+      <span>The wireframes are rough by design. The reasoning is the work.</span>
+    </p>
   </section>
 
   <!-- ── Testimonials ── -->
@@ -2028,31 +2706,41 @@
     <div class="testimonials-carousel">
       <!-- Slide 1 -->
       <div class="testimonial-slide active">
-        <p class="testimonial-quote">"Keshav has a rare ability to translate complex business problems into elegant, intuitive interfaces. His work on BuyingTeams significantly elevated our product quality."</p>
+        <p class="testimonial-quote">"Keshav have been a critical part of designing our entire platforms. Highly skilled and creative UX-Designer that quickly adapts business requirements to beautiful and functional design. Can highly recommend Keshav to anyone looking for a high quality UX-designer."</p>
         <div class="testimonial-attribution">
-          <span class="attribution-name">Arjun Sharma</span>
+          <a href="https://www.linkedin.com/in/daniellapp1/" target="_blank" rel="noopener noreferrer" class="attribution-name">Daniel Lapp</a>
           <span class="attribution-sep">·</span>
-          <span>CEO, BuyingTeams</span>
+          <span>ex-CTO, CXFacts · managed Keshav directly</span>
         </div>
       </div>
 
       <!-- Slide 2 -->
       <div class="testimonial-slide">
-        <p class="testimonial-quote">"Working with Keshav was a breath of fresh air. He brings both aesthetic sensibility and strategic thinking to every brief a combination that's genuinely hard to find."</p>
+        <p class="testimonial-quote">"I wholeheartedly recommend Keshav Anand as a top-notch product designer. Working closely for more than a year, I witnessed his exceptional problem-solving skills and innovative approach. His passion for user-centric design resulted in outstanding and intuitive product concepts. Keshav is a great collaborator, actively seeking feedback and integrating diverse perspectives. He is a valuable asset to any design team."</p>
         <div class="testimonial-attribution">
-          <span class="attribution-name">Priya Menon</span>
+          <a href="https://www.linkedin.com/in/abheetdutt/" target="_blank" rel="noopener noreferrer" class="attribution-name">Abheet Dutt</a>
           <span class="attribution-sep">·</span>
-          <span>Product Manager, Wellpath</span>
+          <span>Design @Derq · worked on the same team</span>
         </div>
       </div>
 
       <!-- Slide 3 -->
       <div class="testimonial-slide">
-        <p class="testimonial-quote">"The design system Keshav built became the foundation our entire engineering team rallied around. He thinks in systems which is exactly what we needed at scale."</p>
+        <p class="testimonial-quote">"Keshav plays an important role in our start-up. He has been with us from the very beginning, being responsible for our full design on our SaaS platform. He has performed really well, both in terms of quality and quantity, and has very good ideas and input to creating positive user experiences through really nice designs and GUI. I give Keshav the best recommendations."</p>
         <div class="testimonial-attribution">
-          <span class="attribution-name">Daniel Lee</span>
+          <a href="https://www.linkedin.com/in/claus5/" target="_blank" rel="noopener noreferrer" class="attribution-name">Claus Nielsen</a>
           <span class="attribution-sep">·</span>
-          <span>Head of Design, Atlas</span>
+          <span>ex-CEO, CXFacts · senior to Keshav</span>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="testimonial-slide">
+        <p class="testimonial-quote">"Keshav has been a great mentor. He helped me learn about the tools and trusted me with tasks. As a designer, Keshav has got tremendous skills with which he creates magical user experiences. Keshav can be a great partner to work with. I highly recommend him."</p>
+        <div class="testimonial-attribution">
+          <a href="https://www.linkedin.com/in/nidhi-sheware/" target="_blank" rel="noopener noreferrer" class="attribution-name">Nidhi Sheware</a>
+          <span class="attribution-sep">·</span>
+          <span>UX Designer · reported to Keshav</span>
         </div>
       </div>
     </div>
@@ -2060,9 +2748,18 @@
     <!-- Navigation -->
     <div class="testimonial-nav">
       <button class="t-nav-btn t-prev" aria-label="Previous testimonial">←</button>
-      <span class="t-counter"><span id="t-current">1</span> / <span id="t-total">3</span></span>
+      <span class="t-counter"><span id="t-current">1</span> / <span id="t-total">4</span></span>
       <button class="t-nav-btn t-next" aria-label="Next testimonial">→</button>
     </div>
+  </section>
+
+  <!-- ── Contact CTA ── -->
+  <section class="contact-cta-section" id="contact">
+    <p class="contact-cta-eyebrow">Open to the right problem</p>
+    <h2 class="contact-cta-heading">Your next designer<br>is already <em>thinking.</em></h2>
+    <p class="contact-cta-sub">I work best when the problem is genuinely hard and the people around me care about getting it right. If that sounds like your team, let's talk.</p>
+    <button class="contact-cta-btn open-contact">Start the conversation →</button>
+    <p class="contact-cta-avail"><span class="avail-dot"></span>Currently available for new work</p>
   </section>
 
   <!-- ── Footer ── -->
@@ -2081,6 +2778,7 @@
         <ul class="footer-nav">
           <li><a href="#">Home</a></li>
           <li><a href="#work">Work</a></li>
+          <li><a href="#mini">Mini Projects</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="docs/Keshav_Anand_Resume.pdf" data-resume>Resume</a></li>
         </ul>
@@ -2091,7 +2789,7 @@
         <p class="footer-col-head">Socials</p>
         <ul class="footer-socials">
           <li>
-            <a href="https://linkedin.com/in/keshav-anand" target="_blank" rel="noopener">
+            <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener">
               <span class="soc-icon">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
               </span>
@@ -2119,6 +2817,8 @@
 
     </div>
 
+    <img src="Assets/shdw.png" alt="" aria-hidden="true" class="footer-sig" loading="lazy" decoding="async" />
+
     <div class="footer-bottom">
       <span class="footer-copy">© 2026 Keshav Anand. All Rights Reserved.</span>
       <a href="#" class="footer-totop">
@@ -2129,6 +2829,63 @@
       </a>
     </div>
   </footer>
+
+  <!-- ── Contact Modal ── -->
+  <!-- SETUP: Create a free account at formspree.io, create a new form, replace YOUR_FORM_ID below -->
+  <div class="contact-modal" id="contactModal" aria-modal="true" role="dialog" aria-label="Contact Keshav">
+    <button class="contact-close" id="contactClose" aria-label="Close contact form">✕</button>
+    <div class="contact-modal-inner">
+      <div>
+        <p class="contact-modal-eyebrow">Contact</p>
+        <h2 class="contact-modal-title">Let's<br><em>Talk.</em></h2>
+        <p class="contact-modal-avail">Currently open to new projects and collaborations.<br>Based in Hyderabad, works globally.</p>
+        <div class="contact-social-tiles">
+          <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="mailto:keshavanand100@gmail.com" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Email directly
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg>
+              Behance
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm">
+          <div class="c-field">
+            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="c-field">
+            <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+          </div>
+          <div class="c-field">
+            <textarea name="message" placeholder="What are you working on?" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="contact-form-submit" id="contactSubmit">Send Message</button>
+        </form>
+        <div class="contact-success-state" id="contactSuccess">
+          <div class="contact-success-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="contact-success-heading">Message sent.</p>
+          <p class="contact-success-body">I'll get back to you within a day or two.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="k-cursor" id="kCursor"></div>
 
@@ -2268,6 +3025,20 @@
         requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
+    })();
+
+    /* ═══════════════════════════════════════════
+       TOOL CHIP EXPAND — inject name + desc content
+    ═══════════════════════════════════════════ */
+    (function initToolExpand() {
+      document.querySelectorAll('.tool-chip[data-desc]').forEach(chip => {
+        const name = chip.querySelector('.tool-chip-label')?.textContent?.trim() || '';
+        const desc = chip.dataset.desc;
+        const div = document.createElement('div');
+        div.className = 'tool-chip-expand';
+        div.innerHTML = `<span class="tool-chip-expand-name">${name}</span><span class="tool-chip-expand-desc">${desc}</span>`;
+        chip.appendChild(div);
+      });
     })();
 
     /* ═══════════════════════════════════════════
@@ -2459,25 +3230,36 @@
 
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
+    /* Activate tools bloom on scroll entry */
+    const bloom = document.querySelector('.tools-bloom');
+    if (bloom) {
+      const bloomObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            bloom.classList.add('active');
+          }
+        });
+      }, { threshold: 0.25 });
+      bloomObs.observe(document.querySelector('.tools-section'));
+    }
+
     /* ═══════════════════════════════════════════
        EASTER EGG Click sculpture to play game
     ═══════════════════════════════════════════ */
     const sculptureEl = document.getElementById('sculptureEgg');
-    const meow = new Audio('Assets/Game_Enter.wav');
-    meow.preload = 'auto';
-
-    // Hover to play sound browser allows audio from user interactions (no unlock needed)
-    sculptureEl.addEventListener('mouseenter', () => {
-      meow.currentTime = 0;
-      meow.play().catch(() => {}); // Graceful fallback if browser blocks
-    });
-
-    sculptureEl.addEventListener('mouseleave', () => {
-      meow.pause();
-      meow.currentTime = 0;
-    });
 
     sculptureEl.addEventListener('click', () => {
+      const click = new AudioContext();
+      const osc = click.createOscillator();
+      const gain = click.createGain();
+      osc.connect(gain);
+      gain.connect(click.destination);
+      osc.frequency.setValueAtTime(1200, click.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, click.currentTime + 0.06);
+      gain.gain.setValueAtTime(0.18, click.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, click.currentTime + 0.08);
+      osc.start(click.currentTime);
+      osc.stop(click.currentTime + 0.08);
       window.location.href = 'game.html';
     });
 
@@ -2536,6 +3318,55 @@
         nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
+
+    /* ═══════════════════════════════════════════
+       CONTACT MODAL
+    ═══════════════════════════════════════════ */
+    (function () {
+      const modal = document.getElementById('contactModal');
+      const closeBtn = document.getElementById('contactClose');
+      const form = document.getElementById('contactForm');
+      const successEl = document.getElementById('contactSuccess');
+      const submitBtn = document.getElementById('contactSubmit');
+      if (!modal) return;
+
+      function openModal() {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.open-contact').forEach(el =>
+        el.addEventListener('click', e => { e.preventDefault(); openModal(); })
+      );
+      closeBtn?.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+      form?.addEventListener('submit', async e => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        try {
+          const r = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' }
+          });
+          if (r.ok) {
+            form.style.display = 'none';
+            successEl.style.display = 'block';
+          } else { throw new Error(); }
+        } catch {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Message';
+          alert('Something went wrong. Email me directly at keshavanand100@gmail.com');
+        }
+      });
+    })();
   </script>
 </body>
 </html>

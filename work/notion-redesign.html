@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <title>Notion Redesign · Keshav Anand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #EDEAE3; --fg: #2A2535; --muted: #7A7490; --accent: #9B2D7A;
+      --border: rgba(42,37,53,0.10); --border-strong: rgba(42,37,53,0.35);
+      --surface: #F4F1EC;
+      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
+      --sans: 'Inter', sans-serif; --serif: 'DM Serif Display', serif;
+      --ease: cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-theme="dark"] {
+      --bg: #1F1E1B; --fg: #F0EBE3; --muted: #9E988E; --accent: #E569A9;
+      --border: rgba(240,235,227,0.10); --border-strong: rgba(240,235,227,0.28);
+      --surface: #2A2825; --nav-bg: rgba(31,30,27,0.94);
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; transition: background-color .35s var(--ease), color .35s var(--ease); }
+
+    /* ── NAV (identical to other case studies) ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: grid; grid-template-columns: auto 1fr auto; align-items: center; padding: 28px 52px; transform: translateZ(0); transition: transform .45s var(--ease), padding .4s var(--ease), background .35s ease; }
+    nav.hide { transform: translateY(-110%); }
+    nav.scrolled { padding: 14px 52px; background: var(--nav-bg); backdrop-filter: blur(8px); }
+    .nav-logo { display: inline-flex; align-items: baseline; text-decoration: none; color: var(--fg); }
+    .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -.015em; line-height: 1; color: var(--fg); transition: transform .35s var(--ease), letter-spacing .35s var(--ease); }
+    .logo-dot { color: var(--accent); font-style: normal; margin-left: 1px; }
+    .nav-logo:hover .logo-word { transform: translateY(-1px); letter-spacing: 0; }
+    .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0; transition: color .2s, border-color .2s, transform .25s var(--ease); }
+    .theme-toggle:hover { color: var(--fg); border-color: var(--fg); transform: rotate(-15deg); }
+    .theme-icon { width: 16px; height: 16px; }
+    .theme-icon-sun { display: none; } .theme-icon-moon { display: block; }
+    [data-theme="dark"] .theme-icon-sun { display: block; } [data-theme="dark"] .theme-icon-moon { display: none; }
+    .nav-center { display: flex; justify-content: center; }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a { font-size: 11px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--muted); position: relative; transition: color .2s; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-btn { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--fg); border: 1.5px solid var(--border-strong); padding: 9px 22px; border-radius: 100px; transition: background .3s var(--ease), border-color .3s, transform .3s var(--ease); }
+    .nav-btn:hover { border-color: var(--fg); transform: scale(1.03); }
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; align-items: flex-end; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; }
+    .nav-hamburger span { display: block; height: 1.5px; background: var(--fg); border-radius: 2px; transform-origin: center; transition: transform .35s var(--ease), opacity .25s, width .3s var(--ease); }
+    .nav-hamburger span:nth-child(1) { width: 22px; } .nav-hamburger span:nth-child(2) { width: 16px; } .nav-hamburger span:nth-child(3) { width: 22px; }
+    .nav-hamburger.open span:nth-child(1) { width: 22px; transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { width: 22px; transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-nav { position: fixed; inset: 0; z-index: 99; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .35s var(--ease); }
+    .mobile-nav.open { pointer-events: all; opacity: 1; }
+    .mobile-nav-links { list-style: none; text-align: center; }
+    .mobile-nav-links a { display: block; font-family: var(--serif); font-size: clamp(36px,8vw,56px); color: var(--fg); text-decoration: none; transform: translateY(110%); opacity: 0; transition: color .2s, transform .5s var(--ease), opacity .5s var(--ease); }
+    .mobile-nav.open .mobile-nav-links a { transform: translateY(0); opacity: 1; }
+    .mobile-nav-links a:hover { color: var(--accent); }
+    .breadcrumb { position: fixed; top: 80px; left: 52px; z-index: 90; display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); transition: top .4s var(--ease); }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { opacity: .4; }
+    .breadcrumb-current { color: var(--fg); font-weight: 500; }
+    .breadcrumb-back { display: none; font-size: 11px; letter-spacing: .06em; color: var(--muted); text-decoration: none; transition: color .2s, transform .3s var(--ease); }
+    .breadcrumb-back:hover { color: var(--fg); transform: translateX(-3px); }
+    @media (max-width:1024px) { nav { padding: 22px 36px; } nav.scrolled { padding: 14px 36px; } .breadcrumb { left: 36px; } }
+    @media (max-width:768px) { nav { padding: 20px 24px; } .nav-center, .nav-right { display: none; } .nav-hamburger { display: flex; } .breadcrumb { top: 76px; left: 24px; } .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; } .breadcrumb-back { display: flex; } }
+
+    /* ── SCROLL PROGRESS ── */
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); transform-origin: left; transform: scaleX(0); z-index: 200; transition: transform .1s linear; }
+
+    /* ── HERO ── */
+    .cs-hero { padding: 190px 52px 80px; border-bottom: 1px solid var(--border); }
+    .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .cs-tag { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); padding: 4px 10px; border-radius: 100px; }
+    .cs-hero h1 { font-family: var(--serif); font-size: clamp(40px,5.5vw,80px); font-weight: 400; line-height: 1.02; letter-spacing: -.03em; margin-bottom: 24px; }
+    .cs-hero h1 em { font-style: italic; color: var(--accent); }
+    .cs-hero-sub { font-size: 17px; font-weight: 300; color: var(--muted); max-width: 560px; line-height: 1.75; margin-bottom: 80px; }
+    .cs-meta-row { display: flex; gap: 0; border-top: 1px solid var(--border); padding-top: 36px; }
+    .cs-meta-item { flex: 1; padding-right: 32px; }
+    .cs-meta-item + .cs-meta-item { padding-left: 32px; border-left: 1px solid var(--border); }
+    .cs-meta-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+    .cs-meta-value { font-size: 14px; font-weight: 400; }
+    @media (max-width:768px) { .cs-hero { padding: 110px 24px 56px; } .cs-meta-row { flex-wrap: wrap; } .cs-meta-item { flex: 1 1 50%; padding: 16px 0 0 !important; border-left: none !important; } }
+
+    /* ── SECTIONS ── */
+    .section { padding: 120px clamp(52px, 9vw, 140px); border-top: 1px solid var(--border); }
+    @media (max-width:768px) { .section { padding: 64px 24px; } }
+    .sec-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .sec-heading { font-family: var(--serif); font-size: clamp(28px,3.5vw,48px); font-weight: 400; line-height: 1.1; letter-spacing: -.025em; margin-bottom: 20px; }
+    .sec-heading em { font-style: italic; color: var(--accent); }
+    .sec-body { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 560px; }
+    .sec-body p + p { margin-top: 14px; }
+    .sec-body strong { color: var(--fg); font-weight: 500; }
+
+    /* ── PROBLEM CARDS ── */
+    .problem-grid { display: flex; flex-direction: column; gap: 0; margin-top: 72px; }
+    .problem-card { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; padding: 48px 0; border-bottom: 1px solid var(--border); }
+    .problem-card:first-child { padding-top: 0; }
+    .problem-card:last-child { border-bottom: none; }
+    .problem-screen { border-radius: 10px; overflow: hidden; height: 180px; border: 1px solid var(--border-strong); flex-shrink: 0; background: #FFFFFF; position: relative; }
+    [data-theme="dark"] .problem-screen { background: #1a1a18; }
+    .problem-label { padding-top: 4px; }
+    .problem-n { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .problem-title { font-family: var(--serif); font-size: clamp(20px, 2vw, 28px); font-weight: 400; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 12px; }
+    .problem-desc { font-size: 14px; line-height: 1.75; color: var(--muted); }
+    @media(max-width:900px){ .problem-card { grid-template-columns: 1fr; } }
+
+    /* ── NOTION UI MOCKUPS ── */
+    /* Shared shell */
+    .notion-shell { display: flex; height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .notion-sidebar { width: 220px; min-width: 220px; background: #F7F7F5; border-right: 1px solid #E8E8E5; padding: 12px 0; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    [data-theme="dark"] .notion-sidebar { background: #252525; border-color: #333; }
+    .notion-sidebar-item { display: flex; align-items: center; gap: 7px; padding: 4px 12px; font-size: 12px; color: rgba(55,53,47,.65); border-radius: 4px; white-space: nowrap; }
+    [data-theme="dark"] .notion-sidebar-item { color: rgba(220,215,210,.5); }
+    .notion-sidebar-item.active { background: rgba(55,53,47,.08); color: #37352F; }
+    [data-theme="dark"] .notion-sidebar-item.active { background: rgba(220,215,210,.08); color: #e0dbd4; }
+    .notion-sidebar-dot { width: 8px; height: 8px; border-radius: 2px; background: currentColor; flex-shrink: 0; opacity: .45; }
+    .notion-sidebar-dot.emoji { opacity: 1; font-size: 11px; }
+    .notion-content { flex: 1; padding: 20px 24px; background: #FFFFFF; overflow: hidden; }
+    [data-theme="dark"] .notion-content { background: #1a1a18; }
+    .notion-page-title { font-size: 18px; font-weight: 700; color: #37352F; margin-bottom: 10px; }
+    [data-theme="dark"] .notion-page-title { color: #e0dbd4; }
+    .notion-page-body { font-size: 12px; color: rgba(55,53,47,.45); line-height: 1.7; }
+    [data-theme="dark"] .notion-page-body { color: rgba(220,215,210,.35); }
+    .notion-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 8px; }
+    .notion-empty-icon { font-size: 28px; opacity: .3; }
+    .notion-empty-text { font-size: 12px; color: rgba(55,53,47,.35); }
+    [data-theme="dark"] .notion-empty-text { color: rgba(220,215,210,.3); }
+    .notion-add-btn { font-size: 11px; color: rgba(55,53,47,.4); border: 1px dashed rgba(55,53,47,.2); border-radius: 5px; padding: 5px 12px; margin-top: 4px; }
+    [data-theme="dark"] .notion-add-btn { color: rgba(220,215,210,.3); border-color: rgba(220,215,210,.15); }
+
+    /* New page dialog — before */
+    .notion-dialog { position: absolute; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; }
+    .notion-dialog-box { background: #FFF; border-radius: 8px; padding: 20px; width: 260px; box-shadow: 0 8px 32px rgba(0,0,0,.15); }
+    [data-theme="dark"] .notion-dialog-box { background: #252525; }
+    .notion-dialog-title { font-size: 12px; font-weight: 600; color: #37352F; margin-bottom: 10px; }
+    [data-theme="dark"] .notion-dialog-title { color: #e0dbd4; }
+    .notion-dialog-input { width: 100%; background: rgba(55,53,47,.06); border: none; border-radius: 4px; padding: 7px 10px; font-size: 12px; color: #37352F; outline: none; margin-bottom: 8px; }
+    [data-theme="dark"] .notion-dialog-input { background: rgba(220,215,210,.06); color: #e0dbd4; }
+    .notion-dialog-hint { font-size: 11px; color: rgba(55,53,47,.35); text-align: center; margin-top: 6px; }
+    [data-theme="dark"] .notion-dialog-hint { color: rgba(220,215,210,.3); }
+
+    /* ── REDESIGN ROWS ── */
+    .redesign-block { margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .redesign-block + .redesign-block { padding-top: 80px; border-top: 1px solid var(--border); }
+    .redesign-text { }
+    .redesign-n { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .redesign-heading { font-family: var(--serif); font-size: clamp(22px,2.5vw,32px); font-weight: 400; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 14px; }
+    .redesign-heading em { font-style: italic; color: var(--accent); }
+    .redesign-body { font-size: 13px; line-height: 1.75; color: var(--muted); }
+    .redesign-body p + p { margin-top: 10px; }
+    .redesign-body strong { color: var(--fg); font-weight: 500; }
+    .redesign-screens { display: flex; flex-direction: column; gap: 12px; }
+    .screen-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .screen-label.after { color: var(--accent); }
+    .screen-wrap { border: 1px solid var(--border-strong); border-radius: 10px; overflow: hidden; height: 180px; position: relative; }
+    @media (max-width:900px) { .redesign-block { grid-template-columns: 1fr; } }
+
+    /* ── REDESIGNED NOTION UI ── */
+    /* Sectioned sidebar */
+    .notion-sidebar-section { padding: 14px 12px 4px; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(55,53,47,.3); }
+    [data-theme="dark"] .notion-sidebar-section { color: rgba(220,215,210,.25); }
+    .notion-sidebar-item.indent { padding-left: 22px; }
+    .notion-sidebar-item.pin { color: rgba(55,53,47,.75); font-weight: 500; }
+    [data-theme="dark"] .notion-sidebar-item.pin { color: rgba(220,215,210,.7); }
+
+    /* Page type picker — after */
+    .type-picker { position: absolute; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; }
+    .type-picker-box { background: #FFF; border-radius: 10px; padding: 18px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,.15); }
+    [data-theme="dark"] .type-picker-box { background: #252525; }
+    .type-picker-title { font-size: 12px; font-weight: 600; color: #37352F; margin-bottom: 12px; }
+    [data-theme="dark"] .type-picker-title { color: #e0dbd4; }
+    .type-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+    .type-tile { border: 1px solid rgba(55,53,47,.12); border-radius: 6px; padding: 8px 6px; text-align: center; cursor: pointer; transition: background .12s; }
+    [data-theme="dark"] .type-tile { border-color: rgba(220,215,210,.1); }
+    .type-tile:hover, .type-tile.sel { background: rgba(46,170,220,.08); border-color: rgba(46,170,220,.4); }
+    .type-tile-icon { font-size: 16px; display: block; margin-bottom: 3px; }
+    .type-tile-name { font-size: 9px; font-weight: 600; color: rgba(55,53,47,.6); letter-spacing: .04em; }
+    [data-theme="dark"] .type-tile-name { color: rgba(220,215,210,.5); }
+
+    /* Welcome scaffold — after */
+    .welcome-content { flex: 1; padding: 16px 20px; background: #FFF; }
+    [data-theme="dark"] .welcome-content { background: #1a1a18; }
+    .welcome-banner { background: linear-gradient(135deg, rgba(46,170,220,.08), rgba(103,73,201,.06)); border: 1px solid rgba(46,170,220,.18); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+    .welcome-banner-title { font-size: 12px; font-weight: 600; color: #37352F; margin-bottom: 2px; }
+    [data-theme="dark"] .welcome-banner-title { color: #e0dbd4; }
+    .welcome-banner-sub { font-size: 11px; color: rgba(55,53,47,.45); }
+    [data-theme="dark"] .welcome-banner-sub { color: rgba(220,215,210,.35); }
+    .welcome-steps { display: flex; flex-direction: column; gap: 5px; }
+    .welcome-step { display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(55,53,47,.6); }
+    [data-theme="dark"] .welcome-step { color: rgba(220,215,210,.45); }
+    .step-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid rgba(55,53,47,.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+    .step-dot.done { background: #2EAADC; border-color: #2EAADC; color: #fff; }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 56px; border-top: 1px solid var(--border-strong); }
+    .insight-item { padding: 32px 32px 32px 0; border-right: 1px solid var(--border); }
+    .insight-item:last-child { border-right: none; }
+    .insight-item + .insight-item { padding-left: 32px; }
+    .insight-n { font-family: var(--serif); font-style: italic; font-size: 36px; color: var(--accent); opacity: .25; line-height: 1; margin-bottom: 12px; }
+    .insight-text { font-size: 13px; line-height: 1.7; color: var(--muted); }
+    .insight-text strong { color: var(--fg); font-weight: 500; display: block; margin-bottom: 4px; font-size: 14px; }
+    @media (max-width:768px) { .insight-row { grid-template-columns: 1fr; } .insight-item { border-right: none; padding: 24px 0 !important; border-bottom: 1px solid var(--border); } .insight-item:last-child { border-bottom: none; } }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote { padding: 90px clamp(52px, 9vw, 140px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pull-quote p { font-family: var(--serif); font-size: clamp(18px,2.2vw,28px); font-style: italic; line-height: 1.45; letter-spacing: -.01em; max-width: 760px; }
+    .pull-quote cite { display: block; margin-top: 14px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-style: normal; }
+    @media (max-width:768px) { .pull-quote { padding: 32px 24px; } }
+
+    /* ── OUTCOME ── */
+    .outcome-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 56px; }
+    .outcome-card { border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+    .outcome-n { font-family: var(--serif); font-size: clamp(32px,4vw,52px); font-weight: 400; color: var(--accent); letter-spacing: -.02em; line-height: 1; margin-bottom: 8px; }
+    .outcome-label { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    @media (max-width:768px) { .outcome-row { grid-template-columns: 1fr 1fr; } }
+
+    /* ── CTA BANNER ── */
+    .cta-banner{padding:100px 52px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-start;gap:0;}
+    .cta-banner-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .cta-banner-heading{font-family:var(--serif);font-size:clamp(36px,5vw,72px);font-weight:400;line-height:1.0;letter-spacing:-.04em;margin-bottom:24px;}
+    .cta-banner-heading em{font-style:italic;color:var(--accent);}
+    .cta-banner-sub{font-size:15px;font-weight:300;color:var(--muted);max-width:420px;line-height:1.75;margin-bottom:40px;}
+    .cta-open-btn{display:inline-flex;align-items:center;gap:12px;background:var(--fg);color:var(--bg);font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;padding:16px 36px;cursor:pointer;transition:transform .35s var(--ease),opacity .2s;}
+    .cta-open-btn:hover{transform:scale(1.04);}
+    .contact-modal{position:fixed;inset:0;z-index:500;background:#14111a;display:flex;align-items:center;justify-content:center;padding:40px;pointer-events:none;opacity:0;transition:opacity .4s var(--ease);}
+    .contact-modal.open{opacity:1;pointer-events:all;}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .cm-sub:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    
+    .cm-ok p:first-child{font-family:var(--serif);font-size:24px;color:#F0EBE3;margin-bottom:8px;}
+    .cm-ok p:last-child{font-size:14px;color:rgba(255,255,255,.45);}
+    }
+    @media(max-width:768px){.cta-banner{padding:56px 24px;}}
+
+    /* ── TRADEOFF LIST ── */
+    .tradeoff-list { display: flex; flex-direction: column; gap: 0; max-width: 720px; }
+    .tradeoff-item { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .tradeoff-item:last-child { border-bottom: none; }
+    .tradeoff-pill { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border-strong); border-radius: 4px; padding: 4px 10px; white-space: nowrap; margin-top: 3px; }
+    .tradeoff-name { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 6px; }
+    .tradeoff-reason { font-size: 13px; line-height: 1.75; color: var(--muted); }
+
+    /* ── NEXT PROJECT ── */
+    .next-section { padding: 100px 52px; border-top: 1px solid var(--border); }
+    .next-label { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 36px; }
+    .next-link { display: flex; align-items: baseline; gap: 16px; text-decoration: none; color: var(--fg); transition: color .25s; }
+    .next-link:hover { color: var(--accent); }
+    .next-title { font-family: var(--serif); font-size: clamp(36px,5vw,72px); font-weight: 400; letter-spacing: -.03em; }
+    .next-arrow { font-size: clamp(32px,4vw,56px); transition: transform .35s var(--ease); }
+    .next-link:hover .next-arrow { transform: translateX(10px); }
+    @media (max-width:768px) { .next-section { padding: 64px 24px; } }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .rd1 { transition-delay: .1s; } .rd2 { transition-delay: .2s; } .rd3 { transition-delay: .3s; }
+      @media(max-width:600px){
+      .contact-modal{top:auto;bottom:0;left:0;right:0;border-radius:20px 20px 0 0;flex-direction:column;align-items:center;padding:0 20px calc(32px + env(safe-area-inset-bottom));max-height:88dvh;overflow-y:auto;opacity:1;transform:translateY(100%);transition:transform .4s var(--ease);}
+      .contact-modal.open{transform:translateY(0);}
+      .contact-modal::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:14px 0 20px;flex-shrink:0;}
+      .contact-inner,
+      
+      .cta-open-btn{width:100%;justify-content:center;}
+      .cs-next-link{width:100%;justify-content:center;}
+    }
+
+    .contact-modal-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;width:100%;max-width:960px;align-items:center;}
+    .contact-close{position:fixed;top:32px;right:40px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s,transform .3s var(--ease);}
+    .contact-close:hover{border-color:rgba(255,255,255,.6);color:#fff;transform:rotate(90deg);}
+    .contact-modal-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+    .contact-modal-title{font-family:var(--serif);font-size:clamp(52px,6vw,92px);font-weight:400;line-height:.95;letter-spacing:-.04em;color:#F0EBE3;margin-bottom:24px;}
+    .contact-modal-title em{font-style:italic;color:#E569A9;}
+    .contact-modal-avail{font-size:14px;line-height:1.75;color:rgba(255,255,255,.4);margin-bottom:40px;}
+    .contact-social-tiles{display:flex;flex-direction:column;gap:8px;}
+    .contact-social-tile{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 18px;text-decoration:none;color:rgba(255,255,255,.5);transition:border-color .2s,color .2s;}
+    .contact-social-tile:hover{border-color:rgba(255,255,255,.35);color:#fff;}
+    .contact-social-tile-label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+    .contact-social-tile-arrow{font-size:14px;opacity:.4;}
+    .contact-form{display:flex;flex-direction:column;gap:14px;}
+    .c-field{display:flex;flex-direction:column;}
+    .c-field input,.c-field textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 18px;font-size:14px;font-family:var(--sans);color:#F0EBE3;outline:none;resize:none;transition:border-color .2s,background .2s;}
+    .c-field input::placeholder,.c-field textarea::placeholder{color:rgba(255,255,255,.22);}
+    .c-field input:focus,.c-field textarea:focus{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.09);}
+    .contact-form-submit{background:#EDEAE3;color:#2A2535;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:8px;padding:17px 32px;cursor:pointer;margin-top:4px;transition:opacity .2s,transform .3s var(--ease);width:100%;}
+    .contact-form-submit:hover{opacity:.9;transform:translateY(-1px);}
+    .contact-form-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .contact-success-state{display:none;text-align:center;padding:48px 0;}
+    .contact-success-check{width:48px;height:48px;border-radius:50%;background:rgba(29,185,84,.15);border:1px solid rgba(29,185,84,.3);display:grid;place-items:center;margin:0 auto 16px;}
+    .contact-success-heading{font-family:var(--serif);font-size:28px;color:#F0EBE3;margin-bottom:8px;}
+    .contact-success-body{font-size:14px;color:rgba(255,255,255,.4);}
+    @media(max-width:900px){.contact-modal-inner{grid-template-columns:1fr;gap:40px;}.contact-modal{padding:24px;overflow-y:auto;align-items:flex-start;padding-top:80px;}}
+    /* ─── FOOTER ─── */
+    footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
+    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
+    .footer-brand{display:flex;flex-direction:column;gap:20px;}
+    .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
+    .footer-logo-dot{color:var(--accent);font-style:normal;}
+    .footer-tagline{font-size:12px;color:var(--muted);line-height:1.6;max-width:220px;}
+    .footer-col-head{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg);margin-bottom:28px;}
+    .footer-nav{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-nav a{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-nav a:hover{color:var(--fg);}
+    .footer-socials{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .footer-socials a{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);transition:color 0.2s;}
+    .footer-socials a:hover{color:var(--fg);}
+    .footer-socials a:hover .soc-icon{border-color:var(--fg);}
+    .soc-icon{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.2s;}
+    .soc-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    .soc-label{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;}
+    .footer-bottom{border-top:1px solid var(--border);padding:24px 0;display:flex;align-items:center;justify-content:space-between;}
+    .footer-copy{font-size:12px;color:var(--muted);font-weight:400;}
+    .footer-totop{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+    .footer-totop:hover{color:var(--fg);}
+    .footer-totop:hover .totop-circle{border-color:var(--fg);}
+    .totop-circle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;}
+    .totop-circle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+    @media(max-width:900px){.footer-main{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1 / -1;}.footer-sig{height:100%;right:-4%;}}
+    @media(max-width:640px){footer{padding:56px 24px 0;}.footer-main{grid-template-columns:1fr;gap:40px;padding-bottom:56px;}.footer-brand{grid-column:auto;}.footer-sig{height:80%;right:-6%;}}
+
+    @media(max-width:600px){
+      .cs-hero{padding:110px 20px 56px;}
+      .notion-screen{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      .before-after{gap:16px;}
+    }
+    </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav id="nav">
+    <a href="../index.html" class="nav-logo" aria-label="Keshav Anand home">
+      <span class="logo-word">Keshav<span class="logo-dot">.</span></span>
+    </a>
+    <div class="nav-center">
+      <ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul>
+    </div>
+    <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="../index.html#work">Work</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Notion Redesign</span>
+    <a href="../index.html#work" class="breadcrumb-back">← Back</a>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+      <li><a href="../index.html#about" class="mobile-link">About</a></li>
+      <li><a href="../index.html#work" class="mobile-link">Work</a></li>
+      <li><a href="../index.html" class="mobile-link">Home</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="cs-tags reveal">
+      <span class="cs-tag">Unsolicited Redesign</span>
+      <span class="cs-tag">Product Thinking</span>
+      <span class="cs-tag">Onboarding</span>
+    </div>
+    <h1 class="reveal rd1">Notion gives you<br><em>everything.</em> That's the problem.</h1>
+    <p class="cs-hero-sub reveal rd2">Notion has 30M+ users and a week-one churn problem. The blank canvas that power users love is the same thing that makes new users feel lost. This is a focused redesign of the first-use experience: not the UI, the psychology.</p>
+    <div class="cs-meta-row reveal rd3">
+      <div class="cs-meta-item">
+        <p class="cs-meta-label">Type</p>
+        <p class="cs-meta-value">Unsolicited Concept</p>
+      </div>
+      <div class="cs-meta-item">
+        <p class="cs-meta-label">Timeline</p>
+        <p class="cs-meta-value">3 days</p>
+      </div>
+      <div class="cs-meta-item">
+        <p class="cs-meta-label">Focus</p>
+        <p class="cs-meta-value">Onboarding · IA · New user retention</p>
+      </div>
+      <div class="cs-meta-item">
+        <p class="cs-meta-label">Role</p>
+        <p class="cs-meta-value">Solo: research, framing, redesign</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">The problem</p>
+    <h2 class="sec-heading reveal rd1">Power is a <em>liability</em><br>in week one.</h2>
+    <p class="sec-body reveal rd2">Notion's flexibility is its biggest product differentiator and its biggest onboarding failure. I audited the first-use flow and found three moments where new users consistently abandon: the empty workspace, the new page creation, and the sidebar that immediately becomes a junk drawer.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-screen">
+          <!-- Current Notion: flat sidebar, empty state -->
+          <div class="notion-shell">
+            <div class="notion-sidebar">
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📄</span> Getting Started</div>
+              <div class="notion-sidebar-item active"><span class="notion-sidebar-dot emoji">📋</span> Quick Note</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">🗂</span> Projects</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📝</span> Meeting notes</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">💡</span> Ideas</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📁</span> Archive copy old</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📁</span> Archive copy old 2</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">🗑</span> Trash folder</div>
+            </div>
+            <div class="notion-content">
+              <div class="notion-empty-state">
+                <div class="notion-empty-icon">📄</div>
+                <div class="notion-empty-text">Click to start writing</div>
+                <div class="notion-add-btn">+ New page</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="problem-label">
+          <p class="problem-n">Pain point 01</p>
+          <p class="problem-title">The flat sidebar</p>
+          <p class="problem-desc">No hierarchy. Everything at the same level. After 2 weeks it's a scroll of anxiety.</p>
+        </div>
+      </div>
+
+      <div class="problem-card reveal rd1">
+        <div class="problem-screen">
+          <!-- Current: blank new page dialog -->
+          <div class="notion-shell">
+            <div class="notion-sidebar">
+              <div class="notion-sidebar-item active"><span class="notion-sidebar-dot emoji">🏠</span> Home</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📝</span> Notes</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📋</span> Tasks</div>
+            </div>
+            <div class="notion-content" style="position:relative;padding:0;">
+              <div class="notion-dialog">
+                <div class="notion-dialog-box">
+                  <div class="notion-dialog-title">New page</div>
+                  <input class="notion-dialog-input" type="text" placeholder="Untitled" />
+                  <div class="notion-dialog-hint">Press Enter to create · Blank page</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="problem-label">
+          <p class="problem-n">Pain point 02</p>
+          <p class="problem-title">The blank page dialog</p>
+          <p class="problem-desc">Name it, then stare at it. No type, no template, no direction. Cursor blinks.</p>
+        </div>
+      </div>
+
+      <div class="problem-card reveal rd2">
+        <div class="problem-screen">
+          <!-- Current: new workspace, nothing there -->
+          <div class="notion-shell">
+            <div class="notion-sidebar" style="width:180px;min-width:180px;">
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot" style="background:#ccc;width:6px;height:6px;border-radius:50%"></span> Search</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot" style="background:#ccc;width:6px;height:6px;border-radius:50%"></span> Updates</div>
+              <div class="notion-sidebar-item"><span class="notion-sidebar-dot" style="background:#ccc;width:6px;height:6px;border-radius:50%"></span> Settings</div>
+              <div style="height:16px;"></div>
+              <div class="notion-sidebar-item" style="font-size:11px;opacity:.4;">+ Add a page</div>
+            </div>
+            <div class="notion-content">
+              <div class="notion-empty-state">
+                <div class="notion-empty-icon" style="font-size:36px;">👋</div>
+                <div class="notion-empty-text" style="font-size:13px;font-weight:600;">Welcome to Notion</div>
+                <div class="notion-empty-text">Here are the basics to get started</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="problem-label">
+          <p class="problem-n">Pain point 03</p>
+          <p class="problem-title">The welcome vacuum</p>
+          <p class="problem-desc">A "getting started" page in an otherwise empty workspace. Where do I even put my work?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">What I found</p>
+    <h2 class="sec-heading reveal rd1">Three insights that<br>shaped the <em>redesign.</em></h2>
+    <div class="insight-row">
+      <div class="insight-item reveal">
+        <div class="insight-n">01</div>
+        <div class="insight-text">
+          <strong>Structure reduces anxiety, not freedom</strong>
+          Users don't want infinite flexibility on day one. They want a scaffold they can break later. Opinionated defaults don't cage people. They give them somewhere to start from.
+        </div>
+      </div>
+      <div class="insight-item reveal rd1">
+        <div class="insight-n">02</div>
+        <div class="insight-text">
+          <strong>The sidebar is a trust signal</strong>
+          Within two weeks, a chaotic sidebar makes Notion feel broken. Users don't blame themselves. They blame the product. A sidebar that stays organised signals a product that has thought about them.
+        </div>
+      </div>
+      <div class="insight-item reveal rd2">
+        <div class="insight-n">03</div>
+        <div class="insight-text">
+          <strong>Type before name</strong>
+          Asking "what do you want to call this?" before "what is this?" is backwards. Users think in types (doc, table, board) before they think in names. Flipping the order reduces abandonment.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pull-quote reveal">
+    <p>"The blank canvas isn't a UX problem. It's a psychological one. People don't fear empty space. They fear making the wrong choice with it."</p>
+    <cite>Observation from 6 user interviews, new Notion users, week one</cite>
+  </div>
+
+  <!-- THE REDESIGN -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">The redesign</p>
+    <h2 class="sec-heading reveal rd1">Three changes.<br><em>One clear principle.</em></h2>
+    <p class="sec-body reveal rd2">Opinionated defaults, escapable constraints. Guide new users into a shape they understand. Then get out of the way as soon as they're ready to break it.</p>
+    <p class="sec-body reveal rd3" style="margin-top:16px;">I chose structural scaffolding over onboarding wizards because walkthroughs have ~30% completion and disappear the moment the user closes them. A pre-populated workspace is passive: users can ignore it and still benefit from seeing what an organised Notion looks like on day one.</p>
+
+    <!-- Change 1: Sectioned sidebar -->
+    <div class="redesign-block">
+      <div class="redesign-text reveal">
+        <p class="redesign-n">Change 01</p>
+        <h3 class="redesign-heading">Sidebar that<br>stays <em>organised</em></h3>
+        <div class="redesign-body">
+          <p>Section headers group content automatically: <strong>Pinned</strong> (what you always need), <strong>Recent</strong> (what you're working on), <strong>Team</strong> (shared spaces), <strong>Archive</strong> (everything else).</p>
+          <p>Users can still name and arrange everything freely. The sections are the scaffold, not a cage.</p>
+        </div>
+      </div>
+      <div class="redesign-screens reveal rd1">
+        <div>
+          <div class="screen-label">Before</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:100%;">
+                <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📄</span> Getting Started</div>
+                <div class="notion-sidebar-item active"><span class="notion-sidebar-dot emoji">📋</span> Quick Note</div>
+                <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">🗂</span> Projects</div>
+                <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📝</span> Meeting notes</div>
+                <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">📁</span> Archive copy old 2</div>
+                <div class="notion-sidebar-item"><span class="notion-sidebar-dot emoji">🗑</span> Trash folder</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="screen-label after">After</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:100%;">
+                <div class="notion-sidebar-section">Pinned</div>
+                <div class="notion-sidebar-item pin"><span class="notion-sidebar-dot emoji">🏠</span> Home</div>
+                <div class="notion-sidebar-item pin active"><span class="notion-sidebar-dot emoji">🗂</span> Projects</div>
+                <div class="notion-sidebar-section">Recent</div>
+                <div class="notion-sidebar-item indent"><span class="notion-sidebar-dot emoji">📝</span> Meeting notes</div>
+                <div class="notion-sidebar-item indent"><span class="notion-sidebar-dot emoji">📋</span> Quick Note</div>
+                <div class="notion-sidebar-section">Archive</div>
+                <div class="notion-sidebar-item indent" style="opacity:.45;font-size:11px;"><span class="notion-sidebar-dot emoji">📁</span> Old files (3)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change 2: Page type picker -->
+    <div class="redesign-block">
+      <div class="redesign-text reveal">
+        <p class="redesign-n">Change 02</p>
+        <h3 class="redesign-heading">Pick a shape<br>before a <em>name</em></h3>
+        <div class="redesign-body">
+          <p>When creating a new page, show <strong>what it could be</strong> before asking what to call it. Doc, Database, Board, Calendar, Checklist: six tiles, one tap.</p>
+          <p>The name field appears after. This removes the blank-name paralysis entirely. You already know what kind of thing you're making.</p>
+        </div>
+      </div>
+      <div class="redesign-screens reveal rd1">
+        <div>
+          <div class="screen-label">Before</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:120px;min-width:120px;"><div class="notion-sidebar-item active"><span class="notion-sidebar-dot emoji">🏠</span> Home</div></div>
+              <div class="notion-content" style="position:relative;padding:0;">
+                <div class="notion-dialog">
+                  <div class="notion-dialog-box">
+                    <div class="notion-dialog-title">New page</div>
+                    <input class="notion-dialog-input" placeholder="Untitled" />
+                    <div class="notion-dialog-hint">Blank page · Press Enter</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="screen-label after">After</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:120px;min-width:120px;"><div class="notion-sidebar-item active"><span class="notion-sidebar-dot emoji">🏠</span> Home</div></div>
+              <div class="notion-content" style="position:relative;padding:0;">
+                <div class="type-picker">
+                  <div class="type-picker-box">
+                    <div class="type-picker-title">What are you making?</div>
+                    <div class="type-grid">
+                      <div class="type-tile sel"><span class="type-tile-icon">📝</span><span class="type-tile-name">Doc</span></div>
+                      <div class="type-tile"><span class="type-tile-icon">🗃</span><span class="type-tile-name">Database</span></div>
+                      <div class="type-tile"><span class="type-tile-icon">🗂</span><span class="type-tile-name">Board</span></div>
+                      <div class="type-tile"><span class="type-tile-icon">📅</span><span class="type-tile-name">Calendar</span></div>
+                      <div class="type-tile"><span class="type-tile-icon">✅</span><span class="type-tile-name">Checklist</span></div>
+                      <div class="type-tile"><span class="type-tile-icon">✨</span><span class="type-tile-name">Blank</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change 3: Welcome scaffold -->
+    <div class="redesign-block">
+      <div class="redesign-text reveal">
+        <p class="redesign-n">Change 03</p>
+        <h3 class="redesign-heading">A workspace that<br>feels <em>inhabited</em></h3>
+        <div class="redesign-body">
+          <p>New workspaces start pre-populated: a pinned Home page, a Projects database stub, and a brief welcome panel showing 3 steps to get going. All deletable, but there when you need them.</p>
+          <p>The goal is to make the workspace feel like it <strong>already belongs to you</strong> on day one, not like something you have to earn.</p>
+        </div>
+      </div>
+      <div class="redesign-screens reveal rd1">
+        <div>
+          <div class="screen-label">Before</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:150px;min-width:150px;">
+                <div class="notion-sidebar-item" style="font-size:11px;opacity:.4;">+ Add a page</div>
+              </div>
+              <div class="notion-content">
+                <div class="notion-empty-state">
+                  <div class="notion-empty-icon">👋</div>
+                  <div class="notion-empty-text">Welcome to Notion</div>
+                  <div class="notion-empty-text">Here are the basics</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="screen-label after">After</div>
+          <div class="screen-wrap">
+            <div class="notion-shell">
+              <div class="notion-sidebar" style="width:150px;min-width:150px;">
+                <div class="notion-sidebar-section">Pinned</div>
+                <div class="notion-sidebar-item active pin"><span class="notion-sidebar-dot emoji">🏠</span> Home</div>
+                <div class="notion-sidebar-item pin"><span class="notion-sidebar-dot emoji">🗂</span> Projects</div>
+              </div>
+              <div class="welcome-content">
+                <div class="welcome-banner">
+                  <div class="welcome-banner-title">Your workspace is ready</div>
+                  <div class="welcome-banner-sub">3 steps to make it yours (takes 5 min)</div>
+                </div>
+                <div class="welcome-steps">
+                  <div class="welcome-step"><div class="step-dot done">✓</div> Workspace created</div>
+                  <div class="welcome-step"><div class="step-dot">2</div> Create your first project</div>
+                  <div class="welcome-step"><div class="step-dot">3</div> Invite a teammate</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT I DIDN'T BUILD -->
+  <section class="section" style="background:var(--surface);">
+    <p class="sec-eyebrow reveal">Decisions made</p>
+    <h2 class="sec-heading reveal rd1">What I<br><em>didn't build.</em></h2>
+    <p class="sec-body reveal rd2" style="margin-bottom:56px;">Every redesign is as much about what you reject as what you ship. These are the ideas I ruled out and why. Each one is a constraint that sharpens the solution.</p>
+    <div class="tradeoff-list reveal rd3">
+      <div class="tradeoff-item">
+        <span class="tradeoff-pill">Not built</span>
+        <div class="tradeoff-content">
+          <p class="tradeoff-name">AI-generated page templates on first open</p>
+          <p class="tradeoff-reason">Adds cognitive load before the user knows if they want AI in their workflow. The goal is confident starts, not clever automation. A scaffold the user can break is more respectful of how people learn than a wizard that decides for them.</p>
+        </div>
+      </div>
+      <div class="tradeoff-item">
+        <span class="tradeoff-pill">Not built</span>
+        <div class="tradeoff-content">
+          <p class="tradeoff-name">Forced walkthrough / onboarding modal</p>
+          <p class="tradeoff-reason">Linear walkthroughs have around 30% completion and create a sense of homework. A pre-populated workspace is passive: users can ignore it entirely and still have a better starting point than a blank canvas.</p>
+        </div>
+      </div>
+      <div class="tradeoff-item">
+        <span class="tradeoff-pill">Not built</span>
+        <div class="tradeoff-content">
+          <p class="tradeoff-name">Forcing the type picker for all new pages</p>
+          <p class="tradeoff-reason">Power users creating quick notes via keyboard shortcuts shouldn't be interrupted. The type picker only appears when creating a page from the empty main panel, not from ⌘+N or the sidebar. Mode matters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOME -->
+  <section class="section">
+    <p class="sec-eyebrow reveal">Estimated impact</p>
+    <h2 class="sec-heading reveal rd1">What this<br>would <em>move.</em></h2>
+    <p class="sec-body reveal rd2">These aren't Notion's real numbers. They're projections based on published benchmarks for onboarding interventions at similar scale SaaS products. The point is the shape of the bets, not the exact magnitude.</p>
+    <div class="outcome-row">
+      <div class="outcome-card reveal">
+        <div class="outcome-n">+18%</div>
+        <div class="outcome-label">Estimated improvement in day-7 retention for new workspaces, based on onboarding scaffold benchmarks from Intercom and Appcues research.</div>
+      </div>
+      <div class="outcome-card reveal rd1">
+        <div class="outcome-n">−40%</div>
+        <div class="outcome-label">Reduction in "how do I organise this?" support queries, direct result of sectioned sidebar and pre-built scaffold reducing first-week confusion.</div>
+      </div>
+      <div class="outcome-card reveal rd2">
+        <div class="outcome-n">3×</div>
+        <div class="outcome-label">Increase in template adoption during onboarding when page-type picker is shown before blank canvas, based on A/B test patterns from similar flows.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner reveal">
+    <p class="cta-banner-eyebrow">Let's work together</p>
+    <h2 class="cta-banner-heading">I don't redesign screens.<br>I redesign <em>the thinking.</em></h2>
+    <p class="cta-banner-sub">If your product has a moment where users quietly give up, I want to know about it. That's where the real work starts.</p>
+    <button class="cta-open-btn open-contact">Let's dig in →</button>
+  </div>
+
+  <!-- NEXT -->
+  <section class="next-section reveal">
+    <p class="next-label">Next project</p>
+    <a href="buyingteams.html" class="next-link">
+      <span class="next-title">CXFacts</span>
+      <span class="next-arrow">→</span>
+    </a>
+  </section>
+
+  <!-- CONTACT MODAL -->
+    <footer>
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo">Keshav<span class="footer-logo-dot">.</span></a>
+        <p class="footer-tagline">Senior Product Designer.<br>Hyderabad, India.</p>
+      </div>
+      <div>
+        <p class="footer-col-head">Quick links</p>
+        <ul class="footer-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#work">Work</a></li>
+          <li><a href="../index.html#mini">Mini Projects</a></li>
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../docs/Keshav_Anand_Resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-head">Socials</p>
+        <ul class="footer-socials">
+          <li>
+            <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+              <span class="soc-label">LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg></span>
+              <span class="soc-label">Behance</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:keshavanand100@gmail.com">
+              <span class="soc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg></span>
+              <span class="soc-label">Email</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <img src="../Assets/shdw.png" alt="" aria-hidden="true" class="footer-sig" />
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Keshav Anand. All Rights Reserved.</span>
+      <a href="#" class="footer-totop">
+        To top
+        <span class="totop-circle">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </footer>
+
+  <div class="contact-modal" id="contactModal" aria-modal="true" role="dialog" aria-label="Contact Keshav">
+    <button class="contact-close" id="contactClose" aria-label="Close contact form">✕</button>
+    <div class="contact-modal-inner">
+      <div>
+        <p class="contact-modal-eyebrow">Contact</p>
+        <h2 class="contact-modal-title">Let's<br><em>Talk.</em></h2>
+        <p class="contact-modal-avail">Currently open to new projects and collaborations.<br>Based in Hyderabad, works globally.</p>
+        <div class="contact-social-tiles">
+          <a href="https://www.linkedin.com/in/keshav-anand-32b218216/" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="mailto:keshavanand100@gmail.com" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Email directly
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+          <a href="https://behance.net/keshavanand4" target="_blank" rel="noopener noreferrer" class="contact-social-tile">
+            <span class="contact-social-tile-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h8.5a4.5 4.5 0 0 1 0 9H3V5z"/><path d="M3 14h9.5a4.5 4.5 0 0 1 0 9H3v-9z"/><path d="M15 6h6M15 10h6"/></svg>
+              Behance
+            </span>
+            <span class="contact-social-tile-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm">
+          <div class="c-field">
+            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="c-field">
+            <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+          </div>
+          <div class="c-field">
+            <textarea name="message" placeholder="What are you working on?" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="contact-form-submit" id="contactSubmit">Send Message</button>
+        </form>
+        <div class="contact-success-state" id="contactSuccess">
+          <div class="contact-success-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="contact-success-heading">Message sent.</p>
+          <p class="contact-success-body">I'll get back to you within a day or two.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* theme */
+    (function initTheme() {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch(e) {}
+      });
+    })();
+
+    /* nav scroll-hide + progress bar */
+    const nav = document.getElementById('nav');
+    const bar = document.getElementById('progressBar');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (nav) {
+        nav.classList.toggle('hide', y > lastY && y > 120);
+        nav.classList.toggle('scrolled', y > 48);
+      }
+      if (bar) {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = `scaleX(${total > 0 ? y / total : 0})`;
+      }
+      lastY = y;
+    }, { passive: true });
+
+    /* hamburger */
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    let menuOpen = false;
+    function toggleMenu(open) {
+      menuOpen = open;
+      if (hamburger) hamburger.classList.toggle('open', open);
+      if (mobileNav) mobileNav.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    if (hamburger) hamburger.addEventListener('click', () => toggleMenu(!menuOpen));
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => toggleMenu(false)));
+
+    /* scroll reveal */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '-24px' });
+    revealEls.forEach(el => observer.observe(el));
+    (function(){const modal=document.getElementById('contactModal'),closeBtn=document.getElementById('contactClose'),form=document.getElementById('contactForm'),success=document.getElementById('contactSuccess'),submitBtn=document.getElementById('contactSubmit');if(!modal)return;function open(){modal.classList.add('open');document.body.style.overflow='hidden';}function close(){modal.classList.remove('open');document.body.style.overflow='';}document.querySelectorAll('.open-contact').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();open();}));closeBtn?.addEventListener('click',close);modal.addEventListener('click',e=>{if(e.target===modal)close();});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});form?.addEventListener('submit',async e=>{e.preventDefault();submitBtn.disabled=true;submitBtn.textContent='Sending...';try{const r=await fetch('https://formspree.io/f/YOUR_FORM_ID',{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});if(r.ok){form.style.display='none';success.style.display='block';}else{throw new Error();}}catch{submitBtn.disabled=false;submitBtn.textContent='Send Message';alert('Something went wrong. Email me directly at keshavanand100@gmail.com');}});})();
+  </script>
+</body>
+</html>
