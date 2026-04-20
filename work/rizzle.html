@@ -17,7 +17,9 @@
     :root {
       --bg: #EDEAE3; --fg: #2A2535; --muted: #7A7490;
       /* Rizzle brand colors — override portfolio pink for this case study */
-      --accent: #9B59FF;
+      --accent: #BB00ED;
+      --accent-form: #D7FF00;
+      --accent-form-fg: #000;
       --border: rgba(42,37,53,0.1); --border-strong: rgba(42,37,53,0.28);
       --surface: #F4F1EC;
       --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
@@ -27,7 +29,9 @@
     }
     [data-theme="dark"] {
       --bg: #1F1E1B; --fg: #F0EBE3; --muted: #9E988E;
-      --accent: #B57BFF;
+      --accent: #D359F3;
+      --accent-form: #D7FF00;
+      --accent-form-fg: #000;
       --border: rgba(240,235,227,0.10); --border-strong: rgba(240,235,227,0.26);
       --surface: #2A2825; --nav-bg: rgba(31,30,27,0.94);
     }
@@ -94,7 +98,7 @@
     @media (max-width: 768px) { nav { padding: 20px 24px; } .nav-center, .nav-right { display: none; } .nav-hamburger { display: flex; } .breadcrumb { top: 76px; left: 24px; } .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; } .breadcrumb-back { display: flex; } }
 
     /* ─── HERO ─── */
-    .hero { padding: 160px 52px 100px; border-bottom: 1px solid var(--border-strong); }
+    .hero { padding: 360px 52px 100px; border-bottom: 1px solid var(--border-strong); }
     .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
     .hero-headline { font-family: var(--serif); font-size: clamp(40px,5.5vw,76px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 28px; }
     .hero-headline em { font-style: italic; color: var(--accent); }
@@ -135,8 +139,8 @@
     /* ─── DEMO CARD ─── */
     /* A clean, on-theme container — no dark windows */
     .demo-card {
-      background: var(--surface);
-      border: 1px solid var(--border-strong);
+      background: #070708;
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 14px;
       overflow: hidden;
     }
@@ -144,13 +148,53 @@
     .demo-card.overflow-visible { overflow: visible; }
     .demo-card-label {
       padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--muted); display: flex; align-items: center; justify-content: space-between;
+      color: rgba(255,255,255,0.35); display: flex; align-items: center; justify-content: space-between;
       position: relative; z-index: 1;
     }
+
     .demo-card-body { padding: 28px; }
     .demo-card-body-sm { padding: 20px; }
+    /* ── Inside demo cards: force dark-context overrides ── */
+    .demo-card .rz-input {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.15);
+      color: #F0EBE3;
+    }
+    .demo-card .rz-input::placeholder { color: rgba(255,255,255,0.3); opacity: 1; }
+    .demo-card .rz-input:hover { border-color: rgba(255,255,255,0.35); }
+    .demo-card .rz-dd-trigger {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.15);
+      color: #F0EBE3;
+    }
+    .demo-card .rz-dd-chevron { color: rgba(255,255,255,0.5); }
+    .demo-card .rz-dd-menu {
+      background: #131315;
+      border-color: rgba(255,255,255,0.12);
+    }
+    .demo-card .rz-dd-item { color: #F0EBE3; }
+    .demo-card .rz-dd-item:hover { background: rgba(215,255,0,0.1); }
+    .demo-card .rz-dd-item.is-selected { color: #F0EBE3; background: rgba(215,255,0,0.15); }
+    .demo-card .rz-radio-row,
+    .demo-card .rz-check-row,
+    .demo-card .rz-toggle-row { color: #F0EBE3; }
+    .demo-card .rz-radio-row input[type=radio],
+    .demo-card .rz-check-row input[type=checkbox] {
+      border-color: rgba(255,255,255,0.3);
+      background: transparent;
+    }
+    .demo-card .rz-toggle-track { background: rgba(255,255,255,0.2); }
+    .demo-card .rz-toggle-wrap input:checked ~ .rz-toggle-track { background: var(--accent-form); }
+    .demo-card .rz-toggle-thumb { background: #fff; }
+    .demo-card .rz-toggle-wrap input:checked ~ .rz-toggle-thumb { background: #000; }
+    .demo-card .rz-btn-secondary { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.25); }
+    .demo-card .rz-btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
+    .demo-card .rz-btn-icon { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+    .demo-card .rz-btn-icon:hover:not(:disabled) { border-color: var(--accent-form); color: var(--accent-form); }
+    .demo-card code { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); color: #F0EBE3; }
+
 
     /* ─── DEMO DIVIDER ─── */
     .d-divider { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--border); margin: 24px 0 16px; font-family: var(--work); }
@@ -238,7 +282,7 @@
     }
     .rz-input::placeholder { color: var(--muted); opacity: .6; }
     .rz-input:hover { border-color: var(--fg); }
-    .rz-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .rz-input:focus { border-color: var(--accent-form); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-form) 20%, transparent); }
     .rz-input.is-error { border-color: #E53E3E; }
     .rz-input.is-error:focus { box-shadow: 0 0 0 3px rgba(229,62,62,.12); }
     .rz-helper { font-family: var(--work); font-size: 11px; color: var(--muted); }
@@ -255,7 +299,7 @@
     }
     .rz-dd-trigger .has-val { color: var(--fg); }
     .rz-dd-trigger:hover { border-color: var(--fg); }
-    .rz-dropdown.open .rz-dd-trigger { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .rz-dropdown.open .rz-dd-trigger { border-color: var(--accent-form); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-form) 20%, transparent); }
     .rz-dd-chevron { transition: transform .2s var(--ease); opacity: .5; font-size: 10px; }
     .rz-dropdown.open .rz-dd-chevron { transform: rotate(180deg); }
     .rz-dd-menu {
@@ -265,17 +309,17 @@
     }
     .rz-dropdown.open .rz-dd-menu { display: block; }
     .rz-dd-item { padding: 9px 12px; font-family: var(--work); font-size: 13px; color: var(--fg); cursor: pointer; transition: background .12s; display: flex; align-items: center; gap: 8px; }
-    .rz-dd-item:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
-    .rz-dd-item.is-selected { color: var(--accent); font-weight: 600; }
+    .rz-dd-item:hover { background: color-mix(in srgb, var(--accent-form) 12%, transparent); }
+    .rz-dd-item.is-selected { color: var(--fg); background: color-mix(in srgb, var(--accent-form) 18%, transparent); font-weight: 600; }
     .rz-dd-item.is-selected::after { content: '✓'; margin-left: auto; font-size: 11px; }
 
     /* ── Radio ── */
     .rz-radio-grp { display: flex; flex-direction: column; gap: 10px; }
     .rz-radio-row { display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: var(--work); font-size: 13px; color: var(--fg); }
     .rz-radio-row input[type=radio] { appearance: none; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border-strong); background: transparent; cursor: pointer; transition: border-color .15s, background .15s; flex-shrink: 0; position: relative; }
-    .rz-radio-row input[type=radio]:hover { border-color: var(--accent); }
-    .rz-radio-row input[type=radio]:checked { border-color: var(--accent); background: var(--accent); }
-    .rz-radio-row input[type=radio]:checked::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+    .rz-radio-row input[type=radio]:hover { border-color: var(--accent-form); }
+    .rz-radio-row input[type=radio]:checked { border-color: var(--accent-form); background: var(--accent-form); }
+    .rz-radio-row input[type=radio]:checked::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--accent-form-fg); }
     .rz-radio-row.is-disabled { opacity: .35; cursor: not-allowed; }
     .rz-radio-row.is-disabled * { pointer-events: none; }
 
@@ -283,9 +327,9 @@
     .rz-check-grp { display: flex; flex-direction: column; gap: 10px; }
     .rz-check-row { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-family: var(--work); font-size: 13px; color: var(--fg); }
     .rz-check-row input[type=checkbox] { appearance: none; width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border-strong); background: transparent; cursor: pointer; transition: border-color .15s, background .15s; flex-shrink: 0; position: relative; margin-top: 1px; }
-    .rz-check-row input[type=checkbox]:hover { border-color: var(--accent); }
-    .rz-check-row input[type=checkbox]:checked { border-color: var(--accent); background: var(--accent); }
-    .rz-check-row input[type=checkbox]:checked::after { content: ''; position: absolute; top: 2px; left: 5px; width: 5px; height: 9px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg); }
+    .rz-check-row input[type=checkbox]:hover { border-color: var(--accent-form); }
+    .rz-check-row input[type=checkbox]:checked { border-color: var(--accent-form); background: var(--accent-form); }
+    .rz-check-row input[type=checkbox]:checked::after { content: ''; position: absolute; top: 2px; left: 5px; width: 5px; height: 9px; border: 2px solid var(--accent-form-fg); border-top: none; border-left: none; transform: rotate(45deg); }
     .rz-check-row.is-disabled { opacity: .35; cursor: not-allowed; }
     .rz-check-row.is-disabled * { pointer-events: none; }
 
@@ -295,8 +339,9 @@
     .rz-toggle-wrap { position: relative; width: 42px; height: 23px; flex-shrink: 0; }
     .rz-toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
     .rz-toggle-track { position: absolute; inset: 0; border-radius: 23px; background: var(--border-strong); transition: background .2s; cursor: pointer; }
-    .rz-toggle-thumb { position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: var(--bg); transition: transform .2s var(--ease); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-    .rz-toggle-wrap input:checked ~ .rz-toggle-track { background: var(--accent); }
+    .rz-toggle-thumb { position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: var(--bg); transition: transform .2s var(--ease), background .2s; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+    .rz-toggle-wrap input:checked ~ .rz-toggle-thumb { background: #000; }
+    .rz-toggle-wrap input:checked ~ .rz-toggle-track { background: var(--accent-form); }
     .rz-toggle-wrap input:checked ~ .rz-toggle-thumb { transform: translateX(19px); }
     .rz-toggle-row.is-disabled { opacity: .35; cursor: not-allowed; }
     .rz-toggle-row.is-disabled * { pointer-events: none; }
@@ -385,7 +430,7 @@
     .rz-ed-spec { font-size: 8px; color: var(--muted); letter-spacing: .02em; line-height: 1.4; }
 
     /* ── Token visual upgrade ── */
-    .rz-ladder { display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 4px; }
+    .rz-ladder { display: flex; align-items: flex-end; gap: 14px; overflow-x: auto; padding-bottom: 20px; margin-bottom: 4px; }
     .rz-ladder-unit { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
     .rz-ladder-block { background: var(--accent); opacity: .65; border-radius: 3px; }
     .rz-ladder-tok { font-size: 7.5px; font-weight: 700; color: var(--fg); letter-spacing: .04em; font-family: var(--work); }
@@ -394,7 +439,7 @@
     .rz-sp-ctx-label { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
     .rz-rad-gallery { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px; }
     .rz-rad-unit { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-    .rz-rad-box { width: 48px; height: 48px; background: color-mix(in srgb, var(--accent) 12%, transparent); border: 2px solid var(--accent); }
+    .rz-rad-box { width: 72px; height: 72px; background: color-mix(in srgb, var(--accent) 12%, transparent); border: 2px solid var(--accent); }
     .rz-rad-name { font-size: 8px; font-weight: 700; color: var(--fg); letter-spacing: .04em; font-family: var(--work); }
     .rz-rad-val { font-size: 7px; color: var(--muted); }
 
@@ -618,17 +663,17 @@
   <header class="hero">
     <p class="hero-eyebrow reveal">Rizzle · Design Systems · 2023</p>
     <h1 class="hero-headline reveal rd1">One language.<br><em>Every surface.</em></h1>
-    <p class="hero-sub reveal rd2">Rizzle had ten designers, three front-end squads, and no shared source of truth. I built the system from tokens to organisms. Six months, ground up.</p>
+    <p class="hero-sub reveal rd2">Rizzle had ten designers, three front-end squads, and no shared source of truth. I built the system from tokens to organisms. Six weeks, ground up.</p>
     <div class="hero-meta reveal rd3">
       <div class="meta-item"><div class="meta-label">Role</div><div class="meta-value">Lead Product Designer</div></div>
-      <div class="meta-item"><div class="meta-label">Timeline</div><div class="meta-value">6 months</div></div>
+      <div class="meta-item"><div class="meta-label">Timeline</div><div class="meta-value">6 weeks</div></div>
       <div class="meta-item"><div class="meta-label">Platform</div><div class="meta-value">Web · Tablet</div></div>
       <div class="meta-item"><div class="meta-label">Deliverable</div><div class="meta-value">Figma library + token spec</div></div>
     </div>
   </header>
 
   <!-- 01 · PROBLEM -->
-  <section class="section">
+  <section class="section" id="problem">
     <div class="sec-row reveal">
       <span class="sec-count">01</span>
       <span class="sec-label">The problem</span>
@@ -661,7 +706,7 @@
   </section>
 
   <!-- 02 · GRID -->
-  <section class="section">
+  <section class="section" id="grid">
     <div class="sec-row reveal">
       <span class="sec-count">02</span>
       <span class="sec-label">Foundation · Grid</span>
@@ -707,7 +752,7 @@
   </section>
 
   <!-- 03 · TOKENS -->
-  <section class="section">
+  <section class="section" id="tokens">
     <div class="sec-row reveal">
       <span class="sec-count">03</span>
       <span class="sec-label">Foundation · Tokens</span>
@@ -730,15 +775,15 @@
         <div id="tp-sp" class="tab-panel active">
           <div class="rz-wf-label" style="margin-top:4px;">8pt base grid — ascending proof</div>
           <div class="rz-ladder">
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:4px;height:4px;"></div><div class="rz-ladder-tok">xs</div><div class="rz-ladder-px">4</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:8px;height:8px;"></div><div class="rz-ladder-tok">sm</div><div class="rz-ladder-px">8</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:12px;height:12px;"></div><div class="rz-ladder-tok">md</div><div class="rz-ladder-px">12</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:16px;height:16px;"></div><div class="rz-ladder-tok">lg</div><div class="rz-ladder-px">16</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:20px;height:20px;"></div><div class="rz-ladder-tok">xl</div><div class="rz-ladder-px">20</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:24px;height:24px;"></div><div class="rz-ladder-tok">2xl</div><div class="rz-ladder-px">24</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:32px;height:32px;"></div><div class="rz-ladder-tok">3xl</div><div class="rz-ladder-px">32</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:40px;height:40px;"></div><div class="rz-ladder-tok">4xl</div><div class="rz-ladder-px">40</div></div>
-            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:48px;height:48px;"></div><div class="rz-ladder-tok">5xl</div><div class="rz-ladder-px">48</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:7px;height:7px;"></div><div class="rz-ladder-tok">xs</div><div class="rz-ladder-px">4</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:14px;height:14px;"></div><div class="rz-ladder-tok">sm</div><div class="rz-ladder-px">8</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:22px;height:22px;"></div><div class="rz-ladder-tok">md</div><div class="rz-ladder-px">12</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:29px;height:29px;"></div><div class="rz-ladder-tok">lg</div><div class="rz-ladder-px">16</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:36px;height:36px;"></div><div class="rz-ladder-tok">xl</div><div class="rz-ladder-px">20</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:43px;height:43px;"></div><div class="rz-ladder-tok">2xl</div><div class="rz-ladder-px">24</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:58px;height:58px;"></div><div class="rz-ladder-tok">3xl</div><div class="rz-ladder-px">32</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:72px;height:72px;"></div><div class="rz-ladder-tok">4xl</div><div class="rz-ladder-px">40</div></div>
+            <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:86px;height:86px;"></div><div class="rz-ladder-tok">5xl</div><div class="rz-ladder-px">48</div></div>
           </div>
           <div class="rz-sp-ctx">
             <div class="rz-sp-ctx-label">Used in product</div>
@@ -766,7 +811,7 @@
   </section>
 
   <!-- 04 · TYPOGRAPHY -->
-  <section class="section">
+  <section class="section" id="typography">
     <div class="sec-row reveal">
       <span class="sec-count">04</span>
       <span class="sec-label">Foundation · Typography</span>
@@ -829,7 +874,7 @@
   </section>
 
   <!-- 05 · COLORS -->
-  <section class="section">
+  <section class="section" id="color">
     <div class="sec-row reveal">
       <span class="sec-count">05</span>
       <span class="sec-label">Foundation · Color</span>
@@ -838,7 +883,7 @@
     <div class="two-col flip">
       <div class="col-text">
         <p class="col-eyebrow reveal">Color system</p>
-        <h3 class="col-heading reveal rd1">Purple is the brand.<br><em>Semantics</em> are the system.</h3>
+        <h3 class="col-heading reveal rd1">One primary, one accent.<br><em>Semantics</em> do the rest.</h3>
         <div class="col-body reveal rd2">
           <p>Full tonal scale: 50 to 900. Every surface, from subtle tints to vibrant CTAs, pulls from the same source.</p>
           <p>Semantic tokens sit on top: <code>color.interactive.idle</code>, <code>color.error.idle</code>. State behavior is a token decision, not a one-off. When Rizzle refreshed their brand, we swapped values under the tokens and the whole product updated in a day.</p>
@@ -849,45 +894,77 @@
         <div class="tab-bar" id="colorTabs">
           <button class="tab-btn active" data-panel="cp-pri">Primary</button>
           <button class="tab-btn" data-panel="cp-sec">Secondary</button>
+          <button class="tab-btn" data-panel="cp-grd">Gradients</button>
           <button class="tab-btn" data-panel="cp-sem">Semantic</button>
+          <button class="tab-btn" data-panel="cp-neu">Neutral</button>
         </div>
-        <div id="cp-pri" class="tab-panel active">
-          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Purple · violet</div>
-          <div class="swatch-grid">
-            <div class="swatch" data-hex="#F3EEFF"><div class="swatch-chip" style="background:#F3EEFF;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#F3EEFF</div></div>
-            <div class="swatch" data-hex="#E4D3FF"><div class="swatch-chip" style="background:#E4D3FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#E4D3FF</div></div>
-            <div class="swatch" data-hex="#C9A8FF"><div class="swatch-chip" style="background:#C9A8FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#C9A8FF</div></div>
-            <div class="swatch" data-hex="#AD7CFF"><div class="swatch-chip" style="background:#AD7CFF"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#AD7CFF</div></div>
-            <div class="swatch" data-hex="#9B59FF"><div class="swatch-chip" style="background:#9B59FF"><div class="copy-hint">COPY</div></div><div class="swatch-name">400 ★</div><div class="swatch-hex">#9B59FF</div></div>
-            <div class="swatch" data-hex="#7C3AED"><div class="swatch-chip" style="background:#7C3AED"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#7C3AED</div></div>
-            <div class="swatch" data-hex="#6D28D9"><div class="swatch-chip" style="background:#6D28D9"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#6D28D9</div></div>
-            <div class="swatch" data-hex="#5B21B6"><div class="swatch-chip" style="background:#5B21B6"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#5B21B6</div></div>
-            <div class="swatch" data-hex="#4C1D95"><div class="swatch-chip" style="background:#4C1D95"><div class="copy-hint">COPY</div></div><div class="swatch-name">800</div><div class="swatch-hex">#4C1D95</div></div>
-            <div class="swatch" data-hex="#2E1065"><div class="swatch-chip" style="background:#2E1065"><div class="copy-hint">COPY</div></div><div class="swatch-name">900</div><div class="swatch-hex">#2E1065</div></div>
+        <div id="cp-neu" class="tab-panel active">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Neutral · warm gray</div>
+          <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(52px,1fr));">
+            <div class="swatch" data-hex="#FFFFFF"><div class="swatch-chip" style="background:#FFFFFF;border:1px solid rgba(0,0,0,.08)"><div class="copy-hint">COPY</div></div><div class="swatch-name">0</div><div class="swatch-hex">#FFFFFF</div></div>
+            <div class="swatch" data-hex="#F7F6F3"><div class="swatch-chip" style="background:#F7F6F3;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#F7F6F3</div></div>
+            <div class="swatch" data-hex="#EDECEA"><div class="swatch-chip" style="background:#EDECEA;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#EDECEA</div></div>
+            <div class="swatch" data-hex="#DDDBD8"><div class="swatch-chip" style="background:#DDDBD8"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#DDDBD8</div></div>
+            <div class="swatch" data-hex="#C8C5C0"><div class="swatch-chip" style="background:#C8C5C0"><div class="copy-hint">COPY</div></div><div class="swatch-name">400</div><div class="swatch-hex">#C8C5C0</div></div>
+            <div class="swatch" data-hex="#A8A4A0"><div class="swatch-chip" style="background:#A8A4A0"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#A8A4A0</div></div>
+            <div class="swatch" data-hex="#898480"><div class="swatch-chip" style="background:#898480"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#898480</div></div>
+            <div class="swatch" data-hex="#6A6663"><div class="swatch-chip" style="background:#6A6663"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#6A6663</div></div>
+            <div class="swatch" data-hex="#4D4A47"><div class="swatch-chip" style="background:#4D4A47"><div class="copy-hint">COPY</div></div><div class="swatch-name">800</div><div class="swatch-hex">#4D4A47</div></div>
+            <div class="swatch" data-hex="#333130"><div class="swatch-chip" style="background:#333130"><div class="copy-hint">COPY</div></div><div class="swatch-name">900</div><div class="swatch-hex">#333130</div></div>
+            <div class="swatch" data-hex="#1E1D1C"><div class="swatch-chip" style="background:#1E1D1C"><div class="copy-hint">COPY</div></div><div class="swatch-name">1000</div><div class="swatch-hex">#1E1D1C</div></div>
+            <div class="swatch" data-hex="#131211"><div class="swatch-chip" style="background:#131211"><div class="copy-hint">COPY</div></div><div class="swatch-name">1100</div><div class="swatch-hex">#131211</div></div>
+            <div class="swatch" data-hex="#0A0908"><div class="swatch-chip" style="background:#0A0908"><div class="copy-hint">COPY</div></div><div class="swatch-name">1200</div><div class="swatch-hex">#0A0908</div></div>
+            <div class="swatch" data-hex="#000000"><div class="swatch-chip" style="background:#000000"><div class="copy-hint">COPY</div></div><div class="swatch-name">1300</div><div class="swatch-hex">#000000</div></div>
           </div>
-          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:20px;">Pink · hot</div>
+        </div>
+        <div id="cp-pri" class="tab-panel">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Brand Primary · #BB00ED</div>
           <div class="swatch-grid">
-            <div class="swatch" data-hex="#FFF0FA"><div class="swatch-chip" style="background:#FFF0FA;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#FFF0FA</div></div>
-            <div class="swatch" data-hex="#FECEF4"><div class="swatch-chip" style="background:#FECEF4"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#FECEF4</div></div>
-            <div class="swatch" data-hex="#FCA0E8"><div class="swatch-chip" style="background:#FCA0E8"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#FCA0E8</div></div>
-            <div class="swatch" data-hex="#F76FD8"><div class="swatch-chip" style="background:#F76FD8"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#F76FD8</div></div>
-            <div class="swatch" data-hex="#EC4CC8"><div class="swatch-chip" style="background:#EC4CC8"><div class="copy-hint">COPY</div></div><div class="swatch-name">400 ★</div><div class="swatch-hex">#EC4CC8</div></div>
-            <div class="swatch" data-hex="#D62DAE"><div class="swatch-chip" style="background:#D62DAE"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#D62DAE</div></div>
-            <div class="swatch" data-hex="#B01890"><div class="swatch-chip" style="background:#B01890"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#B01890</div></div>
-            <div class="swatch" data-hex="#891476"><div class="swatch-chip" style="background:#891476"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#891476</div></div>
+            <div class="swatch" data-hex="#FCF5FE"><div class="swatch-chip" style="background:#FCF5FE;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">0</div><div class="swatch-hex">#FCF5FE</div></div>
+            <div class="swatch" data-hex="#F7E0FD"><div class="swatch-chip" style="background:#F7E0FD"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#F7E0FD</div></div>
+            <div class="swatch" data-hex="#EEBFFA"><div class="swatch-chip" style="background:#EEBFFA"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#EEBFFA</div></div>
+            <div class="swatch" data-hex="#E294F7"><div class="swatch-chip" style="background:#E294F7"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#E294F7</div></div>
+            <div class="swatch" data-hex="#D359F3"><div class="swatch-chip" style="background:#D359F3"><div class="copy-hint">COPY</div></div><div class="swatch-name">400</div><div class="swatch-hex">#D359F3</div></div>
+            <div class="swatch" data-hex="#BB00ED"><div class="swatch-chip" style="background:#BB00ED"><div class="copy-hint">COPY</div></div><div class="swatch-name">500 ★</div><div class="swatch-hex">#BB00ED</div></div>
+            <div class="swatch" data-hex="#9600BE"><div class="swatch-chip" style="background:#9600BE"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#9600BE</div></div>
+            <div class="swatch" data-hex="#70008E"><div class="swatch-chip" style="background:#70008E"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#70008E</div></div>
+            <div class="swatch" data-hex="#4B005F"><div class="swatch-chip" style="background:#4B005F"><div class="copy-hint">COPY</div></div><div class="swatch-name">800</div><div class="swatch-hex">#4B005F</div></div>
+            <div class="swatch" data-hex="#25002F"><div class="swatch-chip" style="background:#25002F"><div class="copy-hint">COPY</div></div><div class="swatch-name">900</div><div class="swatch-hex">#25002F</div></div>
           </div>
         </div>
         <div id="cp-sec" class="tab-panel">
-          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Neon Yellow · lime</div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Brand Secondary · #D7FF00</div>
           <div class="swatch-grid">
-            <div class="swatch" data-hex="#FEFFD0"><div class="swatch-chip" style="background:#FEFFD0;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">50</div><div class="swatch-hex">#FEFFD0</div></div>
-            <div class="swatch" data-hex="#FAFEA0"><div class="swatch-chip" style="background:#FAFEA0"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#FAFEA0</div></div>
-            <div class="swatch" data-hex="#F4FC5C"><div class="swatch-chip" style="background:#F4FC5C"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#F4FC5C</div></div>
-            <div class="swatch" data-hex="#ECFA18"><div class="swatch-chip" style="background:#ECFA18"><div class="copy-hint">COPY</div></div><div class="swatch-name">300 ★</div><div class="swatch-hex">#ECFA18</div></div>
-            <div class="swatch" data-hex="#D4E010"><div class="swatch-chip" style="background:#D4E010"><div class="copy-hint">COPY</div></div><div class="swatch-name">400</div><div class="swatch-hex">#D4E010</div></div>
-            <div class="swatch" data-hex="#A8B00A"><div class="swatch-chip" style="background:#A8B00A"><div class="copy-hint">COPY</div></div><div class="swatch-name">500</div><div class="swatch-hex">#A8B00A</div></div>
-            <div class="swatch" data-hex="#7A8006"><div class="swatch-chip" style="background:#7A8006"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#7A8006</div></div>
-            <div class="swatch" data-hex="#4E5203"><div class="swatch-chip" style="background:#4E5203"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#4E5203</div></div>
+            <div class="swatch" data-hex="#FDFFF5"><div class="swatch-chip" style="background:#FDFFF5;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">0</div><div class="swatch-hex">#FDFFF5</div></div>
+            <div class="swatch" data-hex="#FAFFE0"><div class="swatch-chip" style="background:#FAFFE0;border:1px solid rgba(0,0,0,.04)"><div class="copy-hint">COPY</div></div><div class="swatch-name">100</div><div class="swatch-hex">#FAFFE0</div></div>
+            <div class="swatch" data-hex="#F5FFBF"><div class="swatch-chip" style="background:#F5FFBF"><div class="copy-hint">COPY</div></div><div class="swatch-name">200</div><div class="swatch-hex">#F5FFBF</div></div>
+            <div class="swatch" data-hex="#EEFF94"><div class="swatch-chip" style="background:#EEFF94"><div class="copy-hint">COPY</div></div><div class="swatch-name">300</div><div class="swatch-hex">#EEFF94</div></div>
+            <div class="swatch" data-hex="#E5FF59"><div class="swatch-chip" style="background:#E5FF59"><div class="copy-hint">COPY</div></div><div class="swatch-name">400</div><div class="swatch-hex">#E5FF59</div></div>
+            <div class="swatch" data-hex="#D7FF00"><div class="swatch-chip" style="background:#D7FF00"><div class="copy-hint">COPY</div></div><div class="swatch-name">500 ★</div><div class="swatch-hex">#D7FF00</div></div>
+            <div class="swatch" data-hex="#ACCC00"><div class="swatch-chip" style="background:#ACCC00"><div class="copy-hint">COPY</div></div><div class="swatch-name">600</div><div class="swatch-hex">#ACCC00</div></div>
+            <div class="swatch" data-hex="#819900"><div class="swatch-chip" style="background:#819900"><div class="copy-hint">COPY</div></div><div class="swatch-name">700</div><div class="swatch-hex">#819900</div></div>
+            <div class="swatch" data-hex="#566600"><div class="swatch-chip" style="background:#566600"><div class="copy-hint">COPY</div></div><div class="swatch-name">800</div><div class="swatch-hex">#566600</div></div>
+            <div class="swatch" data-hex="#2B3300"><div class="swatch-chip" style="background:#2B3300"><div class="copy-hint">COPY</div></div><div class="swatch-name">900</div><div class="swatch-hex">#2B3300</div></div>
+          </div>
+        </div>
+        <div id="cp-grd" class="tab-panel">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;margin-top:4px;">Brand Gradients</div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <div style="height:80px;border-radius:14px;background:linear-gradient(135deg,#FF7840 0%,#F040C0 100%);margin-bottom:8px;"></div>
+              <div style="font-size:11px;font-weight:600;color:var(--fg);margin-bottom:2px;">Gradient / Pink-Orange</div>
+              <div style="font-size:10px;color:var(--muted);font-family:monospace;">#FF7840 → #F040C0 · 135°</div>
+            </div>
+            <div>
+              <div style="height:80px;border-radius:14px;background:linear-gradient(135deg,#4E8DC8 0%,#9040D8 100%);margin-bottom:8px;"></div>
+              <div style="font-size:11px;font-weight:600;color:var(--fg);margin-bottom:2px;">Gradient / Pink-Blue</div>
+              <div style="font-size:10px;color:var(--muted);font-family:monospace;">#4E8DC8 → #9040D8 · 135°</div>
+            </div>
+            <div>
+              <div style="height:80px;border-radius:14px;background:radial-gradient(ellipse at 60% 40%,#1C1624 0%,#0A0A0C 100%);margin-bottom:8px;border:1px solid rgba(255,255,255,0.06);"></div>
+              <div style="font-size:11px;font-weight:600;color:var(--fg);margin-bottom:2px;">Shimmer</div>
+              <div style="font-size:10px;color:var(--muted);font-family:monospace;">#0A0A0C → #1C1624 · radial</div>
+            </div>
           </div>
         </div>
         <div id="cp-sem" class="tab-panel">
@@ -930,7 +1007,7 @@
   </section>
 
   <!-- 06 · BUTTONS -->
-  <section class="section">
+  <section class="section" id="buttons">
     <div class="sec-row reveal">
       <span class="sec-count">06</span>
       <span class="sec-label">Components · Buttons</span>
@@ -977,7 +1054,7 @@
   </section>
 
   <!-- 07 · FORMS -->
-  <section class="section">
+  <section class="section" id="forms">
     <div class="sec-row reveal">
       <span class="sec-count">07</span>
       <span class="sec-label">Components · Forms</span>
@@ -1058,7 +1135,7 @@
   </section>
 
   <!-- 08 · SELECTION FIELDS -->
-  <section class="section">
+  <section class="section" id="selection">
     <div class="sec-row reveal">
       <span class="sec-count">08</span>
       <span class="sec-label">Components · Selection fields</span>
@@ -1112,7 +1189,7 @@
   </section>
 
   <!-- 09 · SIDEBAR NAV -->
-  <section class="section">
+  <section class="section" id="navigation">
     <div class="sec-row reveal">
       <span class="sec-count">09</span>
       <span class="sec-label">Components · Navigation</span>
@@ -1128,38 +1205,16 @@
         </div>
       </div>
       <div class="col-demo reveal rd1">
-        <div class="sidebar-demo-shell">
-          <div class="rz-sidebar" id="rzSidebar">
-            <div class="sb-top">
-              <div class="sb-avatar"></div>
-              <span class="sb-user">Alexander A.</span>
-              <button class="sb-collapse" id="sbToggle">‹</button>
-            </div>
-            <nav class="sb-nav">
-              <div class="sb-item active"><span class="ico"></span><span class="sb-item-text">Create</span></div>
-              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Library</span></div>
-              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Analytics</span></div>
-              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Settings</span></div>
-            </nav>
-            <div class="sb-bottom">
-              <div class="sb-item"><span class="ico"></span><span class="sb-item-text">Log out</span></div>
-            </div>
-          </div>
-          <div class="sb-content">
-            <div class="sb-content-title" id="sbContentTitle">Create</div>
-            <div class="sb-content-body">Click sidebar items to navigate. Use ‹ to collapse to icon-only mode.</div>
-            <div style="margin-top:16px;display:flex;gap:8px;">
-              <button class="rz-btn rz-btn-primary rz-btn-sm">New video</button>
-              <button class="rz-btn rz-btn-ghost rz-btn-sm">Import</button>
-            </div>
-          </div>
+        <div class="demo-card">
+          <div class="demo-card-label"><span>Sidebar Navigation</span></div>
+          <img src="../Assets/rizzle-nav.png" alt="Rizzle sidebar navigation component" loading="lazy" decoding="async" style="width:100%;display:block;border-radius:0 0 14px 14px;" />
         </div>
       </div>
     </div>
   </section>
 
   <!-- 10 · FEEDBACK -->
-  <section class="section">
+  <section class="section" id="feedback">
     <div class="sec-row reveal">
       <span class="sec-count">10</span>
       <span class="sec-label">Components · Feedback</span>
@@ -1197,7 +1252,7 @@
   </section>
 
   <!-- 11 · LEARNINGS -->
-  <section class="section">
+  <section class="section" id="learnings">
     <div class="sec-row reveal">
       <span class="sec-count">11</span>
       <span class="sec-label">What I took away</span>
@@ -1456,20 +1511,7 @@
     });
     document.addEventListener('click', () => document.querySelectorAll('.rz-dropdown.open').forEach(d => d.classList.remove('open')));
 
-    /* sidebar */
-    document.getElementById('sbToggle').addEventListener('click', () => {
-      const sb = document.getElementById('rzSidebar');
-      const c = sb.classList.toggle('collapsed');
-      document.getElementById('sbToggle').textContent = c ? '›' : '‹';
-    });
-    document.querySelectorAll('.sb-nav .sb-item, .sb-bottom .sb-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const label = item.querySelector('.sb-item-text')?.textContent;
-        if (label) document.getElementById('sbContentTitle').textContent = label;
-      });
-    });
+    /* sidebar — removed (replaced by PNG) */
 
     /* modals */
     document.getElementById('openInfo').addEventListener('click', () => document.getElementById('modalInfo').classList.add('open'));
@@ -1538,6 +1580,324 @@
         cpTimer = setTimeout(() => cpToast.classList.remove('show'), 1800);
       });
     });
+  </script>
+
+  <!-- FLOATING INDEX -->
+  <nav class="ds-index" id="dsIndex" aria-label="Design system sections">
+    <div class="ds-index-label">Contents</div>
+    <ul class="ds-index-list">
+      <li><a href="#problem"    class="ds-index-link" data-target="problem">   <span class="ds-index-num">01</span><span class="ds-index-link-label">The problem</span></a></li>
+      <li><a href="#grid"       class="ds-index-link" data-target="grid">      <span class="ds-index-num">02</span><span class="ds-index-link-label">Grid</span></a></li>
+      <li><a href="#tokens"     class="ds-index-link" data-target="tokens">    <span class="ds-index-num">03</span><span class="ds-index-link-label">Tokens</span></a></li>
+      <li><a href="#typography" class="ds-index-link" data-target="typography"><span class="ds-index-num">04</span><span class="ds-index-link-label">Typography</span></a></li>
+      <li><a href="#color"      class="ds-index-link" data-target="color">     <span class="ds-index-num">05</span><span class="ds-index-link-label">Color</span></a></li>
+      <li><a href="#buttons"    class="ds-index-link" data-target="buttons">   <span class="ds-index-num">06</span><span class="ds-index-link-label">Buttons</span></a></li>
+      <li><a href="#forms"      class="ds-index-link" data-target="forms">     <span class="ds-index-num">07</span><span class="ds-index-link-label">Forms</span></a></li>
+      <li><a href="#selection"  class="ds-index-link" data-target="selection"> <span class="ds-index-num">08</span><span class="ds-index-link-label">Selection</span></a></li>
+      <li><a href="#navigation" class="ds-index-link" data-target="navigation"><span class="ds-index-num">09</span><span class="ds-index-link-label">Navigation</span></a></li>
+      <li><a href="#feedback"   class="ds-index-link" data-target="feedback">  <span class="ds-index-num">10</span><span class="ds-index-link-label">Feedback</span></a></li>
+      <li><a href="#learnings"  class="ds-index-link" data-target="learnings"> <span class="ds-index-num">11</span><span class="ds-index-link-label">Learnings</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- MOBILE CONTENTS PILL -->
+  <button class="ds-pill" id="dsPill" aria-label="Open contents" aria-expanded="false">
+    <span class="ds-pill-icon">≡</span>
+    <span class="ds-pill-text">Contents</span>
+  </button>
+
+  <!-- MOBILE BOTTOM SHEET -->
+  <div class="ds-sheet-overlay" id="dsOverlay"></div>
+  <div class="ds-sheet" id="dsSheet" aria-hidden="true">
+    <div class="ds-sheet-handle"></div>
+    <div class="ds-sheet-header">Design System</div>
+    <ul class="ds-sheet-list">
+      <li><a href="#problem"    class="ds-sheet-link" data-target="problem">   <span class="ds-index-num">01</span> The problem</a></li>
+      <li><a href="#grid"       class="ds-sheet-link" data-target="grid">      <span class="ds-index-num">02</span> Grid</a></li>
+      <li><a href="#tokens"     class="ds-sheet-link" data-target="tokens">    <span class="ds-index-num">03</span> Tokens</a></li>
+      <li><a href="#typography" class="ds-sheet-link" data-target="typography"><span class="ds-index-num">04</span> Typography</a></li>
+      <li><a href="#color"      class="ds-sheet-link" data-target="color">     <span class="ds-index-num">05</span> Color</a></li>
+      <li><a href="#buttons"    class="ds-sheet-link" data-target="buttons">   <span class="ds-index-num">06</span> Buttons</a></li>
+      <li><a href="#forms"      class="ds-sheet-link" data-target="forms">     <span class="ds-index-num">07</span> Forms</a></li>
+      <li><a href="#selection"  class="ds-sheet-link" data-target="selection"> <span class="ds-index-num">08</span> Selection</a></li>
+      <li><a href="#navigation" class="ds-sheet-link" data-target="navigation"><span class="ds-index-num">09</span> Navigation</a></li>
+      <li><a href="#feedback"   class="ds-sheet-link" data-target="feedback">  <span class="ds-index-num">10</span> Feedback</a></li>
+      <li><a href="#learnings"  class="ds-sheet-link" data-target="learnings"> <span class="ds-index-num">11</span> Learnings</a></li>
+    </ul>
+  </div>
+
+  <style>
+    /* ── FLOATING INDEX — numbers strip (desktop ≥1280px) ── */
+    /* Sits entirely within the 52px left gutter, zero layout impact */
+    .ds-index {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 16px;
+      right: auto;
+      width: 28px;
+      transform: translateY(-50%);
+      z-index: 400;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      background: none;
+      border: none;
+      justify-content: flex-start;
+    }
+    @media (min-width: 1280px) {
+      .ds-index { display: flex; }
+      /* 16px left + 28px strip + 48px gap = 92px */
+      .hero,
+      .section,
+      .next-section,
+      .cta-banner,
+      footer { padding-left: 92px; }
+      .breadcrumb { left: 92px; }
+    }
+    .ds-index-label { display: none; }
+    .ds-index-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ds-index-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.18s var(--ease);
+    }
+    .ds-index-link:hover {
+      background: color-mix(in srgb, var(--fg) 6%, transparent);
+    }
+    .ds-index-link.is-active {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+    /* Number dot */
+    .ds-index-num {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.18s var(--ease);
+      line-height: 1;
+    }
+    .ds-index-link.is-active .ds-index-num {
+      color: var(--accent);
+    }
+    /* Label tooltip on hover */
+    .ds-index-link-label {
+      display: none;
+    }
+    @media (min-width: 1280px) {
+      .ds-index-link-label {
+        display: block;
+        position: absolute;
+        left: calc(100% + 10px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--fg);
+        color: var(--bg);
+        font-family: var(--sans);
+        font-size: 11px;
+        font-weight: 500;
+        padding: 5px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s var(--ease), transform 0.15s var(--ease);
+        transform: translateY(-50%) translateX(-4px);
+      }
+      .ds-index-link:hover .ds-index-link-label {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    /* ── MOBILE PILL ── */
+    .ds-pill {
+      display: none;
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
+    }
+    .ds-pill:active {
+      transform: translateX(-50%) scale(0.96);
+    }
+    @media (max-width: 1479px) {
+      .ds-pill { display: flex; }
+    }
+    .ds-pill-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* ── MOBILE BOTTOM SHEET ── */
+    .ds-sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 600;
+      opacity: 0;
+      transition: opacity 0.25s var(--ease);
+    }
+    .ds-sheet-overlay.is-open {
+      opacity: 1;
+    }
+    .ds-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 700;
+      background: var(--bg);
+      border-radius: 20px 20px 0 0;
+      padding: 12px 24px 40px;
+      transform: translateY(100%);
+      transition: transform 0.35s var(--ease);
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+    .ds-sheet.is-open {
+      transform: translateY(0);
+    }
+    .ds-sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border-strong);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .ds-sheet-header {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .ds-sheet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .ds-sheet-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--fg);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .ds-sheet-list li:last-child .ds-sheet-link {
+      border-bottom: none;
+    }
+    .ds-sheet-link .ds-index-num {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 22px;
+      opacity: 1;
+    }
+    .ds-sheet-link:active {
+      color: var(--accent);
+    }
+  </style>
+
+  <script>
+
+    /* ── FLOATING INDEX SCROLL SPY ── */
+    (function() {
+      const links = document.querySelectorAll('.ds-index-link');
+      const sections = Array.from(links).map(l => document.getElementById(l.dataset.target)).filter(Boolean);
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            links.forEach(l => l.classList.toggle('is-active', l.dataset.target === id));
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+      sections.forEach(s => observer.observe(s));
+
+      /* Smooth scroll for index links */
+      links.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.getElementById(link.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      /* ── MOBILE SHEET ── */
+      const pill = document.getElementById('dsPill');
+      const overlay = document.getElementById('dsOverlay');
+      const sheet = document.getElementById('dsSheet');
+
+      function openSheet() {
+        overlay.style.display = 'block';
+        requestAnimationFrame(() => {
+          overlay.classList.add('is-open');
+          sheet.classList.add('is-open');
+        });
+        pill.setAttribute('aria-expanded', 'true');
+        sheet.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeSheet() {
+        overlay.classList.remove('is-open');
+        sheet.classList.remove('is-open');
+        pill.setAttribute('aria-expanded', 'false');
+        sheet.setAttribute('aria-hidden', 'true');
+        setTimeout(() => { overlay.style.display = 'none'; }, 350);
+      }
+
+      pill.addEventListener('click', openSheet);
+      overlay.addEventListener('click', closeSheet);
+
+      document.querySelectorAll('.ds-sheet-link').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.getElementById(link.dataset.target);
+          closeSheet();
+          setTimeout(() => {
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200);
+        });
+      });
+    })();
   </script>
 </body>
 </html>
