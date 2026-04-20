@@ -766,7 +766,7 @@
     .st-comp-note { font-size: 11px; line-height: 1.6; color: var(--muted); }
     @media (max-width: 600px) { .st-comp-row { grid-template-columns: 1fr; gap: 12px; } }
     /* Buttons */
-    .st-btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 600; font-family: var(--sans); cursor: pointer; transition: background .2s, color .2s, border-color .2s, box-shadow .2s, opacity .2s; }
+    .st-btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 100px; font-size: 12px; font-weight: 600; font-family: var(--sans); cursor: pointer; transition: background .2s, color .2s, border-color .2s, box-shadow .2s, opacity .2s; }
     .st-btn-primary { background: #4358F4; color: #fff; border: none; }
     .st-btn-primary:hover { filter: brightness(1.1); box-shadow: 0 4px 14px rgba(67,88,244,.4); }
     .st-btn-ghost { background: transparent; color: #7A90F8; border: 1.5px solid #4358F4; }
@@ -821,72 +821,41 @@
     }
 
     .cs-screens-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px; margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 64px; margin-top: 64px;
     }
 
     .cs-screen-item {
       position: relative;
     }
     .cs-screen-item.wide {
-      grid-column: span 2;
+      /* no special treatment needed in single column */
     }
 
     .cs-mockup-frame {
-      background: #1A1A1A;
-      border-radius: 16px; padding: 10px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.22);
-      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+      transition: transform 0.45s var(--ease);
     }
     .cs-mockup-frame:hover {
-      transform: translateY(-8px) rotate(-0.5deg);
-      box-shadow: 0 48px 100px rgba(0,0,0,0.28);
+      transform: translateY(-6px);
     }
-
-    .cs-mockup-bar {
-      display: flex; align-items: center; gap: 5px;
-      padding: 8px 10px; margin-bottom: 4px;
-    }
-    .cs-mockup-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
-    .cs-mockup-dot:nth-child(1) { background: #FF5F57; }
-    .cs-mockup-dot:nth-child(2) { background: #FEBC2E; }
-    .cs-mockup-dot:nth-child(3) { background: #28C840; }
-
+    .cs-mockup-bar { display: none; }
     .cs-mockup-screen {
-      border-radius: 8px; overflow: hidden;
-      background: #F5F5F5;
-      min-height: 320px;
-      display: flex; align-items: center; justify-content: center;
+      background: transparent;
     }
     .cs-mockup-screen img {
-      width: 100%; display: block; border-radius: 8px;
-    }
-
-    /* Image placeholder within mockup */
-    .cs-mockup-placeholder {
-      width: 100%; min-height: 320px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 10px; color: rgba(42,37,53,0.3);
-      background: linear-gradient(135deg, #f0eee8 0%, #e8e5de 100%);
-      border-radius: 8px;
-    }
-    .cs-mockup-placeholder-icon { font-size: 24px; opacity: 0.5; }
-    .cs-mockup-placeholder-label {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--muted);
+      width: 100%; display: block;
     }
 
     .cs-screen-label {
       margin-top: 18px;
       font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
       text-transform: uppercase; color: var(--muted);
+      text-align: center;
     }
     .cs-screen-desc {
       margin-top: 4px; font-size: 13px; color: var(--fg); opacity: 0.7;
+      text-align: center;
     }
 
     /* ─────────────────────────────────────────
@@ -1092,8 +1061,7 @@
       .cs-phase-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 6px; padding-bottom: 4px; }
       .cs-phase-tab { flex-shrink: 0; padding: 10px 16px; font-size: 10px; }
       .cs-phase-heading { display: none; }
-      .cs-screens-grid { grid-template-columns: 1fr; }
-      .cs-screen-item.wide { grid-column: span 1; }
+      .cs-screens-grid { gap: 40px; }
       .cs-results-grid { grid-template-columns: 1fr; gap: 0; margin-top: 40px; }
       .cs-result-item { padding: 28px 0; }
       .cs-style-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1298,7 +1266,13 @@
     .cs-challenges { padding: 100px 52px; }
     .cs-challenges-header { margin-bottom: 64px; }
     .cs-challenges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .cs-challenge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+    .cs-challenge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; overflow: hidden; }
+    .cs-challenge-img { width: calc(100% + 80px); margin: -40px -40px 28px; display: block; border-radius: 0; }
+    .cs-process-screenshot { padding: 0 52px 80px; }
+    .cs-process-screenshot img { width: 100%; display: block; border-radius: 12px; filter: drop-shadow(0 24px 56px rgba(0,0,0,0.14)); }
+    .cs-screenshot-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .cs-screenshot-label::before { content: ''; width: 20px; height: 1px; background: var(--muted); display: block; }
+    @media (max-width: 600px) { .cs-process-screenshot { padding: 0 0 48px; } .cs-process-screenshot img { border-radius: 0; } }
     .cs-challenge-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
     .cs-challenge-title { font-family: var(--serif); font-size: clamp(18px, 2vw, 26px); font-weight: 400; letter-spacing: -0.02em; color: var(--fg); margin-bottom: 16px; }
     .cs-challenge-body { font-size: 14px; line-height: 1.8; color: var(--muted); }
@@ -1354,6 +1328,7 @@
       .cs-challenges { padding: 52px 20px; }
       .cs-learnings { padding: 52px 20px; }
       .cs-finale { padding: 52px 20px; }
+      .cs-screen-item img { max-width: 100%; border-radius: 0; }
     }
 
     /* ── 5-col phase overview grid ── */
@@ -1484,6 +1459,114 @@
       .cs-hero::after { width: 200px; height: 200px; }
       .cs-results::before { width: 250px; height: 250px; }
     }
+
+    /* ─── Final screens laptop presentation ─── */
+    .cs-screen-item img {
+      max-width: 82%;
+      margin: 0 auto;
+      display: block;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.18));
+    }
+
+    /* ─── Wireframes v2 — CXFacts blue palette ─── */
+    /* Fixed palette: always light, intentionally document-like */
+    --wf-bg: #F4F3EE; --wf-surface: #ECEAE3; --wf-border: #CECBC1;
+    --wf-line: #D4D0C6; --wf-fill: #E2DFD7; --wf-dark: #1B1D3F;
+    --wf-blue: #4358F4; --wf-muted: #9A978E;
+    /* ─── Wireframes v2 ─── */
+    .wf2-outer { max-width: 780px; }
+    .wf2-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .wf2-span2 { grid-column: span 2; }
+    .wf2-cap { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+    .wf2-cap::before { content: ''; width: 12px; height: 1px; background: var(--muted); display: block; }
+    .wf2-frame { border: 1px solid #CECBC1; border-radius: 8px; overflow: hidden; background: #F4F3EE; display: flex; flex-direction: column; }
+    .wf2-frame--login { height: 240px; background: #1B1D3F; justify-content: center; align-items: center; }
+    .wf2-frame--app { height: 240px; }
+    .wf2-frame--sub { height: 200px; }
+    .wf2-appbar { height: 28px; background: #ECEAE3; border-bottom: 1px solid #CECBC1; display: flex; align-items: center; padding: 0 9px; gap: 6px; flex-shrink: 0; }
+    .wf2-appbar-mark { width: 14px; height: 14px; border-radius: 3px; background: #4358F4; opacity: 0.5; flex-shrink: 0; }
+    .wf2-appbar-name { height: 6px; width: 52px; background: #D4D0C6; border-radius: 2px; }
+    .wf2-appbar-right { margin-left: auto; display: flex; align-items: center; gap: 5px; }
+    .wf2-appbar-btn { height: 18px; border-radius: 3px; background: #4358F4; display: flex; align-items: center; padding: 0 6px; }
+    .wf2-appbar-btn-lbl { height: 5px; width: 22px; background: rgba(255,255,255,0.75); border-radius: 1px; }
+    .wf2-avatar { width: 18px; height: 18px; border-radius: 50%; background: #D4D0C6; flex-shrink: 0; }
+    .wf2-filters { display: flex; gap: 4px; padding: 5px 8px; background: #ECEAE3; border-bottom: 1px solid #CECBC1; align-items: center; flex-shrink: 0; }
+    .wf2-dd { height: 18px; flex: 1; border: 1px solid #CECBC1; border-radius: 3px; background: #fff; display: flex; align-items: center; padding: 0 4px; gap: 3px; min-width: 0; }
+    .wf2-dd-text { flex: 1; height: 4px; background: #D4D0C6; border-radius: 1px; }
+    .wf2-dd-arrow { width: 4px; height: 4px; background: #C4C1B6; flex-shrink: 0; }
+    .wf2-dd.active { border-color: #4358F4; }
+    .wf2-dd.active .wf2-dd-text { background: rgba(67,88,244,0.4); }
+    .wf2-apply { height: 18px; padding: 0 7px; border-radius: 3px; background: #4358F4; flex-shrink: 0; display: flex; align-items: center; }
+    .wf2-apply-lbl { height: 4px; width: 18px; background: rgba(255,255,255,0.8); border-radius: 1px; }
+    .wf2-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .wf2-nav { width: 36px; min-width: 36px; background: #ECEAE3; border-right: 1px solid #CECBC1; padding: 7px 5px; display: flex; flex-direction: column; gap: 4px; align-items: center; flex-shrink: 0; }
+    .wf2-nav-logo { width: 18px; height: 18px; border-radius: 3px; background: #4358F4; opacity: 0.22; margin-bottom: 7px; flex-shrink: 0; }
+    .wf2-nav-icon { width: 14px; height: 14px; border-radius: 2px; background: #D4D0C6; flex-shrink: 0; }
+    .wf2-nav-icon.active { background: rgba(67,88,244,0.55); }
+    .wf2-main { flex: 1; padding: 7px; overflow: hidden; display: flex; flex-direction: column; gap: 5px; }
+    .wf2-card { background: #fff; border: 1px solid #D8D5CC; border-radius: 5px; padding: 6px; }
+    .wf2-line { height: 6px; background: #D4D0C6; border-radius: 1px; display: block; }
+    .wf2-line-sm { height: 4px; background: #DEDAD1; border-radius: 1px; display: block; }
+    .wf2-zlbl { height: 4px; background: #C4C1B6; border-radius: 1px; width: 42%; margin-bottom: 5px; display: block; }
+    .wf2-gauge { width: 38px; height: 38px; border-radius: 50%; border: 5px solid #E2DFD7; border-top-color: #4358F4; border-right-color: #4358F4; background: #fff; flex-shrink: 0; }
+    .wf2-btn-blue { height: 16px; border-radius: 3px; background: #4358F4; display: block; }
+    .wf2-btn-ghost { height: 16px; border-radius: 3px; border: 1px solid #CECBC1; background: transparent; display: block; }
+    .wf2-stars { display: flex; gap: 2px; }
+    .wf2-star { width: 7px; height: 7px; border: 1px solid #D4D0C6; border-radius: 1px; background: #F4F3EE; flex-shrink: 0; }
+    .wf2-badge-blue { height: 13px; border-radius: 3px; background: rgba(67,88,244,0.1); border: 1px solid rgba(67,88,244,0.25); display: inline-flex; align-items: center; padding: 0 4px; flex-shrink: 0; }
+    .wf2-badge-blue-text { height: 4px; background: rgba(67,88,244,0.45); border-radius: 1px; width: 44px; }
+    .wf2-pie { border-radius: 50%; flex-shrink: 0; background: conic-gradient(rgba(67,88,244,0.65) 0% 47%, rgba(67,88,244,0.35) 47% 59%, rgba(67,88,244,0.2) 59% 72%, #E2DFD7 72% 100%); }
+    .wf2-bartrack { height: 5px; background: #E2DFD7; border-radius: 2px; overflow: hidden; flex: 1; }
+    .wf2-barfill { height: 100%; border-radius: 2px; background: rgba(67,88,244,0.45); }
+    .wf2-session { flex: 1; border: 1px solid #D8D5CC; border-radius: 4px; padding: 5px; background: #FAFAF8; }
+    .wf2-chart-area { flex: 1; border: 1px solid #D8D5CC; border-radius: 4px; padding: 5px; background: #FAFAF8; overflow: hidden; }
+    @media(max-width:600px){ .wf2-outer { max-width: 100%; } .wf2-grid { grid-template-columns: 1fr; } .wf2-span2 { grid-column: span 1; } }
+
+    /* ─── Cardsort Matrix ─── */
+    .cx-cardsort-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+    .cx-cardsort { width: 100%; border-collapse: collapse; font-family: var(--sans); }
+    .cx-cardsort th { padding: 10px 12px; background: var(--surface); color: var(--muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 9px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: center; white-space: nowrap; }
+    .cx-cardsort th:first-child { text-align: left; min-width: 160px; border-radius: 12px 0 0 0; }
+    .cx-cardsort th:last-child { border-right: none; }
+    .cx-cardsort tr:last-child td { border-bottom: none; }
+    .cx-cardsort td { padding: 8px 12px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--fg); }
+    .cx-cardsort td:first-child { text-align: left; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .cx-cardsort td:last-child { border-right: none; }
+    .cx-cardsort tr:nth-child(even) td { background: color-mix(in srgb, var(--fg) 2%, transparent); }
+    .cx-val { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+
+    /* ─── Sitemap ─── */
+    .cx-sitemap { overflow-x: auto; padding: 32px 0 20px; }
+    .cx-tree { display: flex; flex-direction: column; align-items: center; }
+    .cx-tree-root { display: flex; flex-direction: column; align-items: center; }
+    .cx-tree-node { padding: 6px 14px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-size: 11px; font-weight: 600; color: var(--fg); font-family: var(--sans); white-space: nowrap; text-align: center; }
+    .cx-tree-node.root { background: var(--accent); color: #fff; border-color: var(--accent); font-size: 12px; }
+    .cx-tree-node.branch { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); color: var(--fg); }
+    .cx-vline { width: 1px; height: 24px; background: var(--border-strong); margin: 0 auto; }
+    .cx-hbar { display: flex; align-items: flex-start; gap: 0; position: relative; }
+    .cx-hbar::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 24px; background: var(--border-strong); }
+    .cx-branch { display: flex; flex-direction: column; align-items: center; padding: 0 8px; position: relative; }
+    .cx-branch-top { width: 1px; height: 24px; background: var(--border-strong); }
+    .cx-connector { position: relative; width: 100%; display: flex; justify-content: center; }
+    .cx-connector::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border-strong); }
+    .cx-branch-children { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 6px; }
+    .cx-leaf { padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); font-size: 10px; color: var(--muted); font-family: var(--sans); white-space: nowrap; }
+
+    /* ─── Taskflow ─── */
+    .cx-flow { overflow-x: auto; padding: 8px 0 16px; }
+    .cx-flow-lanes { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .cx-lane { display: flex; align-items: stretch; min-height: 80px; }
+    .cx-lane + .cx-lane { border-top: 1px solid var(--border); }
+    .cx-lane-label { width: 120px; min-width: 120px; background: var(--surface); border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; padding: 12px; flex-shrink: 0; }
+    .cx-lane-label span { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-family: var(--sans); writing-mode: initial; text-align: center; line-height: 1.4; }
+    .cx-lane-steps { display: flex; align-items: center; gap: 0; padding: 16px 20px; flex-wrap: nowrap; overflow-x: auto; flex: 1; }
+    .cx-step { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-size: 10px; font-weight: 500; color: var(--fg); font-family: var(--sans); white-space: nowrap; text-align: center; flex-shrink: 0; }
+    .cx-step.start { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); color: var(--accent); font-weight: 700; border-radius: 20px; }
+    .cx-step.key { background: var(--surface); border-color: var(--border-strong); font-weight: 600; }
+    .cx-step.end { background: color-mix(in srgb, var(--accent) 8%, var(--bg)); border-radius: 20px; font-size: 9px; color: var(--muted); }
+    .cx-arrow { width: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; }
+    .cx-skip { font-size: 8px; color: var(--muted); text-align: center; position: relative; top: -8px; }
+
     </style>
 </head>
 <body>
@@ -1546,7 +1629,7 @@
       CXFacts
     </h1>
     <p class="cs-hero-sub">
-      CXFacts connects banks and their business partners, surfacing performance data that used to live in exports and emails. I redesigned the platform from the ground up over three months. Then spent 30 more days shipping the one feature that brought two Nordic banks in the door.
+      Relationship managers were spending two days every week exporting CSVs into Excel for meetings they could've skipped. I redesigned the platform that fixed that. Then spent 30 more days shipping the one feature that brought two Nordic banks in the door.
     </p>
     <div class="cs-hero-scroll">
       <span>
@@ -1837,10 +1920,43 @@
       <p>"Fintech interfaces often punish new users. If you need training to find your dashboard, the product has already failed. The 85% agreement told us we'd built navigation that felt like recognition not something that needed to be learned."</p>
     </div>
 
-    <div class="cs-diagram-placeholder tall reveal reveal-d1">
-      <div class="cs-diagram-placeholder-icon">📊</div>
-      <div class="cs-diagram-placeholder-title">Popular Placements Matrix</div>
-      <div class="cs-diagram-placeholder-sub">Card sorting results add your matrix chart image here</div>
+    <div class="cx-cardsort-wrap reveal reveal-d1" style="margin-top:8px;">
+      <table class="cx-cardsort">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Dashboard</th>
+            <th>Feedbacks</th>
+            <th>Custom Reports</th>
+            <th>Market Report</th>
+            <th>Team</th>
+            <th>Business Account</th>
+            <th>Your Account</th>
+            <th>Unsorted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Products Score</td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Banks Score</td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Customer Score</td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Add Banks</td><td><span class="cx-val">50%</span></td><td></td><td></td><td></td><td><span class="cx-val">50%</span></td><td></td><td></td><td></td></tr>
+          <tr><td>Add Product Areas</td><td><span class="cx-val">25%</span></td><td></td><td></td><td></td><td><span class="cx-val">75%</span></td><td></td><td></td><td></td></tr>
+          <tr><td>Demographics</td><td><span class="cx-val">50%</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="cx-val">50%</span></td></tr>
+          <tr><td>Ideas</td><td><span class="cx-val">25%</span></td><td><span class="cx-val">75%</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Feedback Sessions</td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Requests</td><td><span class="cx-val">25%</span></td><td><span class="cx-val">75%</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Team Member List</td><td></td><td></td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td></tr>
+          <tr><td>Add Team Members</td><td></td><td></td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td></tr>
+          <tr><td>Tailored Report</td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Global Report</td><td></td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Colour Aid</td><td></td><td></td><td></td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td></tr>
+          <tr><td>Sharing Policy</td><td></td><td></td><td></td><td></td><td><span class="cx-val">75%</span></td><td><span class="cx-val">25%</span></td><td></td><td></td></tr>
+          <tr><td>Notifications</td><td><span class="cx-val">75%</span></td><td></td><td></td><td></td><td></td><td><span class="cx-val">25%</span></td><td></td><td></td></tr>
+          <tr><td>Market Information</td><td><span class="cx-val">100%</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Your Activity Monitor</td><td></td><td></td><td></td><td></td><td></td><td><span class="cx-val">100%</span></td><td></td><td></td></tr>
+          <tr><td>Your Overall Score</td><td><span class="cx-val">25%</span></td><td></td><td></td><td></td><td></td><td><span class="cx-val">75%</span></td><td></td><td></td></tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Site Map -->
@@ -1851,10 +1967,103 @@
       </p>
     </div>
 
-    <div class="cs-diagram-placeholder taller reveal reveal-d1">
-      <div class="cs-diagram-placeholder-icon">🗺️</div>
-      <div class="cs-diagram-placeholder-title">Site Map Information Architecture</div>
-      <div class="cs-diagram-placeholder-sub">Export your IA diagram from Lucid and add it here</div>
+    <div class="cx-sitemap reveal reveal-d1" style="border:1px solid var(--border);border-radius:12px;padding:32px 24px 24px;margin-top:8px;">
+      <!-- Root -->
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="cx-tree-node root">Company Registration</div>
+        <div class="cx-vline"></div>
+        <!-- Horizontal connector spanning all branches -->
+        <div style="display:flex;align-items:flex-start;position:relative;width:100%;">
+          <!-- top horizontal line -->
+          <div style="position:absolute;top:0;left:8%;right:8%;height:1px;background:var(--border-strong);"></div>
+          <!-- Branches -->
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding-top:0;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Homepage</div>
+            <div class="cx-vline"></div>
+            <div class="cx-leaf">CTA Screens</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Bank Dashboard</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="cx-leaf">Overview</div>
+              <div class="cx-leaf">Banks / Countries</div>
+              <div class="cx-leaf">Product Areas</div>
+            </div>
+          </div>
+          <div style="flex:1.4;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Feedback</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;align-items:flex-start;gap:8px;position:relative;width:100%;">
+              <div style="position:absolute;top:0;left:10%;right:10%;height:1px;background:var(--border-strong);"></div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+                <div class="cx-vline"></div>
+                <div class="cx-leaf" style="font-weight:600;color:var(--fg);">Sessions</div>
+                <div class="cx-vline" style="height:12px;"></div>
+                <div class="cx-leaf">Create Session</div>
+                <div style="height:4px;"></div>
+                <div class="cx-leaf">Reply Flow</div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+                <div class="cx-vline"></div>
+                <div class="cx-leaf" style="font-weight:600;color:var(--fg);">Requests</div>
+                <div class="cx-vline" style="height:12px;"></div>
+                <div class="cx-leaf">Create Request</div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+                <div class="cx-vline"></div>
+                <div class="cx-leaf" style="font-weight:600;color:var(--fg);">Ideas</div>
+                <div class="cx-vline" style="height:12px;"></div>
+                <div class="cx-leaf">Create Idea</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex:1.2;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Reports</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="cx-leaf">Custom Report</div>
+              <div class="cx-leaf">Market Report</div>
+              <div class="cx-leaf">Other Reports</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Teams</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="cx-leaf">View Colleagues</div>
+              <div class="cx-leaf">Invite Colleague</div>
+            </div>
+          </div>
+          <div style="flex:1.2;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">Business Settings</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="cx-leaf">Overview</div>
+              <div class="cx-leaf">User Management</div>
+              <div class="cx-leaf">Sharing Policy</div>
+              <div class="cx-leaf">GDPR &amp; Privacy</div>
+            </div>
+          </div>
+          <div style="flex:1.2;display:flex;flex-direction:column;align-items:center;">
+            <div class="cx-vline"></div>
+            <div class="cx-tree-node branch">User Settings</div>
+            <div class="cx-vline"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="cx-leaf">Notifications</div>
+              <div class="cx-leaf">Sharing Policy</div>
+              <div class="cx-leaf">GDPR Exports</div>
+              <div class="cx-leaf">Sign-in History</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Task Flow -->
@@ -1866,10 +2075,71 @@
       <p class="cs-content-text" style="margin-top: 12px; font-size: 12px; color: var(--muted);">'Lucid'</p>
     </div>
 
-    <div class="cs-diagram-placeholder taller reveal reveal-d1">
-      <div class="cs-diagram-placeholder-icon">🔀</div>
-      <div class="cs-diagram-placeholder-title">Task Flow Diagram</div>
-      <div class="cs-diagram-placeholder-sub">Export your Task Flow from Lucid and add it here</div>
+    <div class="cx-flow reveal reveal-d1" style="margin-top:8px;">
+      <div class="cx-flow-lanes">
+
+        <!-- New Bank User -->
+        <div class="cx-lane">
+          <div class="cx-lane-label"><span>New Bank User</span></div>
+          <div class="cx-lane-steps">
+            <div class="cx-step start">23. Registration</div>
+            <div class="cx-arrow">→</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+              <div class="cx-step key">24. Dashboard Walkthrough</div>
+              <div class="cx-skip">skip ↓</div>
+            </div>
+            <div class="cx-arrow">→</div>
+            <div class="cx-step key">25. Bank Dashboard</div>
+            <div class="cx-arrow">→</div>
+            <div class="cx-step">10. Feedback</div>
+            <div class="cx-arrow">→</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="cx-step end">31. Ideas</div>
+              <div class="cx-step end">32. Requests</div>
+              <div class="cx-step end">33. Feedback Session</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Existing Bank User -->
+        <div class="cx-lane">
+          <div class="cx-lane-label"><span>Existing Bank User</span></div>
+          <div class="cx-lane-steps">
+            <div class="cx-step start">6. Login</div>
+            <div class="cx-arrow">→</div>
+            <div class="cx-step">2-way Auth</div>
+            <div class="cx-arrow">→</div>
+            <div class="cx-step key">25. Bank Dashboard</div>
+            <div class="cx-arrow">→</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="cx-step end">29. Customers</div>
+              <div class="cx-step end">26. Reports</div>
+            </div>
+            <div class="cx-arrow">→</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="cx-step end">34. Bank Settings</div>
+              <div class="cx-step end">35. User Settings</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin -->
+        <div class="cx-lane">
+          <div class="cx-lane-label"><span>Admin Paths</span></div>
+          <div class="cx-lane-steps">
+            <div class="cx-step start">Login (Admin)</div>
+            <div class="cx-arrow">→</div>
+            <div class="cx-step key">25. Bank Dashboard</div>
+            <div class="cx-arrow">→</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="cx-step end">34. Customers (admin)</div>
+              <div class="cx-step end">35. Users (admin)</div>
+              <div class="cx-step end">36. Policies (admin)</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -1899,10 +2169,246 @@
       </p>
     </div>
 
-    <div class="cs-diagram-placeholder taller reveal reveal-d1">
-      <div class="cs-diagram-placeholder-icon">📐</div>
-      <div class="cs-diagram-placeholder-title">Lo-Fi Wireframes</div>
-      <div class="cs-diagram-placeholder-sub">Add your wireframe grid image from Figma here</div>
+    <div class="wf2-outer">
+    <div class="wf2-grid reveal reveal-d1">
+
+      <!-- ① LOGIN -->
+      <div>
+        <div class="wf2-frame wf2-frame--login">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;">
+            <div style="width:20px;height:20px;border-radius:4px;background:#4358F4;opacity:0.7;flex-shrink:0;"></div>
+            <div style="height:7px;width:52px;background:rgba(255,255,255,0.25);border-radius:2px;"></div>
+          </div>
+          <div style="width:176px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:16px;background:rgba(255,255,255,0.05);">
+            <div style="height:8px;width:55%;background:rgba(255,255,255,0.2);border-radius:2px;margin:0 auto 14px;"></div>
+            <div style="height:4px;width:25%;background:rgba(255,255,255,0.15);border-radius:1px;margin-bottom:5px;"></div>
+            <div style="height:24px;border:1px solid rgba(255,255,255,0.12);border-radius:4px;background:rgba(255,255,255,0.04);margin-bottom:10px;"></div>
+            <div style="height:4px;width:28%;background:rgba(255,255,255,0.15);border-radius:1px;margin-bottom:5px;"></div>
+            <div style="height:24px;border:1px solid rgba(255,255,255,0.12);border-radius:4px;background:rgba(255,255,255,0.04);margin-bottom:12px;"></div>
+            <div style="height:28px;background:#4358F4;border-radius:5px;"></div>
+          </div>
+        </div>
+        <div class="wf2-cap">Login</div>
+      </div>
+
+      <!-- ② DASHBOARD HOME -->
+      <div class="wf2-span2">
+        <div class="wf2-frame wf2-frame--app">
+          <div class="wf2-appbar">
+            <div class="wf2-appbar-mark"></div>
+            <div class="wf2-appbar-name"></div>
+            <div class="wf2-appbar-right">
+              <div class="wf2-appbar-btn"><div class="wf2-appbar-btn-lbl"></div></div>
+              <div class="wf2-avatar"></div>
+            </div>
+          </div>
+          <div class="wf2-filters">
+            <div class="wf2-dd"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+            <div class="wf2-dd"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+            <div class="wf2-dd"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+            <div class="wf2-apply"><div class="wf2-apply-lbl"></div></div>
+          </div>
+          <div class="wf2-body">
+            <div class="wf2-nav">
+              <div class="wf2-nav-logo"></div>
+              <div class="wf2-nav-icon active"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon"></div>
+            </div>
+            <div class="wf2-main">
+              <div style="display:flex;gap:6px;align-items:stretch;flex:1;">
+                <div class="wf2-card" style="width:84px;min-width:84px;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center;">
+                  <div class="wf2-gauge"></div>
+                  <div class="wf2-line-sm" style="width:60%;"></div>
+                  <div class="wf2-line-sm" style="width:44%;"></div>
+                </div>
+                <div class="wf2-card" style="flex:1;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                    <div class="wf2-zlbl" style="margin:0;"></div>
+                    <div class="wf2-badge-blue"><div class="wf2-badge-blue-text" style="width:10px;"></div></div>
+                  </div>
+                  <div style="display:flex;gap:4px;">
+                    <div class="wf2-session">
+                      <div class="wf2-line" style="width:85%;margin-bottom:4px;"></div>
+                      <div class="wf2-line-sm" style="width:60%;margin-bottom:8px;"></div>
+                      <div class="wf2-btn-blue" style="width:70%;"></div>
+                    </div>
+                    <div class="wf2-session">
+                      <div class="wf2-line" style="width:85%;margin-bottom:4px;"></div>
+                      <div class="wf2-line-sm" style="width:60%;margin-bottom:8px;"></div>
+                      <div class="wf2-btn-blue" style="width:70%;"></div>
+                    </div>
+                    <div class="wf2-session">
+                      <div class="wf2-line" style="width:85%;margin-bottom:4px;"></div>
+                      <div class="wf2-line-sm" style="width:60%;margin-bottom:8px;"></div>
+                      <div class="wf2-btn-ghost" style="width:70%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:5px;">
+                <div style="flex:1;border-left:3px solid rgba(67,88,244,0.4);padding:5px 7px;background:#F9F8F5;border-radius:0 4px 4px 0;">
+                  <div class="wf2-line" style="width:65%;margin-bottom:3px;"></div>
+                  <div class="wf2-line-sm" style="width:85%;"></div>
+                </div>
+                <div style="flex:1;border-left:3px solid rgba(67,88,244,0.4);padding:5px 7px;background:#F9F8F5;border-radius:0 4px 4px 0;">
+                  <div class="wf2-line" style="width:65%;margin-bottom:3px;"></div>
+                  <div class="wf2-line-sm" style="width:85%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wf2-cap">Dashboard Home</div>
+      </div>
+
+      <!-- ③ COUNTRY VIEW -->
+      <div>
+        <div class="wf2-frame wf2-frame--sub">
+          <div class="wf2-appbar">
+            <div class="wf2-appbar-mark"></div>
+            <div class="wf2-appbar-name"></div>
+            <div class="wf2-appbar-right"><div class="wf2-avatar"></div></div>
+          </div>
+          <div class="wf2-filters">
+            <div class="wf2-dd active" style="flex:none;width:56px;"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+            <div class="wf2-dd"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+            <div class="wf2-apply"><div class="wf2-apply-lbl"></div></div>
+          </div>
+          <div class="wf2-body">
+            <div class="wf2-nav">
+              <div class="wf2-nav-logo"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon active"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon"></div>
+            </div>
+            <div class="wf2-main">
+              <div class="wf2-chart-area" style="flex:1;">
+                <div class="wf2-zlbl"></div>
+                <svg width="100%" height="36" viewBox="0 0 140 36" preserveAspectRatio="none" style="display:block;">
+                  <polyline points="0,28 28,20 56,24 84,12 112,16 140,8" fill="none" stroke="rgba(67,88,244,0.55)" stroke-width="1.5"/>
+                  <polyline points="0,32 28,28 56,30 84,24 112,28 140,22" fill="none" stroke="rgba(67,88,244,0.22)" stroke-width="1.5" stroke-dasharray="3,2"/>
+                </svg>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <div class="wf2-card" style="flex:1;">
+                  <div class="wf2-zlbl"></div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="display:flex;align-items:center;gap:4px;"><div style="width:10px;height:10px;border-radius:50%;background:#E2DFD7;flex-shrink:0;"></div><div class="wf2-line" style="flex:1;"></div></div>
+                    <div style="display:flex;align-items:center;gap:4px;"><div style="width:10px;height:10px;border-radius:50%;background:#E2DFD7;flex-shrink:0;"></div><div class="wf2-line" style="flex:1;"></div></div>
+                  </div>
+                </div>
+                <div class="wf2-card" style="flex:1;">
+                  <div class="wf2-zlbl"></div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="display:flex;align-items:center;gap:4px;"><div class="wf2-line" style="flex:1;"></div></div>
+                    <div style="display:flex;align-items:center;gap:4px;"><div class="wf2-line" style="flex:1;"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wf2-cap">Country View</div>
+      </div>
+
+      <!-- ④ FEEDBACK SESSION -->
+      <div>
+        <div class="wf2-frame wf2-frame--sub">
+          <div class="wf2-appbar">
+            <div class="wf2-appbar-mark"></div>
+            <div class="wf2-appbar-name"></div>
+            <div class="wf2-appbar-right"><div class="wf2-avatar"></div></div>
+          </div>
+          <div class="wf2-body">
+            <div style="width:52px;min-width:52px;background:#ECEAE3;border-right:1px solid #CECBC1;padding:6px 5px;display:flex;flex-direction:column;gap:3px;flex-shrink:0;">
+              <div style="height:4px;width:70%;background:#D4D0C6;border-radius:1px;margin-bottom:6px;"></div>
+              <div style="height:18px;border-radius:3px;background:rgba(67,88,244,0.1);border:1px solid rgba(67,88,244,0.22);"></div>
+              <div style="height:18px;border-radius:3px;background:#E2DFD7;"></div>
+              <div style="height:18px;border-radius:3px;background:#E2DFD7;"></div>
+              <div style="flex:1;"></div>
+              <div style="height:18px;border-radius:3px;background:rgba(220,60,60,0.1);border:1px solid rgba(220,60,60,0.2);"></div>
+            </div>
+            <div class="wf2-main">
+              <div class="wf2-card">
+                <div class="wf2-line" style="width:90%;margin-bottom:3px;"></div>
+                <div class="wf2-line" style="width:65%;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0;border:1px solid #D8D5CC;border-radius:5px;overflow:hidden;background:#fff;flex:1;">
+                <div style="display:flex;align-items:center;gap:4px;padding:5px 6px;border-bottom:1px solid #E2DFD7;">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#E2DFD7;flex-shrink:0;"></div>
+                  <div class="wf2-line" style="width:30%;"></div>
+                  <div style="flex:1;"></div>
+                  <div class="wf2-stars"><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;padding:5px 6px;border-bottom:1px solid #E2DFD7;">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#E2DFD7;flex-shrink:0;"></div>
+                  <div class="wf2-line" style="width:36%;"></div>
+                  <div style="flex:1;"></div>
+                  <div class="wf2-stars"><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;padding:5px 6px;">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#E2DFD7;flex-shrink:0;"></div>
+                  <div class="wf2-line" style="width:28%;"></div>
+                  <div style="flex:1;"></div>
+                  <div class="wf2-stars"><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div><div class="wf2-star"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wf2-cap">Feedback Session</div>
+      </div>
+
+      <!-- ⑤ CUSTOM QUESTION ANALYSIS -->
+      <div>
+        <div class="wf2-frame wf2-frame--sub">
+          <div class="wf2-appbar">
+            <div class="wf2-appbar-mark"></div>
+            <div class="wf2-appbar-name"></div>
+            <div class="wf2-appbar-right"><div class="wf2-avatar"></div></div>
+          </div>
+          <div class="wf2-body">
+            <div class="wf2-nav">
+              <div class="wf2-nav-logo"></div>
+              <div class="wf2-nav-icon active"></div>
+              <div class="wf2-nav-icon"></div>
+              <div class="wf2-nav-icon"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+              <div class="wf2-filters">
+                <div class="wf2-badge-blue"><div class="wf2-badge-blue-text"></div></div>
+                <div class="wf2-dd"><div class="wf2-dd-text"></div><div class="wf2-dd-arrow"></div></div>
+                <div class="wf2-apply"><div class="wf2-apply-lbl"></div></div>
+              </div>
+              <div class="wf2-main">
+                <div class="wf2-card">
+                  <div class="wf2-line" style="width:88%;margin-bottom:3px;"></div>
+                  <div class="wf2-line" style="width:55%;"></div>
+                </div>
+                <div style="display:flex;gap:5px;flex:1;align-items:flex-start;">
+                  <div class="wf2-card" style="width:52px;min-width:52px;display:flex;flex-direction:column;align-items:center;gap:5px;padding-top:8px;">
+                    <div class="wf2-pie" style="width:34px;height:34px;"></div>
+                  </div>
+                  <div class="wf2-card" style="flex:1;">
+                    <div style="display:flex;flex-direction:column;gap:4px;">
+                      <div style="display:flex;align-items:center;gap:4px;"><div class="wf2-bartrack"><div class="wf2-barfill" style="width:48%;"></div></div><div class="wf2-line-sm" style="width:14px;flex-shrink:0;"></div></div>
+                      <div style="display:flex;align-items:center;gap:4px;"><div class="wf2-bartrack"><div class="wf2-barfill" style="width:28%;opacity:0.6;"></div></div><div class="wf2-line-sm" style="width:14px;flex-shrink:0;"></div></div>
+                      <div style="display:flex;align-items:center;gap:4px;"><div class="wf2-bartrack"><div class="wf2-barfill" style="width:14%;opacity:0.4;"></div></div><div class="wf2-line-sm" style="width:14px;flex-shrink:0;"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wf2-cap">Custom Question Analysis</div>
+      </div>
+
+    </div>
     </div>
 
     <!-- Design Language -->
@@ -2314,95 +2820,35 @@
 
       <!-- Login Screen -->
       <div class="cs-screen-item wide reveal">
-        <div class="cs-mockup-frame">
-          <div class="cs-mockup-bar">
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-          </div>
-          <div class="cs-mockup-screen">
-            <div class="cs-mockup-placeholder">
-              <div class="cs-mockup-placeholder-icon">🔐</div>
-              <div class="cs-mockup-placeholder-label">Login Screen CXFacts</div>
-            </div>
-          </div>
-        </div>
+        <img src="../Assets/ss4.png" alt="CXFacts login screen" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Login Screen</div>
-        <div class="cs-screen-desc">First impression the only screen where we could lose a user before they'd seen anything</div>
+        <div class="cs-screen-desc">First impression — the only screen where we could lose a user before they'd seen anything</div>
       </div>
 
       <!-- Dashboard -->
       <div class="cs-screen-item reveal">
-        <div class="cs-mockup-frame">
-          <div class="cs-mockup-bar">
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-          </div>
-          <div class="cs-mockup-screen">
-            <div class="cs-mockup-placeholder">
-              <div class="cs-mockup-placeholder-icon">📊</div>
-              <div class="cs-mockup-placeholder-label">Main Dashboard</div>
-            </div>
-          </div>
-        </div>
+        <img src="../Assets/ss2.png" alt="CXFacts main dashboard" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Dashboard</div>
         <div class="cs-screen-desc">Real-time overview with scores, sessions &amp; CTAs</div>
       </div>
 
       <!-- Country Screen -->
       <div class="cs-screen-item reveal reveal-d1">
-        <div class="cs-mockup-frame">
-          <div class="cs-mockup-bar">
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-          </div>
-          <div class="cs-mockup-screen">
-            <div class="cs-mockup-placeholder">
-              <div class="cs-mockup-placeholder-icon">🌍</div>
-              <div class="cs-mockup-placeholder-label">Country Screen</div>
-            </div>
-          </div>
-        </div>
+        <img src="../Assets/ss3.png" alt="CXFacts country drill-down screen" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Specific Country View</div>
         <div class="cs-screen-desc">Drill-down by geography with score trends</div>
       </div>
 
       <!-- Feedback -->
       <div class="cs-screen-item reveal">
-        <div class="cs-mockup-frame">
-          <div class="cs-mockup-bar">
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-          </div>
-          <div class="cs-mockup-screen">
-            <div class="cs-mockup-placeholder">
-              <div class="cs-mockup-placeholder-icon">💬</div>
-              <div class="cs-mockup-placeholder-label">Feedback Session</div>
-            </div>
-          </div>
-        </div>
+        <img src="../Assets/ss1.png" alt="CXFacts replying to feedback screen" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Replying to Feedback</div>
         <div class="cs-screen-desc">Structured rating across product areas &amp; banks</div>
       </div>
 
       <!-- Feedback Data Analysis -->
       <div class="cs-screen-item reveal reveal-d1">
-        <div class="cs-mockup-frame">
-          <div class="cs-mockup-bar">
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-            <div class="cs-mockup-dot"></div>
-          </div>
-          <div class="cs-mockup-screen">
-            <div class="cs-mockup-placeholder">
-              <div class="cs-mockup-placeholder-icon">📈</div>
-              <div class="cs-mockup-placeholder-label">Data Analysis</div>
-            </div>
-          </div>
-        </div>
+        <img src="../Assets/ss5.png" alt="CXFacts custom question data analysis" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Feedback Data Analysis</div>
         <div class="cs-screen-desc">Custom questions with respondent breakdown</div>
       </div>
@@ -2459,8 +2905,13 @@
   </section>
 
   <!-- ── Part Two label ── -->
-  <div style="padding: 0 52px 8px;">
+  <div style="padding: 0 52px 32px;">
     <span class="cs-part-label reveal">Part Two · The Feature</span>
+  </div>
+
+  <!-- ── Feature hero image ── -->
+  <div class="reveal" style="padding: 0 52px 80px;">
+    <img src="../Assets/customquestion.png" alt="CXFacts Custom Question feature — shipped screen" loading="lazy" decoding="async" style="width:100%;display:block;border-radius:16px;filter:drop-shadow(0 32px 64px rgba(0,0,0,0.2));" />
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -2564,6 +3015,10 @@
     </div>
     <div class="cs-ghost-num">01</div>
   </div>
+  <div class="cs-process-screenshot reveal">
+    <div class="cs-screenshot-label">What shipped</div>
+    <img src="../Assets/p1.png" alt="Discover phase — project brief and stakeholder alignment" loading="lazy" decoding="async" />
+  </div>
 
   <!-- Define -->
   <div class="cs-process-row flip" id="f-define">
@@ -2613,6 +3068,9 @@
       </div>
     </div>
     <div class="cs-ghost-num">02</div>
+  </div>
+  <div class="cs-process-screenshot reveal">
+    <img src="../Assets/p2.png" alt="Define phase — personas and user journey mapping" loading="lazy" decoding="async" />
   </div>
 
   <!-- Design -->
@@ -2665,6 +3123,9 @@
     </div>
     <div class="cs-ghost-num">03</div>
   </div>
+  <div class="cs-process-screenshot reveal">
+    <img src="../Assets/p3.png" alt="Design phase — wireframes and component design" loading="lazy" decoding="async" />
+  </div>
 
   <!-- Deliver -->
   <div class="cs-process-row flip" id="f-deliver">
@@ -2709,6 +3170,9 @@
     </div>
     <div class="cs-ghost-num">04</div>
   </div>
+  <div class="cs-process-screenshot reveal">
+    <img src="../Assets/p4.png" alt="Deliver phase — handoff and developer collaboration" loading="lazy" decoding="async" />
+  </div>
 
   <!-- ══════════════════════════════════════════
        CHALLENGES / ITERATIONS
@@ -2720,29 +3184,17 @@
     </div>
     <div class="cs-challenges-grid">
       <div class="cs-challenge-card reveal">
+        <img src="../Assets/imp1.png" alt="Iteration 01 — Previously Used Questions" loading="lazy" decoding="async" class="cs-challenge-img" />
         <div class="cs-challenge-eyebrow">Iteration 01</div>
         <h3 class="cs-challenge-title">Previously Used Questions</h3>
         <p class="cs-challenge-body">First round of wireframe testing surfaced something I hadn't designed for: users didn't want to rebuild the same question twice. "I asked this last quarter, why can't I just reuse it?" That became a side drawer, reachable right from the question creation screen. The kind of thing that feels obvious in hindsight.</p>
       </div>
       <div class="cs-challenge-card reveal reveal-d1">
+        <img src="../Assets/imp2.png" alt="Iteration 02 — Character Counter" loading="lazy" decoding="async" class="cs-challenge-img" />
         <div class="cs-challenge-eyebrow">Iteration 02</div>
         <h3 class="cs-challenge-title">Character Counter</h3>
         <p class="cs-challenge-body">Nobody writes a 400-character survey question. Except when they do. During testing, a user hammered the question field and the layout collapsed. We benchmarked limits across Google Forms and SurveyMonkey, landed on counts that covered real usage, then added a live counter. Not glamorous. Completely necessary.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       FEATURE FINALE
-  ══════════════════════════════════════════ -->
-  <section class="cs-finale" id="feature-result">
-    <div class="cs-finale-quote reveal reveal-d1">
-      "Delivered on day 30.<br>The founders asked when we could start the next sprint."
-    </div>
-    <div class="cs-finale-stats reveal reveal-d2">
-      <span class="cs-finale-stat">30 Days</span>
-      <span class="cs-finale-stat">2 Nordic Banks</span>
-      <span class="cs-finale-stat">In Development</span>
     </div>
   </section>
 
@@ -2768,6 +3220,22 @@
       </div>
     </div>
   </section>
+
+    <!-- ══════════════════════════════════════════
+       FEATURE FINALE
+  ══════════════════════════════════════════ -->
+  <section class="cs-finale" id="feature-result">
+    <div class="cs-finale-quote reveal reveal-d1">
+      "Delivered on day 30.<br>The founders asked when we could start the next sprint."
+    </div>
+    <div class="cs-finale-stats reveal reveal-d2">
+      <span class="cs-finale-stat">30 Days</span>
+      <span class="cs-finale-stat">2 Nordic Banks</span>
+      <span class="cs-finale-stat">In Development</span>
+    </div>
+  </section>
+
+
 
   <!-- ══════════════════════════════════════════
        NEXT PROJECT

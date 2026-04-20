@@ -85,7 +85,9 @@
 
     html {
       scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
+      /* Proximity (not mandatory) — lets trackpads and anchor scrolls feel natural while
+         still honoring section alignment points when the user coasts to a stop near one. */
+      scroll-snap-type: y proximity;
       scroll-padding-top: 80px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -505,13 +507,18 @@
       width: auto;
       max-width: 110px;
       object-fit: contain;
-      opacity: 0.5;
+      /* Ghosted by default so the hero stays dominant. Individual hover brings the logo to full clarity. */
+      opacity: 0.38;
+      transition: opacity 0.4s var(--ease);
     }
     .client-logo.dark  { display: none; }
     .client-logo.brand { display: none; }
     [data-theme="dark"] .client-logo.light { display: none; }
     [data-theme="dark"] .client-logo.dark  { display: inline-block; }
-    .client:hover .client-logo { opacity: 0.95; }
+    /* Group lift: hovering the marquee brings every logo up a touch, so the row reads as "alive"
+       while the pointed-at logo snaps to full opacity for a clean focal point. */
+    .client-marquee:hover .client-logo { opacity: 0.6; }
+    .client:hover .client-logo { opacity: 1; }
     .client:not(.no-brand):hover .client-logo.light,
     .client:not(.no-brand):hover .client-logo.dark  { display: none !important; }
     .client:not(.no-brand):hover .client-logo.brand { display: inline-block; }
@@ -2157,24 +2164,6 @@
     ::selection { background: rgba(155, 45, 122, 0.22); color: var(--fg); }
     [data-theme="dark"] ::selection { background: rgba(229, 105, 169, 0.26); }
 
-    *, *::before, *::after { cursor: none; }
-    input, textarea, select, [contenteditable] { cursor: text; }
-
-    .k-cursor {
-      position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 99999;
-      will-change: transform; opacity: 0;
-      transition: opacity 0.35s;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-left: -4px; margin-top: -4px;
-    }
-
-    @media (pointer: coarse) {
-      *, *::before, *::after { cursor: auto; }
-      .k-cursor { display: none; }
-    }
   </style>
 
   <script type="application/ld+json">
@@ -2912,7 +2901,6 @@
     </div>
   </div>
 
-  <div class="k-cursor" id="kCursor"></div>
 
   <!-- ── Mobile desktop notice ── -->
   <div class="m-backdrop" id="mBackdrop"></div>
@@ -3139,20 +3127,6 @@
       backdrop.addEventListener('click', dismiss);
     })();
 
-    /* ═══════════════════════════════════════════
-       BRAND CURSOR — Figma-style arrow
-    ═══════════════════════════════════════════ */
-    (function initBrandCursor() {
-      if (window.matchMedia('(pointer: coarse)').matches) return;
-      const cur = document.getElementById('kCursor');
-      if (!cur) return;
-
-      document.addEventListener('mousemove', e => {
-        cur.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-        if (cur.style.opacity !== '1') cur.style.opacity = '1';
-      });
-      document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; });
-    })();
 
     (function initThemeToggle() {
       const btn = document.getElementById('themeToggle');

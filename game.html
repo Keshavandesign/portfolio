@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keshav's Game</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -124,6 +125,104 @@
       .card { padding: 28px 20px; }
       .card-headline { font-size: 28px; }
     }
+    /* FTUX control hint — sticky bottom */
+    #ftux {
+      position: fixed;
+      left: 50%;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 18px;
+      background: #1F1E1B;
+      border: 1px solid rgba(240,235,227,0.12);
+      border-radius: 999px;
+      color: #F0EBE3;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+      opacity: 0.96;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    #ftux.dim { opacity: 0.35; }
+    #ftux .ftux-item { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    #ftux kbd {
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      min-width: 22px; height: 22px;
+      padding: 0 6px;
+      background: rgba(240,235,227,0.08);
+      border: 1px solid rgba(240,235,227,0.20);
+      border-radius: 5px;
+      color: #F0EBE3;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    #ftux .ftux-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(240,235,227,0.15);
+    }
+    @media (pointer: coarse) { #ftux { display: none; } }
+    @media (max-width: 560px) {
+      #ftux { font-size: 11px; gap: 10px; padding: 8px 12px; }
+      #ftux .ftux-sep { display: none; }
+    }
+    /* Close button — fixed top-right escape hatch back to portfolio */
+    #closeBtn {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 45;
+      width: 40px; height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1F1E1B;
+      border: 1px solid rgba(240,235,227,0.18);
+      border-radius: 999px;
+      color: #F0EBE3;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px; font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    #closeBtn:hover { background: #2A2925; transform: scale(1.05); }
+    #closeBtn:focus-visible { outline: 2px solid #E569A9; outline-offset: 2px; }
+    /* Story Mode narrator overlay — shows when the camera auto-pans through Keshav's career */
+    #storyBar {
+      position: fixed;
+      left: 50%;
+      top: max(64px, calc(env(safe-area-inset-top) + 64px));
+      transform: translateX(-50%);
+      z-index: 30;
+      padding: 8px 18px;
+      background: rgba(31,30,27,0.94);
+      border: 1px solid rgba(229,105,169,0.45);
+      border-radius: 999px;
+      color: #F0EBE3;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+      pointer-events: none;
+      display: none;
+    }
+    #storyBar.visible { display: inline-flex; }
+    #storyBar .story-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: #E569A9; margin-right: 10px;
+      animation: storyPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes storyPulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
   </style>
 </head>
 <body>
@@ -140,6 +239,25 @@
       <a class="card-cta" id="cardCta" href="">Claim your free audit →</a>
       <button class="card-secondary" id="cardBack">Back to portfolio</button>
     </div>
+  </div>
+
+  <!-- Top-right close button — quick return to portfolio at any time -->
+  <button id="closeBtn" type="button" aria-label="Back to portfolio">✕</button>
+
+  <!-- Story Mode narrator badge — visible when cinematic auto-pan is active -->
+  <div id="storyBar" aria-hidden="true"><span class="story-dot"></span>Story Mode · press G to exit</div>
+
+  <!-- FTUX: keyboard hotkey explainer, sticky bottom -->
+  <div id="ftux" aria-hidden="true">
+    <div class="ftux-item"><kbd>←</kbd><kbd>→</kbd><span>Move</span></div>
+    <div class="ftux-sep"></div>
+    <div class="ftux-item"><kbd>Space</kbd><span>Jump</span></div>
+    <div class="ftux-sep"></div>
+    <div class="ftux-item"><kbd>X</kbd><span>Shoot</span></div>
+    <div class="ftux-sep"></div>
+    <div class="ftux-item"><kbd>G</kbd><span>Story Mode</span></div>
+    <div class="ftux-sep"></div>
+    <div class="ftux-item"><kbd>Esc</kbd><span>Back</span></div>
   </div>
 
   <!-- Mobile controls -->
@@ -163,18 +281,39 @@
   const GROUND = 560;
 
   /* ── PHYSICS CONSTANTS ── */
-  const GRAVITY    = 0.52;
-  const JUMP_FORCE = -11;
-  const SPEED      = 3.2;
-  const FRICTION   = 0.80;
+  // Slower, more deliberate feel. Quick rise, slow fall = floaty apex.
+  const GRAVITY_UP   = 0.48;   // while ascending (quick rise)
+  const GRAVITY_DOWN = 0.28;   // while falling (slower drop)
+  const JUMP_FORCE   = -10.5;
+  const SPEED        = 1.9;    // was 3.2 — ~60% of prior pace
+  const FRICTION     = 0.82;
 
   /* ── COLORS ── */
   const C = {
     gameBg: '#1a1a2e',
-    sky1: '#74B9FF', sky2: '#A29BFE',
+    // Mario sky — saturated day blue
+    sky1: '#5C94FC', sky2: '#A8D8FF',
     ground: '#2A2535',
     p1: ['#4CAF50','#FF9800','#E040FB','#FF5252','#26C6DA'],
-    coin: '#FFD700',
+    // Mario earth + grass palette (used by platform renderer)
+    grass:     '#1DB84E',
+    grassHi:   '#6AEC7A',
+    grassDark: '#0A7A34',
+    earth:     '#C67638',
+    earthDark: '#7B3A12',
+    earthDot:  '#5A240A',
+    // Cloud (outline = deep navy like classic Mario)
+    cloud:     '#FFFFFF',
+    cloudLine: '#1E3A8A',
+    // Distant hills
+    hill:      '#0A7A34',
+    hillShade: '#075A26',
+    // Banner / poster text (Spider-Verse + Mario)
+    bannerFill:    '#FCE843',
+    bannerFillAlt: '#FF4D4D',
+    bannerInk:     '#000000',
+    bannerWhite:   '#FFFFFF',
+    coin:   '#FFD700',
     artifact: ['#00BCD4','#FF4081','#FF9800','#69F0AE'],
     blob:   ['#4CAF50','#FF9800','#CE93D8'],
     spike:  '#FF5252',
@@ -190,7 +329,9 @@
 
   /* ── GAME STATE ── */
   let cam = 0;
-  let lives = 3;
+  const MAX_HP = 3;
+  let hp = MAX_HP;
+  let iFrames = 0;       // invincibility frames after a hit
   let score = 0;
   let coins = 0;
   let state = 'PLAY';   // PLAY | DYING | END
@@ -206,38 +347,155 @@
     factoidTimer = 220;
   }
 
-  const FACTOIDS = {
-    F: "I've shipped in Figma since day one. It's where thinking becomes real.",
-    P: "4 years. B2B SaaS, fintech, AI products. I still sketch on paper first.",
-    G: "I was Founding Designer at FinalLayer. Built the design system from zero.",
-    C: "I built this game too. Design and code aren't that different once you stop treating them that way.",
-    Z1: "BuyingTeams. A B2B fintech platform. I owned it end to end.",
-    Z2: "CXFacts. A Custom Question feature. 30 days. Double Diamond. Shipped.",
-    Z3: "I work across Hyderabad and remote. Context switching is a design skill.",
-    Z4: "MSN, ESPN, Getty. Different scales. Same instinct: what does the user actually need?",
+  // Career narrative — pulled from the resume, ordered chronologically so the arc reads left to right.
+  // Artifact pickups reveal full sentences; sky banners engrave the headline beats in the atmosphere.
+  // Keys map to existing pickup labels: F = first artifact, P/G/C = mid-world artifacts, Z1–Z4 = zone checkpoints.
+  const CAREER_FACTOIDS = {
+    F:  "2020. First line of code at Excytech. Remote, self-taught, shipping e-commerce and ed-tech for clients I never met in person.",
+    Z1: "2022. Lagorii in Bangalore. I launched their first digital storefront end to end. Category, interaction, merchandising.",
+    P:  "Dec 2021 onward. CXFacts. UX strategy and design vision for a B2B SaaS analytics platform. Aligned design with exec leadership.",
+    Z2: "Sep 2023. Rizzle. Senior Product Designer. Managed seven designers. Promoted in twelve months.",
+    G:  "Design-led demos closed MSN Networks, ESPN Sports, and Getty as paying clients. Built a seven-person design team from scratch.",
+    Z3: "Dec 2024. Founding Designer at FinalLayer. AI creative platform, built from zero. Vision, strategy, brand identity.",
+    C:  "Rebuilt the free-trial onboarding. Login conversion jumped from 2% to 20% month over month. Real growth, not vanity.",
+    Z4: "50+ features, 30+ flows shipped with a two-person team. One designer, one AI agent. Output parity with a seven-person org.",
   };
+  // Kept as `FACTOIDS` alias so existing render/lookup code stays untouched.
+  const FACTOIDS = CAREER_FACTOIDS;
 
-  // Editorial sky banners: italic serif pull quotes scattered across the level.
-  // x = world x, y = world y (sky band, above platforms at y=560).
-  const SKY_FACTOIDS = [
-    { x: 260,  y: 150, text: "4 years. Shipping product." },
-    { x: 940,  y: 120, text: "Figma since day one." },
-    { x: 1580, y: 160, text: "Founding Designer at FinalLayer." },
-    { x: 2220, y: 130, text: "I design. I code." },
-    { x: 2900, y: 155, text: "CXFacts. 30 days. Shipped." },
-    { x: 3560, y: 125, text: "Two Nordic banks. Closed." },
-    { x: 4240, y: 150, text: "MSN. ESPN. Getty." },
+  // Sky banners — Spider-Verse poster energy. Resume headline beats engraved across the sky
+  // in chronological order so a player reading left-to-right walks through the career.
+  // tilt = degrees of rotation, fill = 0 (yellow) or 1 (red) for variety.
+  const CAREER_SKY_BANNERS = [
+    { x: 260,  y: 110, text: "FIRST LINE OF CODE. 2020.", tilt: -4, fill: 0 },
+    { x: 780,  y: 160, text: "REMOTE. SELF-TAUGHT.",       tilt:  3, fill: 1 },
+    { x: 1260, y: 100, text: "LAGORII. FIRST STOREFRONT.", tilt: -2, fill: 0 },
+    { x: 1780, y: 150, text: "CXFACTS. B2B SAAS.",         tilt:  3, fill: 1 },
+    { x: 2280, y: 105, text: "RIZZLE. LED SEVEN.",         tilt: -3, fill: 0 },
+    { x: 2780, y: 155, text: "MSN. ESPN. GETTY.",          tilt:  4, fill: 1 },
+    { x: 3280, y: 105, text: "2% → 20% CONVERSION.",       tilt: -2, fill: 0 },
+    { x: 3780, y: 155, text: "FOUNDING DESIGNER.",          tilt:  3, fill: 1 },
+    { x: 4280, y: 110, text: "FINALLAYER. ZERO TO ONE.",    tilt: -3, fill: 0 },
+    { x: 4620, y: 160, text: "STILL SHIPPING.",             tilt:  4, fill: 1 },
+  ];
+  const SKY_FACTOIDS = CAREER_SKY_BANNERS;
+
+  // Story Mode narration beats — fired as the camera auto-pans across the world in cinematic mode.
+  // Each beat is positioned to coincide with the matching sky banner so audio/visual align.
+  const STORY_BEATS = [
+    { at: 0,     text: "Let me walk you through it. This is the shape of my career." },
+    { at: 300,   text: "2020. Excytech. I wrote my first real line of production code. Remote, self-taught, shipping for clients I never met." },
+    { at: 900,   text: "2022. Lagorii in Bangalore. I launched their first digital storefront end to end. Category, interaction, merchandising." },
+    { at: 1500,  text: "Dec 2021. CXFacts. UX strategy for a B2B SaaS analytics platform. Still active there today." },
+    { at: 2100,  text: "Sep 2023. Rizzle. Senior Product Designer. Managed seven designers. Promoted in twelve months." },
+    { at: 2700,  text: "MSN Networks. ESPN Sports. Getty. Design-led demos that closed enterprise deals." },
+    { at: 3200,  text: "I rebuilt the free-trial onboarding. Login conversion jumped from 2% to 20% month over month." },
+    { at: 3700,  text: "Dec 2024. Founding Designer at FinalLayer. AI creative platform, built from zero." },
+    { at: 4200,  text: "50+ features, 30+ flows shipped with a two-person team. One designer, one AI agent." },
+    { at: 4500,  text: "Still shipping. Still reading the terrain. Thanks for playing." },
   ];
 
+  // Classic Mario clouds — positioned to punctuate the sky with the banners.
+  // Each cloud is rendered as 3 overlapping circles with a deep-navy outline.
+  const CLOUDS = [
+    { x: 140,  y: 180, s: 1.0 },
+    { x: 620,  y: 230, s: 1.3 },
+    { x: 1180, y: 170, s: 0.9 },
+    { x: 1780, y: 220, s: 1.1 },
+    { x: 2380, y: 190, s: 1.2 },
+    { x: 2820, y: 230, s: 1.0 },
+    { x: 3320, y: 170, s: 1.3 },
+    { x: 3820, y: 215, s: 1.0 },
+    { x: 4340, y: 185, s: 1.1 },
+  ];
+
+  // Distant mountain silhouettes rising from below the ground line (not floating).
+  // Two layers: far range (light, deep parallax) + nearer range (darker, higher parallax).
+  // Each peak: x = peak apex, h = height above horizon, spread = base half-width.
+  const MOUNTAINS_FAR = [
+    { x: 120,  spread: 260, h: 240 },
+    { x: 560,  spread: 300, h: 290 },
+    { x: 1020, spread: 240, h: 220 },
+    { x: 1420, spread: 320, h: 320 },
+    { x: 1900, spread: 260, h: 260 },
+    { x: 2400, spread: 320, h: 310 },
+    { x: 2900, spread: 240, h: 240 },
+    { x: 3400, spread: 300, h: 290 },
+    { x: 3900, spread: 260, h: 260 },
+    { x: 4360, spread: 320, h: 300 },
+    { x: 4800, spread: 240, h: 230 },
+  ];
+  const MOUNTAINS_NEAR = [
+    { x: 260,  spread: 220, h: 200 },
+    { x: 780,  spread: 200, h: 190 },
+    { x: 1260, spread: 260, h: 240 },
+    { x: 1780, spread: 220, h: 210 },
+    { x: 2260, spread: 240, h: 220 },
+    { x: 2800, spread: 200, h: 180 },
+    { x: 3280, spread: 260, h: 250 },
+    { x: 3760, spread: 220, h: 210 },
+    { x: 4220, spread: 240, h: 230 },
+    { x: 4680, spread: 220, h: 200 },
+  ];
+
+  /* ── ENEMY-KILL QUIPS (about coding this game) ── */
+  // Short, punchy, three words max. Spawned when an enemy explodes and rises to the viewport top.
+  const KILL_QUIPS = [
+    'HAND CODED THIS',
+    'NO BUILD STEP',
+    'PURE CANVAS 2D',
+    'ONE HTML FILE',
+    'PIXELS BY HAND',
+    'DESIGNED AND CODED',
+    'WROTE IT SOLO',
+    'COLLISION MATH HURT',
+    'SHIPPED IN DAYS',
+    'NO FRAMEWORKS USED',
+    'LINE BY LINE',
+    'CLAUDE AS COPILOT',
+  ];
+  const killQuips = [];   // { x, y, text, t } active floating labels
+  let killQuipIdx = 0;
+  function spawnKillQuip(wx, wy) {
+    const text = KILL_QUIPS[killQuipIdx % KILL_QUIPS.length];
+    killQuipIdx++;
+    killQuips.push({ x: wx, y: wy, text, t: 0 });
+  }
+
+  /* ── STORY MODE (cinematic auto-pan of the career narrative) ── */
+  // When active, the camera drifts rightward on its own and STORY_BEATS fire in sequence.
+  // Player input + enemy hits are suspended so viewers can just read the journey.
+  let storyMode = false;
+  const STORY_CAM_SPEED = 1.4;              // world units per frame while auto-panning
+  function setStoryMode(on) {
+    storyMode = on;
+    factoidText = ''; factoidTimer = 0;
+    STORY_BEATS.forEach(b => { b.fired = false; });
+    if (storyBarEl) storyBarEl.classList.toggle('visible', on);
+    if (on) {
+      cam = 0;
+      player.x = SPAWN.x; player.y = SPAWN.y;
+      player.vx = 0; player.vy = 0;
+      iFrames = 0;
+    }
+  }
+  function toggleStoryMode() { setStoryMode(!storyMode); }
+
   function resetState() {
-    cam = 0; lives = 3; score = 0; coins = 0;
+    cam = 0; hp = MAX_HP; iFrames = 0; score = 0; coins = 0;
     state = 'PLAY'; deathTimer = 0; checkpointX = 40; frame = 0; powerup = null;
     factoidText = ''; factoidTimer = 0;
     coinDefs.forEach(c => c.alive = true);
     artifactDefs.forEach(a => a.alive = true);
     powerupDefs.forEach(p => p.alive = true);
+    enemies.forEach(e => e.alive = true);
+    CANNONS.forEach(cn => { cn.alive = true; cn.t = 0; });
+    cannonballs.length = 0;
+    explosions.length = 0;
+    killQuips.length = 0;
     projectiles.length = 0;
     shootCooldown = 0; muzzleFlash = 0;
+    setStoryMode(false);
     spawnPlayer();
   }
 
@@ -262,13 +520,18 @@
       o.start(); o.stop(ac.currentTime + dur);
     } catch(e) {}
   }
-  function sfxJump()     { beep(200, 0.08, 'sine', 0.15, 420); }
+  // Sound palette intentionally sparse: coin pickup, enemy kill, end-state stings.
+  // Everything else is visual feedback only.
+  function sfxJump()     {}
+  function sfxThrow()    {}
+  function sfxHit()      {}
+  function sfxArtifact() {}
+  function sfxPowerup()  {}
+  function sfxCannon()   {}
+  function sfxExplode()  {}
+  function sfxCoin()     { [523,659,784].forEach((f,i) => setTimeout(() => beep(f, 0.06, 'square', 0.10), i*50)); }
+  function sfxEnemyKill(){ beep(180, 0.10, 'square', 0.16, 80); setTimeout(() => beep(90, 0.14, 'sawtooth', 0.14, 40), 40); }
   function sfxDie()      { beep(400, 0.4,  'square', 0.2, 60); }
-  function sfxCoin()     { [523,659,784].forEach((f,i) => setTimeout(() => beep(f, 0.07, 'square', 0.12), i*55)); }
-  function sfxArtifact() { [392,494,587,740].forEach((f,i) => setTimeout(() => beep(f, 0.09, 'sine', 0.15), i*60)); }
-  function sfxPowerup()  { beep(300, 0.25, 'sawtooth', 0.18, 900); }
-  function sfxThrow()    { beep(800, 0.08, 'sawtooth', 0.14, 200); }
-  function sfxHit()      { beep(150, 0.06, 'square', 0.15); }
   function sfxWin()      { [523,659,784,1047].forEach((f,i) => setTimeout(() => beep(f, 0.18, 'square', 0.18), i*120)); }
   function sfxLose()     { [400,300,200,100].forEach((f,i) => setTimeout(() => beep(f, 0.15, 'square', 0.15), i*130)); }
 
@@ -296,52 +559,65 @@
 
   /* ── INPUT ── */
   const keys = {};
+  const ftuxEl   = document.getElementById('ftux');
+  const storyBarEl = document.getElementById('storyBar');
+  const closeBtnEl = document.getElementById('closeBtn');
+  let ftuxDimmed = false;
+  function dimFtux() {
+    if (ftuxDimmed || !ftuxEl) return;
+    ftuxDimmed = true;
+    ftuxEl.classList.add('dim');
+  }
   window.addEventListener('keydown', e => {
     keys[e.code] = true;
+    if (e.code === 'Escape') { window.location.href = 'index.html'; return; }
+    if (e.code === 'KeyG')   { toggleStoryMode(); e.preventDefault(); return; }
     if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+    if (['ArrowLeft','ArrowRight','Space','KeyX','KeyF','KeyA','KeyD','KeyW','KeyG'].includes(e.code)) dimFtux();
   });
   window.addEventListener('keyup', e => { keys[e.code] = false; });
 
+  // Top-right close button: consistent one-click exit back to the portfolio, no keyboard required.
+  if (closeBtnEl) closeBtnEl.addEventListener('click', () => { window.location.href = 'index.html'; });
+
   /* ── PLATFORMS ── */
   // { x, y, w, h, col, moving?, dx?, minX?, maxX? }
+  // Widened ground strips and upper ledges for forgiving landings — the story matters more than the challenge.
   const platforms = [
-    // ── Zone 1: Ground intro (x 0–800) ──
-    { x:0,    y:560, w:300, h:20, col:C.p1[0] },
-    { x:340,  y:560, w:200, h:20, col:C.p1[0] },
-    { x:580,  y:560, w:260, h:20, col:C.p1[0] },
-    { x:400,  y:480, w:120, h:16, col:C.p1[0] },
-    { x:560,  y:420, w:100, h:16, col:C.p1[0] },
+    // ── Zone 1: Ground intro (x 0–800) — one uninterrupted runway to get comfortable
+    { x:0,    y:560, w:800, h:20, col:C.p1[0] },
+    { x:380,  y:480, w:180, h:16, col:C.p1[0] },
+    { x:580,  y:420, w:160, h:16, col:C.p1[0] },
 
-    // ── Zone 2: Multi-tier climb (x 800–2000) ──
-    { x:840,  y:560, w:200, h:20, col:C.p1[1] },
-    { x:1080, y:500, w:140, h:16, col:C.p1[1] },
-    { x:1260, y:430, w:140, h:16, col:C.p1[1] },
-    { x:1440, y:360, w:140, h:16, col:C.p1[1] },
-    { x:1620, y:430, w:120, h:16, col:C.p1[1] },
-    { x:1780, y:500, w:200, h:20, col:C.p1[1] },
-    { x:1980, y:560, w:100, h:20, col:C.p1[1] },
+    // ── Zone 2: Multi-tier climb (x 800–2000) — wider steps, gentler staircase
+    { x:840,  y:560, w:260, h:20, col:C.p1[1] },
+    { x:1080, y:500, w:180, h:16, col:C.p1[1] },
+    { x:1260, y:430, w:180, h:16, col:C.p1[1] },
+    { x:1440, y:360, w:200, h:16, col:C.p1[1] },
+    { x:1620, y:430, w:180, h:16, col:C.p1[1] },
+    { x:1780, y:500, w:260, h:20, col:C.p1[1] },
 
-    // ── Zone 3: Moving platforms over pit (x 2000–3200) ──
-    { x:2100, y:560, w:120, h:20, col:C.p1[2] },
-    { x:2300, y:480, w:100, h:16, col:C.p1[2], moving:true, dx:1.2, minX:2300, maxX:2480 },
-    { x:2550, y:420, w:100, h:16, col:C.p1[2], moving:true, dx:-1.0, minX:2480, maxX:2650 },
-    { x:2750, y:480, w:100, h:16, col:C.p1[2], moving:true, dx:1.4, minX:2700, maxX:2900 },
-    { x:2960, y:430, w:120, h:16, col:C.p1[2] },
-    { x:3100, y:560, w:150, h:20, col:C.p1[2] },
+    // ── Zone 3: Moving platforms over pit (x 2000–3200) — slower drift, wider pads
+    { x:2080, y:560, w:180, h:20, col:C.p1[2] },
+    { x:2280, y:480, w:140, h:16, col:C.p1[2], moving:true, dx:0.8, minX:2280, maxX:2440 },
+    { x:2480, y:420, w:140, h:16, col:C.p1[2] },
+    { x:2680, y:480, w:140, h:16, col:C.p1[2], moving:true, dx:0.9, minX:2640, maxX:2820 },
+    { x:2880, y:430, w:180, h:16, col:C.p1[2] },
+    { x:3080, y:560, w:200, h:20, col:C.p1[2] },
 
-    // ── Zone 4: Dense zone (x 3200–4000) ──
-    { x:3260, y:560, w:180, h:20, col:C.p1[3] },
-    { x:3480, y:500, w:120, h:16, col:C.p1[3] },
-    { x:3640, y:440, w:120, h:16, col:C.p1[3] },
-    { x:3800, y:500, w:120, h:16, col:C.p1[3] },
-    { x:3960, y:560, w:100, h:20, col:C.p1[3] },
+    // ── Zone 4: Dense zone (x 3200–4000) — connected ground for a safer sprint
+    { x:3280, y:560, w:280, h:20, col:C.p1[3] },
+    { x:3480, y:500, w:160, h:16, col:C.p1[3] },
+    { x:3660, y:440, w:160, h:16, col:C.p1[3] },
+    { x:3820, y:500, w:160, h:16, col:C.p1[3] },
+    { x:3900, y:560, w:200, h:20, col:C.p1[3] },
 
-    // ── Zone 5: Final sprint (x 4000–4800) ──
-    { x:4060, y:560, w:160, h:20, col:C.p1[4] },
-    { x:4260, y:500, w:100, h:16, col:C.p1[4] },
-    { x:4400, y:440, w:100, h:16, col:C.p1[4] },
-    { x:4560, y:500, w:120, h:16, col:C.p1[4] },
-    { x:4700, y:560, w:100, h:20, col:C.p1[4] },
+    // ── Zone 5: Final sprint (x 4000–4800) — generous runway to the flag
+    { x:4100, y:560, w:280, h:20, col:C.p1[4] },
+    { x:4260, y:500, w:140, h:16, col:C.p1[4] },
+    { x:4420, y:440, w:140, h:16, col:C.p1[4] },
+    { x:4560, y:500, w:160, h:16, col:C.p1[4] },
+    { x:4680, y:560, w:120, h:20, col:C.p1[4] },
   ];
 
   /* ── PLAYER ── */
@@ -370,7 +646,8 @@
       player.vy = JUMP_FORCE; player.onGround = false; sfxJump();
     }
 
-    player.vy += GRAVITY;
+    // Asymmetric gravity: snappy rise, floaty fall
+    player.vy += (player.vy < 0 ? GRAVITY_UP : GRAVITY_DOWN);
     player.x += player.vx;
     player.onGround = false;
 
@@ -398,12 +675,28 @@
 
     player.x = Math.max(0, Math.min(player.x, W - player.w));
 
-    const shielded = powerup && powerup.type === 'shield';
+    // Enemy collision: a gracious drop from above kills them (Mario-style stomp) with a big hitbox.
+    // Side or underneath contact still damages the player.
     enemies.forEach(e => {
-      if (!shielded && hit(player, { x:e.x+2, y:e.y+2, w:e.w-4, h:e.h-4 })) die();
+      if (!e.alive) return;
+      const generousHitbox = { x: e.x - 2, y: e.y - 2, w: e.w + 4, h: e.h + 4 };
+      if (!hit(player, generousHitbox)) return;
+      const playerFalling = player.vy > 0;
+      const landedOnHead  = (player.y + player.h) <= (e.y + e.h * 0.55);
+      if (playerFalling && landedOnHead) {
+        killEnemy(e);
+        player.vy = JUMP_FORCE * 0.65;    // satisfying bounce off the stomp
+      } else {
+        damagePlayer();
+      }
     });
+    // Spikes only hurt when the player lands on them from above (falling onto tips).
+    // Brushing from the side is safe, which matches modern platformer expectations.
     spikes.forEach(s => {
-      if (!shielded && hit(player, s)) die();
+      if (!hit(player, s)) return;
+      const fallingDown = player.vy > 0;
+      const landedOnTop = (player.y + player.h) <= (s.y + Math.min(6, s.h * 0.5));
+      if (fallingDown && landedOnTop) damagePlayer();
     });
 
     if (player.y > H + 40) die();
@@ -425,99 +718,163 @@
     if (state === 'DYING' && Math.floor(deathTimer / 4) % 2 === 0) return;
     const shielded = powerup && powerup.type === 'shield';
     if (shielded && Math.floor(frame / 3) % 2 === 0) return;
+    if (iFrames > 0 && Math.floor(iFrames / 3) % 2 === 0) return;
 
-    const cx = sx(player.x + player.w / 2);
-    const top = sy(player.y);
     const f = player.facing;
     const walk = player.onGround && Math.abs(player.vx) > 0.5;
+    const baseX = sx(player.x);
+    const baseY = sy(player.y);
+    const u = scale;   // one "pixel" unit
 
-    ctx.save(); ctx.translate(cx, top);
-    ctx.strokeStyle = C.accent; ctx.fillStyle = C.accent;
-    ctx.lineWidth = Math.max(1, Math.ceil(2.2 * scale)); ctx.lineCap = 'square';
+    // Pixel helpers — lock to integer px for that chunky pixel-art feel
+    const p = (n) => Math.round(n * u);
+    const rect = (px, py, pw, ph, color) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(baseX + p(px), baseY + p(py), Math.max(1, p(pw)), Math.max(1, p(ph)));
+    };
 
-    const hr = Math.ceil(5 * scale);
-    ctx.fillRect(-hr, Math.ceil(2*scale), hr*2, hr*2);
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(f * Math.ceil(2*scale), Math.ceil(2*scale), Math.ceil(2*scale), Math.ceil(2*scale));
+    // Mirror helper so the same pixel map flips with facing
+    const M = (px, w) => (f > 0 ? px : player.w - px - w);
 
-    const bt = Math.ceil(9*scale), bb = Math.ceil(18*scale);
-    ctx.strokeStyle = C.accent;
-    ctx.beginPath(); ctx.moveTo(0, bt); ctx.lineTo(0, bb); ctx.stroke();
+    // Palette — designer in a magenta hoodie, pale skin, dark jeans, gold sneakers
+    const P = {
+      skin:  '#F2C79A',
+      skinD: '#C69062',
+      hoodie:'#9B2D7A',   // accent magenta
+      hoodieD:'#6A1A54',
+      hoodieH:'#C24A9C',
+      jeans: '#2A2F55',
+      jeansD:'#15183A',
+      shoe:  '#FFD45A',
+      shoeD: '#B8892B',
+      hair:  '#2A1A1A',
+      eyeW:  '#FFFFFF',
+      eyeK:  '#111',
+      line:  '#000',
+    };
 
-    const ay = bt + Math.ceil(3*scale);
-    const sw2 = walk ? Math.sin(player.wf * 0.4) * Math.ceil(4*scale) : 0;
-    // Front arm — held straight horizontally to aim the gun, not the walking diagonal.
-    const armTipX = f * Math.ceil(8 * scale);
-    const armTipY = ay + Math.ceil(1 * scale);
-    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(armTipX, armTipY); ctx.stroke();
-    // Back arm — still swings with stride for life.
-    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(-f * Math.ceil(5*scale), ay + Math.ceil(5*scale) - sw2); ctx.stroke();
+    // Walk cycle: subtle full-body bob + alternating leg lift
+    const step = walk ? Math.sin(player.wf * 0.32) : 0;
+    const bodyBob = walk ? Math.round(step * 0.6) : 0;
 
-    // Gun — minimal charcoal pistol at the fingertips.
-    const gunLen = Math.ceil(7 * scale);
-    const gunH = Math.max(2, Math.ceil(3 * scale));
-    ctx.fillStyle = C.fg;
-    ctx.fillRect(
-      armTipX + (f > 0 ? 0 : -gunLen),
-      armTipY - Math.floor(gunH / 2),
-      gunLen,
-      gunH
-    );
-    // Grip: a tiny stub under the barrel
-    ctx.fillRect(
-      armTipX + (f > 0 ? Math.ceil(1 * scale) : -Math.ceil(3 * scale)),
-      armTipY + Math.floor(gunH / 2),
-      Math.ceil(2 * scale),
-      Math.ceil(3 * scale)
-    );
-    // Muzzle flash — gold burst for a few frames after firing
+    // Layout within 14×26 hitbox (cols 0..14, rows 0..26):
+    //   Head  rows 0..7   (x 2..12, width 10)
+    //   Torso rows 7..15  (x 2..12, width 10)
+    //   Jeans rows 15..23 (x 3..11, width 8)
+    //   Shoes rows 23..26 (x 3..11, width 8)
+
+    // ── Head ──
+    rect(M(2, 10), 0 + bodyBob, 10, 1, P.hair);                   // hair top
+    rect(M(2, 1),  1 + bodyBob, 1, 4, P.hair);                    // hair side L
+    rect(M(11, 1), 1 + bodyBob, 1, 4, P.hair);                    // hair side R
+    rect(M(3, 8),  1 + bodyBob, 8, 5, P.skin);                    // face
+    rect(M(3, 3),  1 + bodyBob, 3, 1, P.hair);                    // forehead sweep
+    rect(M(f > 0 ? 7 : 5, 2), 3 + bodyBob, 2, 2, P.eyeW);         // eye white
+    rect(M(f > 0 ? 8 : 5, 1), 3 + bodyBob, 1, 2, P.eyeK);         // pupil
+    rect(M(4, 6),  6 + bodyBob, 6, 1, P.skinD);                   // chin shadow
+
+    // ── Torso (hoodie) ──
+    rect(M(2, 10), 7 + bodyBob, 10, 8, P.hoodie);
+    rect(M(4, 6),  7 + bodyBob, 6, 1, P.hoodieD);                 // neck shadow
+    rect(M(3, 1),  8 + bodyBob, 1, 5, P.hoodieH);                 // highlight stripe
+    rect(M(4, 6), 12 + bodyBob, 6, 1, P.hoodieD);                 // pocket line
+
+    // ── Arms ──
+    const backArmY = 8 + bodyBob + (walk ? Math.round(step * 0.8) : 0);
+    rect(M(1, 2), backArmY, 2, 5, P.hoodie);                      // back arm
+    rect(M(1, 2), backArmY + 5, 2, 1, P.skin);                    // back hand
+
+    const frontArmY = 9 + bodyBob;
+    rect(M(10, 2), frontArmY, 2, 3, P.hoodie);                    // shoulder square
+    // Extended forearm (in world coords, relative to baseX)
+    const armStartX = f > 0 ? player.w + 0 : -3;
+    ctx.fillStyle = P.hoodie;
+    ctx.fillRect(baseX + p(armStartX), baseY + p(frontArmY + 1), Math.max(1, p(3)), Math.max(1, p(2)));
+    // Hand
+    ctx.fillStyle = P.skin;
+    ctx.fillRect(baseX + p(f > 0 ? player.w + 3 : -4), baseY + p(frontArmY + 1), Math.max(1, p(1)), Math.max(1, p(2)));
+
+    // ── Gun ──
+    const gunX = f > 0 ? player.w + 4 : -8;
+    const gunY = frontArmY + 1;
+    rect(gunX, gunY, 4, 1, '#1a1a1f');
+    rect(gunX, gunY + 1, 4, 1, '#2a2a33');
+    rect(f > 0 ? gunX + 1 : gunX + 2, gunY + 2, 1, 1, '#1a1a1f');
+
+    // Muzzle flash
     if (muzzleFlash > 0) {
-      const mx = armTipX + f * (gunLen + Math.ceil(2 * scale));
-      const my = armTipY;
-      const flashAlpha = muzzleFlash / 5;
-      ctx.fillStyle = `rgba(255, 215, 0, ${flashAlpha})`;
+      const mAlpha = muzzleFlash / 5;
+      const mx = baseX + p(f > 0 ? gunX + 5 : gunX - 1);
+      const my = baseY + p(gunY + 1);
+      ctx.fillStyle = `rgba(255, 236, 120, ${mAlpha})`;
       ctx.beginPath();
-      ctx.arc(mx, my, Math.ceil(5 * scale), 0, Math.PI * 2);
+      ctx.arc(mx, my, p(4), 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha * 0.8})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${mAlpha})`;
       ctx.beginPath();
-      ctx.arc(mx, my, Math.ceil(2 * scale), 0, Math.PI * 2);
+      ctx.arc(mx, my, p(1.5), 0, Math.PI * 2);
       ctx.fill();
     }
 
-    if (walk) {
-      const ls = Math.sin(player.wf * 0.4) * Math.ceil(5*scale);
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(ls, bb + Math.ceil(8*scale)); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-ls, bb + Math.ceil(8*scale)); ctx.stroke();
-    } else if (!player.onGround) {
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-Math.ceil(3*scale), bb + Math.ceil(6*scale)); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(Math.ceil(3*scale), bb + Math.ceil(6*scale)); ctx.stroke();
-    } else {
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(-Math.ceil(3*scale), bb + Math.ceil(8*scale)); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, bb); ctx.lineTo(Math.ceil(3*scale), bb + Math.ceil(8*scale)); ctx.stroke();
-    }
-    ctx.restore();
+    // ── Jeans ──
+    rect(M(3, 8), 15 + bodyBob, 8, 8, P.jeans);
+    rect(M(6, 2), 15 + bodyBob, 2, 8, P.jeansD);                  // center seam
+
+    // ── Shoes (alternating step) ──
+    const legLiftA = walk ? (step > 0 ? 1 : 0) : 0;
+    const legLiftB = walk ? (step > 0 ? 0 : 1) : 0;
+    // Front foot
+    rect(M(3, 4), 23 - legLiftA, 4, 2, P.shoe);
+    rect(M(3, 4), 25 - legLiftA, 4, 1, P.shoeD);
+    // Back foot
+    rect(M(7, 4), 23 - legLiftB, 4, 2, P.shoe);
+    rect(M(7, 4), 25 - legLiftB, 4, 1, P.shoeD);
+
+    // Outline passes
+    ctx.strokeStyle = P.line;
+    ctx.lineWidth = Math.max(1, Math.floor(u));
+    ctx.strokeRect(baseX + p(2), baseY + p(0 + bodyBob), Math.max(1, p(10)), Math.max(1, p(15)));
+    ctx.strokeRect(baseX + p(3), baseY + p(15 + bodyBob), Math.max(1, p(8)), Math.max(1, p(8)));
   }
 
   /* ── ENEMIES ── */
+  // Five patrolling enemies, one per zone. Calm pace and mid-size hitboxes so stomping feels fair.
   const enemies = [
-    { x:420, w:18, h:18, minX:360, maxX:540, speed:1.0, dir:1, type:0 },
-    { x:900, w:14, h:14, minX:840, maxX:1020, speed:1.4, dir:1, type:1 },
-    { x:1320, w:14, h:14, minX:1260, maxX:1380, speed:1.2, dir:-1, type:1 },
-    { x:1660, w:20, h:20, minX:1620, maxX:1780, speed:0.9, dir:1, type:2 },
-    { x:2960, w:14, h:14, minX:2960, maxX:3080, speed:1.3, dir:1, type:0 },
-    { x:3320, w:18, h:18, minX:3260, maxX:3440, speed:1.5, dir:1, type:1 },
-    { x:3520, w:14, h:14, minX:3480, maxX:3600, speed:1.3, dir:-1, type:2 },
-    { x:3850, w:20, h:20, minX:3800, maxX:3960, speed:1.0, dir:1, type:0 },
-    { x:4120, w:14, h:14, minX:4060, maxX:4220, speed:1.6, dir:1, type:1 },
-    { x:4310, w:18, h:18, minX:4260, maxX:4400, speed:1.4, dir:-1, type:2 },
-    { x:4610, w:14, h:14, minX:4560, maxX:4690, speed:1.5, dir:1, type:1 },
+    { x:480,  w:20, h:20, minX:380,  maxX:720,  speed:0.30, dir: 1, type:0 },
+    { x:1500, w:18, h:18, minX:1440, maxX:1620, speed:0.28, dir: 1, type:1 },
+    { x:2900, w:20, h:20, minX:2880, maxX:3040, speed:0.32, dir: 1, type:2 },
+    { x:3820, w:20, h:20, minX:3700, maxX:3960, speed:0.32, dir: 1, type:0 },
+    { x:4500, w:18, h:18, minX:4420, maxX:4620, speed:0.30, dir:-1, type:1 },
   ];
-  enemies.forEach(e => {
+  enemies.forEach((e, i) => {
     const plat = platforms.find(p => e.x >= p.x && e.x <= p.x + p.w);
     e.y = plat ? plat.y - e.h : GROUND - e.h;
     e.baseY = e.y;
+    e.alive = true;
+    e.phase = i * 0.9;    // rhythmic step offset per enemy
+    e.vy = 0;             // vertical velocity (for jumping)
+    e.onGround = true;
+    e.alert = 0;          // ticks > 0 while aggro toward player
+    e.exclaim = 0;        // frames remaining to show "!" bubble
   });
+
+  /* ── CANNONS (stationary shooters) ── */
+  // Nerfed from the earlier build: two cannons only, long reload, slower balls, smaller splash.
+  // They punctuate the middle of the map as a hazard, not a gauntlet.
+  const CANNONS = [
+    { x: 2960, y: 420, dir: -1, fireEvery: 260, t: 80, alive: true },
+    { x: 3580, y: 420, dir:  1, fireEvery: 280, t: 60, alive: true },
+  ];
+  // Anchor each cannon on the nearest platform surface beneath its x.
+  CANNONS.forEach(cn => {
+    const plat = platforms.find(p => cn.x + 10 >= p.x && cn.x + 10 <= p.x + p.w);
+    cn.y = plat ? plat.y - 18 : cn.y;
+    cn.w = 24; cn.h = 18;
+  });
+  const cannonballs = [];
+  const explosions = [];
+  const EXPLOSION_R = 38;       // world units — splash radius (tighter, more avoidable)
+  const CANNONBALL_SPEED = 1.7; // slower arc so a player can react
 
   /* ── SPIKES ── */
   const spikes = [
@@ -532,35 +889,436 @@
     { x:4580, y:484, w:12, h:16 },
   ];
 
+  // Kill an enemy with theatrics: starburst explosion, 3-word quip rises from the corpse,
+  // and a short kill SFX. Used by bullet hits AND cannon-splash damage.
+  function killEnemy(e) {
+    if (!e.alive) return;
+    e.alive = false;
+    const cx = e.x + e.w / 2;
+    const cy = e.y + e.h / 2;
+    explosions.push({ x: cx, y: cy, t: 0 });
+    spawnKillQuip(cx, cy - 4);
+    sfxEnemyKill();
+    score += 5;
+  }
+
+  function damagePlayer() {
+    if (state !== 'PLAY') return;
+    if (iFrames > 0) return;
+    if (powerup && powerup.type === 'shield') return;
+    hp--;
+    iFrames = 60;       // ~1s of invincibility
+    sfxHit();
+    if (hp <= 0) { endGame(false); }
+  }
+
+  // Fall off map: hard reset to checkpoint costing one HP.
   function die() {
     if (state !== 'PLAY') return;
     sfxDie();
-    lives--;
-    if (lives <= 0) { endGame(false); return; }
+    hp--;
+    if (hp <= 0) { endGame(false); return; }
+    iFrames = 60;
     state = 'DYING'; deathTimer = 50;
   }
+
+  const DETECT_R = 220;       // world units: enemies aggro when player is within
+  const PURSUE_SPEED_MULT = 1.6;
 
   function updateEnemies() {
     if (state !== 'PLAY') return;
     enemies.forEach(e => {
-      e.x += e.speed * e.dir;
-      if (e.x <= e.minX || e.x + e.w >= e.maxX) e.dir *= -1;
-      const plat = platforms.find(p => p.moving && Math.abs(p.y - (e.baseY + e.h)) < 2 &&
+      if (!e.alive) return;
+
+      // Distance to player (used for detection)
+      const pcx = player.x + player.w/2, pcy = player.y + player.h/2;
+      const ecx = e.x + e.w/2, ecy = e.y + e.h/2;
+      const ddx = pcx - ecx, ddy = pcy - ecy;
+      const distSq = ddx*ddx + ddy*ddy;
+
+      if (distSq < DETECT_R * DETECT_R) {
+        if (e.alert === 0) e.exclaim = 36;   // brand new detection → show "!"
+        e.alert = 90;                         // stay alert for ~1.5s after losing LOS
+      }
+      if (e.alert > 0) e.alert--;
+      if (e.exclaim > 0) e.exclaim--;
+
+      const pursuing = e.alert > 0;
+
+      // Movement: while pursuing, track the player horizontally. While patrolling,
+      // oscillate between minX/maxX as before.
+      if (pursuing) {
+        const wantDir = ddx >= 0 ? 1 : -1;
+        e.dir = wantDir;
+        e.x += e.speed * PURSUE_SPEED_MULT * e.dir;
+
+        // Simple jump heuristic: if player is clearly above and within jump range,
+        // or if there's no platform directly ahead under our feet, jump.
+        const ahead = e.x + (e.dir > 0 ? e.w + 6 : -6);
+        const footY = e.y + e.h + 4;
+        const groundAhead = platforms.some(p =>
+          ahead >= p.x && ahead <= p.x + p.w && Math.abs(p.y - footY) < 8
+        );
+        const shouldJumpUp = ddy < -24 && Math.abs(ddx) < 120;
+        if (e.onGround && (!groundAhead || shouldJumpUp)) {
+          e.vy = -7.5;
+          e.onGround = false;
+        }
+      } else {
+        e.x += e.speed * e.dir;
+        if (e.x <= e.minX || e.x + e.w >= e.maxX) e.dir *= -1;
+      }
+
+      // Gravity + platform collision (only when mid-air or pursuing off-track)
+      e.vy += 0.4;
+      e.y += e.vy;
+      e.onGround = false;
+      platforms.forEach(p => {
+        if (!hit(e, p)) return;
+        if (e.vy > 0 && e.y + e.h - e.vy <= p.y + 2) {
+          e.y = p.y - e.h;
+          e.vy = 0;
+          e.onGround = true;
+        } else if (e.vy < 0 && e.y - e.vy >= p.y + p.h - 2) {
+          e.y = p.y + p.h;
+          e.vy = 0;
+        }
+      });
+
+      // Moving-platform ride (preserve the baseY feel for stationary patrols)
+      const moving = platforms.find(p => p.moving &&
+        Math.abs(p.y - (e.y + e.h)) < 2 &&
         e.x + e.w/2 >= p.x && e.x + e.w/2 <= p.x + p.w);
-      if (plat) e.y = plat.y - e.h;
+      if (moving) e.y = moving.y - e.h;
+
+      // Clamp to world edges; if fallen off, just despawn silently.
+      if (e.y > H + 60) e.alive = false;
+      e.x = Math.max(0, Math.min(e.x, W - e.w));
     });
   }
 
   function drawEnemies() {
     enemies.forEach(e => {
-      const bob = Math.sin(frame * 0.08 + e.x) * 2 * scale;
+      if (!e.alive) return;
+      // Rhythmic dance: squash/stretch + step bob with per-enemy phase
+      const t = frame * 0.12 + e.phase;
+      const bob = Math.sin(t) * 2 * scale;
+      const squash = 1 + Math.sin(t * 2) * 0.08;     // body pulse
+      const x = sx(e.x), y = sy(e.y) + bob;
+      const w = sw(e.w), h = sh(e.h);
+      const bodyH = h * squash;
+      const bodyY = y + (h - bodyH);
+
+      // Body fill (rounded goomba-like)
       ctx.fillStyle = C.blob[e.type];
-      ctx.fillRect(sx(e.x), sy(e.y) + bob, sw(e.w), sh(e.h));
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, bodyY, w, bodyH, Math.max(3, Math.floor(w * 0.3)));
+      else ctx.rect(x, bodyY, w, bodyH);
+      ctx.fill();
+
+      // Darker underside shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.22)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, bodyY + bodyH - Math.max(3, h * 0.28), w, Math.max(3, h * 0.28), Math.max(2, Math.floor(w * 0.2)));
+      else ctx.rect(x, bodyY + bodyH - Math.max(3, h * 0.28), w, Math.max(3, h * 0.28));
+      ctx.fill();
+
+      // Cheek highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.fillRect(x + Math.ceil(2 * scale), bodyY + Math.ceil(2 * scale), Math.max(2, Math.floor(w * 0.25)), Math.max(2, Math.floor(h * 0.18)));
+
+      // Eye whites (two eyes that lean in direction of travel)
+      const eyeSize = Math.max(4, Math.ceil(5 * scale));
+      const eyeY = bodyY + Math.ceil(h * 0.35);
+      const leanX = e.dir > 0 ? Math.ceil(1 * scale) : -Math.ceil(1 * scale);
+      const eyeLX = x + Math.ceil(w * 0.22) - eyeSize / 2 + leanX;
+      const eyeRX = x + Math.ceil(w * 0.70) - eyeSize / 2 + leanX;
       ctx.fillStyle = '#fff';
-      const ew = Math.ceil(4*scale), eh = Math.ceil(4*scale);
-      ctx.fillRect(sx(e.x + (e.dir > 0 ? e.w-6 : 2)), sy(e.y+4) + bob, ew, eh);
+      ctx.fillRect(eyeLX, eyeY, eyeSize, eyeSize);
+      ctx.fillRect(eyeRX, eyeY, eyeSize, eyeSize);
+      // Pupils
+      const pupil = Math.max(2, Math.floor(eyeSize * 0.45));
+      const pupilOffset = e.dir > 0 ? eyeSize - pupil - 1 : 1;
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(eyeLX + pupilOffset, eyeY + Math.floor(eyeSize * 0.25), pupil, pupil);
+      ctx.fillRect(eyeRX + pupilOffset, eyeY + Math.floor(eyeSize * 0.25), pupil, pupil);
+
+      // Angry brow (thin slash above eyes)
+      ctx.fillStyle = '#1a1a1a';
+      const browH = Math.max(1, Math.floor(1.5 * scale));
+      ctx.fillRect(eyeLX, eyeY - browH - 1, eyeSize, browH);
+      ctx.fillRect(eyeRX, eyeY - browH - 1, eyeSize, browH);
+
+      // Feet alternating in rhythm (left foot up / right foot up)
+      const step = Math.sin(t * 2) > 0 ? 1 : -1;
+      const footW = Math.max(3, Math.floor(w * 0.28));
+      const footH = Math.max(3, Math.ceil(3 * scale));
+      const footY = bodyY + bodyH - Math.floor(footH * 0.4);
+      ctx.fillStyle = '#2a1810';
+      ctx.fillRect(x + Math.ceil(w * 0.08), footY - (step > 0 ? 0 : Math.ceil(2 * scale)), footW, footH);
+      ctx.fillRect(x + w - Math.ceil(w * 0.08) - footW, footY - (step > 0 ? Math.ceil(2 * scale) : 0), footW, footH);
+
+      // Outline
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, bodyY, w, bodyH, Math.max(3, Math.floor(w * 0.3)));
+      else ctx.rect(x, bodyY, w, bodyH);
+      ctx.stroke();
+
+      // "!" exclamation bubble on first detection (brief, punchy)
+      if (e.exclaim > 0) {
+        const pop = Math.min(1, (36 - e.exclaim) / 6);   // ease-in pop
+        const bubbleR = Math.ceil(10 * scale * pop);
+        const bx = x + w / 2;
+        const by = y - Math.ceil(12 * scale) - Math.ceil(6 * scale) * pop;
+        // Bubble
+        ctx.fillStyle = '#FFE14D';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+        ctx.beginPath(); ctx.arc(bx, by, bubbleR, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Tail (little triangle)
+        ctx.fillStyle = '#FFE14D';
+        ctx.beginPath();
+        ctx.moveTo(bx - bubbleR * 0.35, by + bubbleR * 0.6);
+        ctx.lineTo(bx, by + bubbleR + Math.ceil(4 * scale));
+        ctx.lineTo(bx + bubbleR * 0.35, by + bubbleR * 0.6);
+        ctx.closePath(); ctx.fill();
+        ctx.stroke();
+        // "!" glyph
+        ctx.fillStyle = '#000';
+        ctx.font = `900 ${Math.ceil(14 * scale * pop)}px "Arial Black", sans-serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('!', bx, by + Math.ceil(1 * scale));
+      }
+    });
+  }
+
+  /* ── CANNON RENDER + UPDATE ── */
+  function updateCannons() {
+    if (state !== 'PLAY') return;
+    CANNONS.forEach(cn => {
+      if (!cn.alive) return;
+      cn.t++;
+      if (cn.t >= cn.fireEvery) {
+        cn.t = 0;
+        cannonballs.push({
+          x: cn.x + (cn.dir > 0 ? cn.w : -6),
+          y: cn.y + 4,
+          vx: CANNONBALL_SPEED * cn.dir,
+          vy: -3.4,
+          alive: true,
+        });
+        sfxCannon();
+      }
+    });
+  }
+
+  function drawCannons() {
+    CANNONS.forEach(cn => {
+      if (!cn.alive) return;
+      const x = sx(cn.x), y = sy(cn.y);
+      const w = sw(cn.w), h = sh(cn.h);
+      // Base
+      ctx.fillStyle = '#2c2c33';
+      ctx.fillRect(x, y + Math.floor(h * 0.35), w, Math.ceil(h * 0.65));
+      ctx.fillStyle = '#1a1a1f';
+      ctx.fillRect(x, y + h - Math.max(2, Math.floor(3 * scale)), w, Math.max(2, Math.floor(3 * scale)));
+      // Barrel
+      const barW = sw(14), barH = sh(8);
+      const barX = cn.dir > 0 ? x + Math.floor(w * 0.6) : x + w - Math.floor(w * 0.6) - barW;
+      const barY = y + Math.floor(h * 0.1);
+      ctx.fillStyle = '#3a3a42';
+      ctx.fillRect(barX, barY, barW, barH);
+      // Barrel rim
       ctx.fillStyle = '#000';
-      ctx.fillRect(sx(e.x + (e.dir > 0 ? e.w-4 : 3)), sy(e.y+5) + bob, Math.ceil(2*scale), Math.ceil(2*scale));
+      ctx.fillRect(cn.dir > 0 ? barX + barW - Math.max(1, Math.floor(2 * scale)) : barX, barY, Math.max(1, Math.floor(2 * scale)), barH);
+      // Charge glow as it approaches firing
+      const charge = cn.t / cn.fireEvery;
+      if (charge > 0.7) {
+        const a = (charge - 0.7) / 0.3;
+        ctx.fillStyle = `rgba(255, 120, 40, ${a})`;
+        const gx = cn.dir > 0 ? barX + barW : barX - Math.ceil(3 * scale);
+        ctx.beginPath();
+        ctx.arc(gx, barY + barH / 2, Math.ceil(4 * scale) * (0.6 + a * 0.6), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Thin black outline
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+      ctx.strokeRect(x, y + Math.floor(h * 0.35), w, Math.ceil(h * 0.65));
+    });
+  }
+
+  /* ── CANNONBALLS + EXPLOSIONS ── */
+  function updateCannonballs() {
+    if (state !== 'PLAY') {
+      // Let explosions finish animating even during DYING/END
+      for (let i = explosions.length - 1; i >= 0; i--) {
+        explosions[i].t++;
+        if (explosions[i].t > 28) explosions.splice(i, 1);
+      }
+      return;
+    }
+    const shielded = powerup && powerup.type === 'shield';
+    for (let i = cannonballs.length - 1; i >= 0; i--) {
+      const b = cannonballs[i];
+      if (!b.alive) { cannonballs.splice(i, 1); continue; }
+      b.vy += 0.16;
+      b.x += b.vx;
+      b.y += b.vy;
+      b.r = 6;
+      // Offscreen cleanup
+      if (b.y > H + 80 || b.x < -60 || b.x > W + 60) { cannonballs.splice(i, 1); continue; }
+      // Ground or platform hit → explode
+      let hitGround = b.y >= GROUND - 4;
+      if (!hitGround) {
+        for (const p of platforms) {
+          if (b.x >= p.x && b.x <= p.x + p.w && b.y >= p.y && b.y <= p.y + p.h) { hitGround = true; break; }
+        }
+      }
+      // Player hit by projectile body (direct)
+      const playerCenter = { x: player.x + player.w/2, y: player.y + player.h/2 };
+      const dx = b.x - playerCenter.x, dy = b.y - playerCenter.y;
+      const direct = dx*dx + dy*dy < 16 * 16;
+      if (hitGround || direct) {
+        explosions.push({ x: b.x, y: b.y, t: 0 });
+        sfxExplode();
+        // Splash damage
+        if (!shielded) {
+          const ddx = b.x - playerCenter.x, ddy = b.y - playerCenter.y;
+          if (ddx*ddx + ddy*ddy < EXPLOSION_R * EXPLOSION_R) damagePlayer();
+        }
+        // Splash also kills enemies within radius (full theatrics: explode + quip + sound)
+        enemies.forEach(e => {
+          if (!e.alive) return;
+          const ex = e.x + e.w/2 - b.x, ey = e.y + e.h/2 - b.y;
+          if (ex*ex + ey*ey < EXPLOSION_R * EXPLOSION_R) killEnemy(e);
+        });
+        cannonballs.splice(i, 1);
+      }
+    }
+    // Advance explosion timers
+    for (let i = explosions.length - 1; i >= 0; i--) {
+      explosions[i].t++;
+      if (explosions[i].t > 28) explosions.splice(i, 1);
+    }
+  }
+
+  function drawCannonballs() {
+    cannonballs.forEach(b => {
+      const x = sx(b.x), y = sy(b.y);
+      const r = Math.ceil(6 * scale);
+      // Shadow core
+      ctx.fillStyle = '#000';
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      // Fuse spark
+      const spark = (frame % 6 < 3);
+      if (spark) {
+        ctx.fillStyle = '#FFB020';
+        ctx.beginPath(); ctx.arc(x - r * 0.4, y - r * 0.9, Math.ceil(2 * scale), 0, Math.PI * 2); ctx.fill();
+      }
+      // Highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.beginPath(); ctx.arc(x - r * 0.35, y - r * 0.35, Math.ceil(2 * scale), 0, Math.PI * 2); ctx.fill();
+    });
+  }
+
+  /* ── KILL QUIPS: smoky-fade floating text from dead enemies up off-screen ── */
+  const QUIP_LIFE = 110;    // frames alive
+  const QUIP_RISE = 180;    // world pixels the label travels up over its life
+  function updateKillQuips() {
+    for (let i = killQuips.length - 1; i >= 0; i--) {
+      const q = killQuips[i];
+      q.t++;
+      if (q.t > QUIP_LIFE) { killQuips.splice(i, 1); continue; }
+    }
+  }
+  function drawKillQuips() {
+    if (!killQuips.length) return;
+    const fs = Math.max(16, Math.ceil(22 * scale));
+    ctx.save();
+    ctx.font = `900 ${fs}px "Arial Black", Impact, "Helvetica Neue", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    killQuips.forEach(q => {
+      const prog = q.t / QUIP_LIFE;          // 0..1
+      // Ease-out rise
+      const eased = 1 - Math.pow(1 - prog, 2);
+      const wy = q.y - eased * QUIP_RISE;
+      const sxQ = sx(q.x);
+      const syQ = sy(wy);
+      // Smoky puff behind the text — multiple soft circles that grow + fade
+      const puffs = 5;
+      for (let i = 0; i < puffs; i++) {
+        const pa = 0.18 * (1 - prog) * (1 - i / puffs);
+        const pr = (18 + i * 7) * scale * (0.5 + eased * 1.2);
+        const ox = ((i - (puffs - 1) / 2) * 10) * scale;
+        ctx.fillStyle = `rgba(220, 220, 230, ${pa})`;
+        ctx.beginPath();
+        ctx.arc(sxQ + ox, syQ + (i * 2 * scale), pr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Text alpha fades in first 15% then holds, then fades out last 30%
+      let textAlpha;
+      if (prog < 0.12) textAlpha = prog / 0.12;
+      else if (prog > 0.7) textAlpha = 1 - (prog - 0.7) / 0.3;
+      else textAlpha = 1;
+      textAlpha = Math.max(0, Math.min(1, textAlpha));
+      // Thick black outline
+      ctx.lineWidth = Math.max(3, Math.ceil(4 * scale));
+      ctx.strokeStyle = `rgba(0, 0, 0, ${textAlpha})`;
+      ctx.strokeText(q.text, sxQ, syQ);
+      // Cream fill (reads off the blue sky cleanly)
+      ctx.fillStyle = `rgba(255, 244, 210, ${textAlpha})`;
+      ctx.fillText(q.text, sxQ, syQ);
+    });
+    ctx.restore();
+  }
+
+  function drawExplosions() {
+    explosions.forEach(ex => {
+      const prog = ex.t / 28;                  // 0 → 1
+      const rOuter = EXPLOSION_R * scale * (0.35 + prog * 0.95);
+      const rInner = rOuter * 0.45;
+      const cx = sx(ex.x), cy = sy(ex.y);
+      const alpha = 1 - prog;
+      const spikes = 10;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(ex.t * 0.08);
+      // Outer yellow spiky star
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const a = (i / (spikes * 2)) * Math.PI * 2;
+        const r = i % 2 === 0 ? rOuter : rInner;
+        const px = Math.cos(a) * r, py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = `rgba(255, 196, 32, ${alpha})`;
+      ctx.fill();
+      ctx.lineWidth = Math.max(2, Math.ceil(3 * scale));
+      ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+      ctx.stroke();
+      // Inner orange star
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const a = (i / (spikes * 2)) * Math.PI * 2 + 0.2;
+        const r = i % 2 === 0 ? rOuter * 0.62 : rInner * 0.55;
+        const px = Math.cos(a) * r, py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = `rgba(255, 77, 77, ${alpha})`;
+      ctx.fill();
+      // White hot center
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+      ctx.beginPath();
+      ctx.arc(0, 0, rInner * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     });
   }
 
@@ -685,42 +1443,199 @@
       if (!p.alive) { projectiles.splice(i, 1); continue; }
       p.x += p.vx;
       if (p.x < cam - 20 || p.x > cam + vw/scale + 20) { p.alive = false; continue; }
-      enemies.forEach(e => { if (hit(p, e)) { p.alive = false; sfxHit(); score += 3; } });
+      enemies.forEach(e => {
+        if (!e.alive) return;
+        if (hit(p, e)) {
+          p.alive = false;
+          killEnemy(e);
+        }
+      });
       spikes.forEach(s => { if (hit(p, s)) p.alive = false; });
+      // Bullets also detonate cannonballs mid-air (satisfying counterplay)
+      for (let j = cannonballs.length - 1; j >= 0; j--) {
+        const b = cannonballs[j];
+        if (Math.abs(p.x - b.x) < 10 && Math.abs(p.y - b.y) < 10) {
+          explosions.push({ x: b.x, y: b.y, t: 0 });
+          cannonballs.splice(j, 1);
+          p.alive = false;
+          score += 4;
+          break;
+        }
+      }
+      // Bullets destroy cannons too (with a satisfying explosion)
+      CANNONS.forEach(cn => {
+        if (!cn.alive) return;
+        if (hit(p, cn)) {
+          p.alive = false;
+          cn.alive = false;
+          explosions.push({ x: cn.x + cn.w / 2, y: cn.y + cn.h / 2, t: 0 });
+          sfxEnemyKill();
+          score += 8;
+        }
+      });
     }
   }
 
   function drawCollectibles() {
     const bob = Math.sin(frame * 0.07) * 3 * scale;
+
+    /* ── Premium coins: spinning golden doubloon with shine sweep + sparkles ── */
     coinDefs.forEach(c => {
       if (!c.alive) return;
-      ctx.fillStyle = C.coin;
-      const r = Math.ceil(5*scale);
-      ctx.beginPath();
-      ctx.arc(sx(c.x+5), sy(c.y+5) + bob, r, 0, Math.PI*2);
-      ctx.fill();
-      ctx.fillStyle = 'rgba(255,255,255,0.4)';
-      ctx.beginPath();
-      ctx.arc(sx(c.x+3), sy(c.y+3) + bob, Math.ceil(2*scale), 0, Math.PI*2);
-      ctx.fill();
+      const cx = sx(c.x + 5);
+      const cy = sy(c.y + 5) + bob;
+      // Spin: oval gets narrower then wider
+      const spin = Math.cos(frame * 0.12 + c.x * 0.01);      // -1..1
+      const rX = Math.max(1, Math.ceil(6 * scale * Math.abs(spin)));
+      const rY = Math.ceil(6 * scale);
+
+      // Soft outer glow
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, rY * 2.2);
+      glow.addColorStop(0, 'rgba(255, 210, 80, 0.45)');
+      glow.addColorStop(1, 'rgba(255, 210, 80, 0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(cx, cy, rY * 2.2, 0, Math.PI * 2); ctx.fill();
+
+      // Face — radial gradient from pale gold center to deep gold rim
+      const face = ctx.createRadialGradient(cx - rX * 0.3, cy - rY * 0.4, 0, cx, cy, Math.max(rX, rY));
+      face.addColorStop(0, '#FFF1A8');
+      face.addColorStop(0.55, '#FFD24A');
+      face.addColorStop(1, '#C78A1A');
+      ctx.fillStyle = face;
+      ctx.beginPath(); ctx.ellipse(cx, cy, rX, rY, 0, 0, Math.PI * 2); ctx.fill();
+      // Dark rim outline
+      ctx.strokeStyle = '#7A4A0A';
+      ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+      ctx.stroke();
+
+      // Inset circle for the stamp
+      ctx.strokeStyle = 'rgba(122, 74, 10, 0.55)';
+      ctx.lineWidth = Math.max(1, Math.floor(scale));
+      ctx.beginPath(); ctx.ellipse(cx, cy, rX * 0.6, rY * 0.6, 0, 0, Math.PI * 2); ctx.stroke();
+
+      // "K" mark when face is wide enough to read (design-systems monogram)
+      if (Math.abs(spin) > 0.55) {
+        ctx.fillStyle = 'rgba(122, 74, 10, 0.9)';
+        ctx.font = `900 ${Math.ceil(7 * scale)}px "DM Serif Display", serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('K', cx, cy + Math.ceil(0.5 * scale));
+      }
+
+      // Shine sweep — thin highlight that rotates with the spin
+      if (spin > 0.15) {
+        const shX = cx + rX * -0.3;
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.35 * spin})`;
+        ctx.beginPath();
+        ctx.ellipse(shX, cy - rY * 0.2, rX * 0.35, rY * 0.65, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Sparkle — a tiny four-point star drifting near the coin on a cycle
+      const spPhase = (frame + c.x) * 0.05;
+      const spA = (Math.sin(spPhase) + 1) / 2;
+      if (spA > 0.5) {
+        const sR = rY * 1.8;
+        const sx0 = cx + Math.cos(spPhase * 1.3) * sR;
+        const sy0 = cy + Math.sin(spPhase * 1.3) * sR * 0.5;
+        ctx.fillStyle = `rgba(255, 244, 150, ${(spA - 0.5) * 2})`;
+        const sparkleL = rY * 0.9, sparkleS = Math.max(1, Math.floor(scale));
+        ctx.fillRect(sx0 - sparkleL / 2, sy0 - sparkleS / 2, sparkleL, sparkleS);
+        ctx.fillRect(sx0 - sparkleS / 2, sy0 - sparkleL / 2, sparkleS, sparkleL);
+      }
     });
+
+    /* ── Premium artifacts: glowing journal scroll with wax seal + ribbon ── */
     artifactDefs.forEach(a => {
       if (!a.alive) return;
-      ctx.fillStyle = a.col;
-      ctx.fillRect(sx(a.x), sy(a.y) + bob, sw(a.w), sh(a.h));
-      ctx.fillStyle = '#fff';
-      ctx.font = `bold ${Math.ceil(10*scale)}px monospace`;
+      const bx = sx(a.x), by = sy(a.y) + bob - Math.ceil(2 * scale);
+      const bw = sw(a.w), bh = sh(a.h);
+
+      // Floating glow halo (pulses softly)
+      const pulse = 0.75 + Math.sin(frame * 0.08 + a.x * 0.01) * 0.25;
+      const haloR = Math.max(bw, bh) * 1.4 * pulse;
+      const halo = ctx.createRadialGradient(bx + bw / 2, by + bh / 2, 0, bx + bw / 2, by + bh / 2, haloR);
+      halo.addColorStop(0, 'rgba(255, 235, 185, 0.55)');
+      halo.addColorStop(1, 'rgba(255, 235, 185, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath(); ctx.arc(bx + bw / 2, by + bh / 2, haloR, 0, Math.PI * 2); ctx.fill();
+
+      // Parchment card (slight paper texture via two-color layering)
+      ctx.fillStyle = '#F7EBCF';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, Math.ceil(2 * scale));
+      else ctx.rect(bx, by, bw, bh);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(160, 120, 60, 0.15)';
+      ctx.fillRect(bx, by + bh - Math.ceil(3 * scale), bw, Math.ceil(3 * scale));   // aged bottom edge
+
+      // Quill-line ruling
+      ctx.strokeStyle = 'rgba(120, 80, 30, 0.35)';
+      ctx.lineWidth = Math.max(1, Math.floor(scale));
+      ctx.beginPath();
+      ctx.moveTo(bx + Math.ceil(3 * scale), by + bh * 0.45);
+      ctx.lineTo(bx + bw - Math.ceil(3 * scale), by + bh * 0.45);
+      ctx.moveTo(bx + Math.ceil(3 * scale), by + bh * 0.65);
+      ctx.lineTo(bx + bw - Math.ceil(3 * scale), by + bh * 0.65);
+      ctx.stroke();
+
+      // Outline
+      ctx.strokeStyle = '#6A4A1A';
+      ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, Math.ceil(2 * scale));
+      else ctx.rect(bx, by, bw, bh);
+      ctx.stroke();
+
+      // Wax seal (red dot with the letter)
+      const sealR = Math.ceil(6 * scale);
+      const sealX = bx + bw / 2;
+      const sealY = by - Math.ceil(2 * scale);
+      ctx.fillStyle = '#B8002E';
+      ctx.beginPath(); ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#4A0012';
+      ctx.lineWidth = Math.max(1, Math.floor(scale));
+      ctx.stroke();
+      // Seal highlight
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.beginPath(); ctx.arc(sealX - sealR * 0.35, sealY - sealR * 0.35, sealR * 0.35, 0, Math.PI * 2); ctx.fill();
+      // Letter on the seal
+      ctx.fillStyle = '#FCE8B0';
+      ctx.font = `900 ${Math.ceil(8 * scale)}px "DM Serif Display", serif`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(a.label, sx(a.x+8), sy(a.y+8) + bob);
+      ctx.fillText(a.label, sealX, sealY + Math.ceil(0.5 * scale));
+
+      // Tiny ribbon tail swaying
+      const ribbonSwing = Math.sin(frame * 0.1 + a.x) * Math.ceil(2 * scale);
+      ctx.fillStyle = '#B8002E';
+      ctx.beginPath();
+      ctx.moveTo(sealX - Math.ceil(3 * scale), sealY + sealR * 0.5);
+      ctx.lineTo(sealX - Math.ceil(5 * scale) + ribbonSwing, sealY + sealR + Math.ceil(5 * scale));
+      ctx.lineTo(sealX, sealY + sealR);
+      ctx.closePath(); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(sealX + Math.ceil(3 * scale), sealY + sealR * 0.5);
+      ctx.lineTo(sealX + Math.ceil(5 * scale) + ribbonSwing, sealY + sealR + Math.ceil(5 * scale));
+      ctx.lineTo(sealX, sealY + sealR);
+      ctx.closePath(); ctx.fill();
     });
+
+    /* ── Power-ups kept simple but outlined ── */
     powerupDefs.forEach(p => {
       if (!p.alive) return;
+      const x = sx(p.x), y = sy(p.y) + bob;
+      const w = sw(p.w), h = sh(p.h);
       ctx.fillStyle = p.type === 'bolt' ? C.bolt : C.shield;
-      ctx.fillRect(sx(p.x), sy(p.y) + bob, sw(p.w), sh(p.h));
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, y, w, h, Math.ceil(3 * scale));
+      else ctx.rect(x, y, w, h);
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = Math.max(1, Math.floor(1.5 * scale));
+      ctx.stroke();
       ctx.fillStyle = '#fff';
-      ctx.font = `bold ${Math.ceil(10*scale)}px monospace`;
+      ctx.font = `bold ${Math.ceil(10 * scale)}px monospace`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(p.type === 'bolt' ? '⚡' : '★', sx(p.x+8), sy(p.y+8) + bob);
+      ctx.fillText(p.type === 'bolt' ? '⚡' : '★', x + w / 2, y + h / 2);
     });
   }
 
@@ -762,44 +1677,120 @@
     ctx.closePath(); ctx.fill();
   }
 
-  function drawHeart(cx, cy, r) {
-    ctx.beginPath();
-    ctx.moveTo(cx, cy + r*0.4);
-    ctx.bezierCurveTo(cx, cy-r*0.4, cx-r, cy-r*0.6, cx-r, cy);
-    ctx.bezierCurveTo(cx-r, cy+r*0.5, cx, cy+r*0.8, cx, cy+r);
-    ctx.bezierCurveTo(cx, cy+r*0.8, cx+r, cy+r*0.5, cx+r, cy);
-    ctx.bezierCurveTo(cx+r, cy-r*0.6, cx, cy-r*0.4, cx, cy+r*0.4);
-    ctx.closePath(); ctx.fill();
-  }
-
   function drawHUD() {
-    const m = Math.ceil(14*scale);
-    const bw = Math.ceil(150*scale), bh = Math.ceil(28*scale);
-    const bx = offX + m, by = offY + m;
-    ctx.fillStyle = C.hudBg;
+    const m = Math.ceil(14 * scale);
+    const radius = Math.ceil(10 * scale);
+
+    /* ── Top-left stats pill (dark BG, heart emojis + score) ── */
+    ctx.save();
+    const emoji = `${Math.ceil(15 * scale)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    const lbl = `600 ${Math.ceil(11 * scale)}px Inter, sans-serif`;
+    ctx.font = emoji;
+    ctx.textBaseline = 'middle';
+    // Measure hearts
+    const heartStr = '❤️'.repeat(hp) + '🖤'.repeat(MAX_HP - hp);
+    const heartW = ctx.measureText(heartStr).width;
+    ctx.font = lbl;
+    const statStr = `${score} pts · ${coins} coins`;
+    const statW = ctx.measureText(statStr).width;
+    const padX = Math.ceil(14 * scale);
+    const gap  = Math.ceil(12 * scale);
+    const pillW = padX * 2 + heartW + gap + statW;
+    const pillH = Math.ceil(36 * scale);
+    const px = offX + m, py = offY + m;
+
+    ctx.fillStyle = '#1F1E1B';
     ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, Math.ceil(6*scale));
-    else ctx.rect(bx, by, bw, bh);
+    if (ctx.roundRect) ctx.roundRect(px, py, pillW, pillH, radius); else ctx.rect(px, py, pillW, pillH);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(240,235,227,0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.font = emoji;
+    ctx.textAlign = 'left';
+    ctx.fillText(heartStr, px + padX, py + pillH / 2);
+    ctx.font = lbl;
+    ctx.fillStyle = '#F0EBE3';
+    ctx.fillText(statStr, px + padX + heartW + gap, py + pillH / 2);
+    ctx.restore();
+
+    /* ── Top-center slim health bar ── */
+    ctx.save();
+    const barW = Math.min(Math.ceil(280 * scale), vw * 0.45);
+    const barH = Math.ceil(10 * scale);      // slimmer track reads as a neat HUD bar, not a slab
+    const outerPad = Math.ceil(7 * scale);
+    const heartSize = Math.ceil(14 * scale);
+    const gap2 = Math.ceil(8 * scale);
+    const totalW = heartSize + gap2 + barW;
+    const boxW = totalW + outerPad * 2;
+    const boxH = barH + outerPad * 2;
+    const boxX = Math.floor(offX + vw / 2 - boxW / 2);
+    const boxY = offY + m;
+
+    ctx.fillStyle = '#1F1E1B';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, radius); else ctx.rect(boxX, boxY, boxW, boxH);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(240,235,227,0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Heart emoji
+    ctx.font = `${heartSize}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    const heartX = boxX + outerPad;
+    const heartY = boxY + boxH / 2;
+    ctx.fillText('❤️', heartX, heartY);
+
+    // Health bar track + segments
+    const trackX = boxX + outerPad + heartSize + gap2;
+    const trackY = boxY + outerPad;
+    ctx.fillStyle = 'rgba(240,235,227,0.08)';
+    ctx.beginPath();
+    const trackRadius = Math.ceil(barH / 2);
+    if (ctx.roundRect) ctx.roundRect(trackX, trackY, barW, barH, trackRadius);
+    else ctx.rect(trackX, trackY, barW, barH);
     ctx.fill();
 
-    for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = i < lives ? C.heart : 'rgba(42,37,53,0.15)';
-      drawHeart(bx + Math.ceil((10 + i*22)*scale), by + bh/2, Math.ceil(6*scale));
+    const segGap = Math.ceil(3 * scale);
+    const segW = (barW - segGap * (MAX_HP - 1)) / MAX_HP;
+    for (let i = 0; i < MAX_HP; i++) {
+      const filled = i < hp;
+      const sx0 = trackX + i * (segW + segGap);
+      if (filled) {
+        const pulse = iFrames > 0 ? 0.6 + Math.abs(Math.sin(iFrames * 0.4)) * 0.4 : 1;
+        const grad = ctx.createLinearGradient(0, trackY, 0, trackY + barH);
+        grad.addColorStop(0, `rgba(255, 120, 120, ${pulse})`);
+        grad.addColorStop(1, `rgba(229, 57, 57, ${pulse})`);
+        ctx.fillStyle = grad;
+      } else {
+        ctx.fillStyle = 'rgba(240,235,227,0.10)';
+      }
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(sx0, trackY, segW, barH, Math.min(trackRadius, Math.ceil(3 * scale)));
+      else ctx.rect(sx0, trackY, segW, barH);
+      ctx.fill();
     }
 
-    ctx.fillStyle = C.fg;
-    ctx.font = `600 ${Math.ceil(10*scale)}px Inter, sans-serif`;
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(`${score} pts · ${coins} coins`, bx + Math.ceil(82*scale), by + bh/2);
+    // "HP" label above bar
+    ctx.font = `600 ${Math.ceil(9 * scale)}px Inter, sans-serif`;
+    ctx.fillStyle = 'rgba(240,235,227,0.6)';
+    ctx.textBaseline = 'bottom';
+    ctx.textAlign = 'center';
+    ctx.fillText(`HEALTH ${hp} / ${MAX_HP}`, trackX + barW / 2, trackY - Math.ceil(2 * scale));
+    ctx.restore();
 
+    /* ── Powerup timer (beneath stats pill) ── */
     if (powerup) {
-      const bx2 = offX + m, by2 = by + bh + Math.ceil(5*scale);
-      const maxW = Math.ceil(150*scale);
+      const bx2 = offX + m, by2 = py + pillH + Math.ceil(6 * scale);
+      const maxW = Math.ceil(180 * scale);
       const fillW = Math.ceil(maxW * (powerup.timer / powerup.maxTimer));
-      ctx.fillStyle = 'rgba(237,234,227,0.5)';
-      ctx.fillRect(bx2, by2, maxW, Math.ceil(4*scale));
+      ctx.fillStyle = 'rgba(31,30,27,0.85)';
+      ctx.fillRect(bx2, by2, maxW, Math.ceil(6 * scale));
       ctx.fillStyle = powerup.type === 'bolt' ? C.bolt : C.shield;
-      ctx.fillRect(bx2, by2, fillW, Math.ceil(4*scale));
+      ctx.fillRect(bx2, by2, fillW, Math.ceil(6 * scale));
     }
   }
 
@@ -859,7 +1850,9 @@
   function endGame(won) {
     if (state === 'END') return;
     state = 'END';
-    cancelAnimationFrame(rafId);
+    // Note: the render loop self-terminates on state === 'END' — no cancelAnimationFrame needed.
+    // (The earlier cancel was a no-op because rafId pointed to the already-consumed current frame,
+    // so a new frame was still scheduled at the end of loop(). That caused double-speed on retry.)
     won ? sfxWin() : sfxLose();
 
     const tiers = [
@@ -894,6 +1887,7 @@
         document.getElementById('endCard').classList.remove('show');
         document.activeElement?.blur();
         resetState();
+        lastTime = 0;   // fresh dt baseline — avoids a stale gap from the time spent on the end card
         rafId = requestAnimationFrame(loop);
       };
     }
@@ -902,65 +1896,180 @@
   }
 
   /* ── DRAW: SKY ── */
+  // Flat Mario day-sky: saturated blue top to pale horizon. No tint bands.
   function drawSky() {
     const grad = ctx.createLinearGradient(0, offY, 0, offY + H * scale);
     grad.addColorStop(0, C.sky1);
+    grad.addColorStop(0.75, '#8FBEFF');
     grad.addColorStop(1, C.sky2);
     ctx.fillStyle = grad;
     ctx.fillRect(offX, offY, W * scale, H * scale);
+  }
 
-    // Zone color bands (subtle tint)
-    const zones = [
-      { x:0,    w:840,  col:'rgba(76,175,80,0.08)' },
-      { x:840,  w:1160, col:'rgba(255,152,0,0.08)' },
-      { x:2000, w:1200, col:'rgba(224,64,251,0.08)' },
-      { x:3200, w:800,  col:'rgba(255,82,82,0.08)' },
-      { x:4000, w:800,  col:'rgba(38,198,218,0.08)' },
-    ];
-    zones.forEach(z => {
-      ctx.fillStyle = z.col;
-      ctx.fillRect(sx(z.x), offY, sw(z.w), H * scale);
+  /* ── DRAW: MOUNTAINS ── */
+  // Distant mountain range behind the clouds. Triangular silhouettes rising from
+  // below the ground line so they read as "mountains on the horizon," not floating hills.
+  // Two layers: far (paler, parallax 0.15) and near (darker, parallax 0.3).
+  function drawMountainRange(list, parallax, fill, snowFill, darken) {
+    const horizonY = H + 40;   // base sinks below visible ground so mountains never float
+    list.forEach(m => {
+      const apexX = Math.floor((m.x - cam * parallax) * scale + offX);
+      const apexY = Math.floor((horizonY - m.h) * scale + offY);
+      const leftX = Math.floor((m.x - m.spread - cam * parallax) * scale + offX);
+      const rightX = Math.floor((m.x + m.spread - cam * parallax) * scale + offX);
+      const baseY = Math.floor(horizonY * scale + offY);
+      if (rightX < -20 || leftX > vw + 20) return;
+
+      // Body
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.moveTo(leftX, baseY);
+      ctx.lineTo(apexX, apexY);
+      ctx.lineTo(rightX, baseY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Shaded side (left slope gets the shadow)
+      ctx.fillStyle = darken;
+      ctx.beginPath();
+      ctx.moveTo(leftX, baseY);
+      ctx.lineTo(apexX, apexY);
+      ctx.lineTo(apexX, baseY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Snow cap: small triangle at the apex
+      const snowH = Math.max(10, m.h * 0.22);
+      const snowBase = apexY + snowH * scale;
+      const snowL = apexX - (m.spread * (snowH / m.h)) * scale * 0.9;
+      const snowR = apexX + (m.spread * (snowH / m.h)) * scale * 0.9;
+      ctx.fillStyle = snowFill;
+      ctx.beginPath();
+      ctx.moveTo(apexX, apexY);
+      ctx.lineTo(snowL, snowBase);
+      // Jagged snow line
+      ctx.lineTo(snowL + (snowR - snowL) * 0.25, snowBase - Math.ceil(3 * scale));
+      ctx.lineTo(snowL + (snowR - snowL) * 0.45, snowBase);
+      ctx.lineTo(snowL + (snowR - snowL) * 0.65, snowBase - Math.ceil(4 * scale));
+      ctx.lineTo(snowL + (snowR - snowL) * 0.85, snowBase);
+      ctx.lineTo(snowR, snowBase);
+      ctx.closePath();
+      ctx.fill();
+    });
+  }
+
+  function drawMountains() {
+    // Far range — cool, desaturated, sits way back
+    drawMountainRange(MOUNTAINS_FAR, 0.15, '#7A8AB8', '#F5F7FC', '#5E6E96');
+    // Near range — deeper blue-green, tighter parallax
+    drawMountainRange(MOUNTAINS_NEAR, 0.30, '#4B6F8E', '#EDF4FC', '#2F4A66');
+  }
+
+  /* ── DRAW: CLOUDS ── */
+  // Classic Mario puffs: 3 overlapping circles, white fill, deep-navy outline.
+  function drawClouds() {
+    const parallax = 0.4;
+    const lw = Math.max(2, Math.ceil(2.5 * scale));
+    ctx.lineJoin = 'round';
+    CLOUDS.forEach(cl => {
+      const cx = Math.floor((cl.x - cam * parallax) * scale + offX);
+      const cy = Math.floor(cl.y * scale + offY);
+      const r  = Math.ceil(18 * cl.s * scale);
+      if (cx + r * 3 < -20 || cx - r * 3 > vw + 20) return;
+      // Outline pass (single path so the outline sits behind the fills cleanly)
+      ctx.strokeStyle = C.cloudLine;
+      ctx.lineWidth = lw;
+      ctx.beginPath();
+      ctx.arc(cx - r * 1.3, cy + r * 0.25, r,       0, Math.PI * 2);
+      ctx.arc(cx,           cy - r * 0.15, r * 1.3, 0, Math.PI * 2);
+      ctx.arc(cx + r * 1.3, cy + r * 0.25, r,       0, Math.PI * 2);
+      ctx.stroke();
+      // White fill pass
+      ctx.fillStyle = C.cloud;
+      ctx.beginPath();
+      ctx.arc(cx - r * 1.3, cy + r * 0.25, r,       0, Math.PI * 2);
+      ctx.arc(cx,           cy - r * 0.15, r * 1.3, 0, Math.PI * 2);
+      ctx.arc(cx + r * 1.3, cy + r * 0.25, r,       0, Math.PI * 2);
+      ctx.fill();
     });
   }
 
   /* ── DRAW: SKY BANNERS ── */
-  // Editorial italic-serif pull quotes floating across the sky, parallax 0.55.
-  // No cloud shapes: the type IS the visual — minimal, confident, on-brand.
+  // Spider-Verse poster text: heavy display font, thick black outline,
+  // alternating yellow/red fills, slight tilt. No shadow — pure chunk.
   function drawSkyBanners() {
     const parallax = 0.55;
-    const fs = Math.max(11, Math.ceil(17 * scale));
+    const fs = Math.max(18, Math.ceil(30 * scale));
     ctx.save();
-    ctx.font = `italic 400 ${fs}px "DM Serif Display", Georgia, serif`;
+    ctx.font = `900 ${fs}px "Arial Black", "Helvetica Neue", Impact, sans-serif`;
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    const lineH = Math.max(1, Math.ceil(1.2 * scale));
-    const lineW = Math.ceil(34 * scale);
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    ctx.miterLimit = 2;
+    const outline = Math.max(4, Math.ceil(6 * scale));
     SKY_FACTOIDS.forEach(b => {
-      const sxB = Math.floor((b.x - cam * parallax) * scale + offX);
-      const syB = Math.floor(b.y * scale + offY);
+      const bx = Math.floor((b.x - cam * parallax) * scale + offX);
+      const by = Math.floor(b.y * scale + offY);
       const w = ctx.measureText(b.text).width;
-      if (sxB + w / 2 < -20 || sxB - w / 2 > vw + 20) return; // cull offscreen
-      // Accent hairline above the quote
-      ctx.fillStyle = 'rgba(155, 45, 122, 0.32)';
-      ctx.fillRect(sxB - lineW / 2, syB, lineW, lineH);
-      // Quote
-      ctx.fillStyle = 'rgba(42, 37, 53, 0.38)';
-      ctx.fillText(b.text, sxB, syB + Math.ceil(10 * scale));
+      if (bx + w / 2 + 40 < 0 || bx - w / 2 - 40 > vw) return;
+      ctx.save();
+      ctx.translate(bx, by);
+      ctx.rotate((b.tilt || 0) * Math.PI / 180);
+      // Thick black outline
+      ctx.lineWidth = outline;
+      ctx.strokeStyle = C.bannerInk;
+      ctx.strokeText(b.text, 0, 0);
+      // White inner ring (Spider-Verse double-stroke look)
+      ctx.lineWidth = Math.max(1, Math.floor(outline * 0.35));
+      ctx.strokeStyle = C.bannerWhite;
+      ctx.strokeText(b.text, 0, 0);
+      // Bold fill
+      ctx.fillStyle = b.fill === 1 ? C.bannerFillAlt : C.bannerFill;
+      ctx.fillText(b.text, 0, 0);
+      ctx.restore();
     });
     ctx.restore();
   }
 
   /* ── DRAW: PLATFORMS ── */
+  // Grass-on-earth: green top strip, brown body with pebble dots, black outline.
   function drawPlatforms() {
+    const outline = Math.max(1, Math.floor(1.5 * scale));
     platforms.forEach(p => {
-      ctx.fillStyle = p.col;
-      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
-      // Shadow gradient on top surface
-      const grad = ctx.createLinearGradient(0, sy(p.y), 0, sy(p.y) + sh(p.h));
-      grad.addColorStop(0, 'rgba(0,0,0,0.18)');
-      grad.addColorStop(1, 'rgba(0,0,0,0.0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
+      const x = sx(p.x), y = sy(p.y), w = sw(p.w), h = sh(p.h);
+      const grassH = Math.max(4, Math.ceil(Math.min(10, p.h * 0.35) * scale));
+      // Earth body
+      ctx.fillStyle = C.earth;
+      ctx.fillRect(x, y + grassH, w, h - grassH);
+      // Earth darker underbelly
+      ctx.fillStyle = C.earthDark;
+      ctx.fillRect(x, y + h - Math.max(2, Math.floor(3 * scale)), w, Math.max(2, Math.floor(3 * scale)));
+      // Pebble dots (deterministic by platform index)
+      ctx.fillStyle = C.earthDot;
+      const dot = Math.max(2, Math.floor(2.5 * scale));
+      const stepX = Math.max(18, Math.floor(22 * scale));
+      const stepY = Math.max(14, Math.floor(16 * scale));
+      for (let dx = Math.floor(p.x) % 11 * 2; dx < p.w; dx += stepX / scale) {
+        for (let dy = grassH / scale + 6; dy < p.h - 4; dy += stepY / scale) {
+          const px = sx(p.x + dx);
+          const py = sy(p.y + dy);
+          if (px > x + w - dot || py > y + h - dot) continue;
+          ctx.fillRect(px, py, dot, dot);
+        }
+      }
+      // Grass top
+      ctx.fillStyle = C.grass;
+      ctx.fillRect(x, y, w, grassH);
+      // Grass dark line at seam
+      ctx.fillStyle = C.grassDark;
+      ctx.fillRect(x, y + grassH - Math.max(1, Math.floor(scale)), w, Math.max(1, Math.floor(scale)));
+      // Grass highlight (top pixel row)
+      ctx.fillStyle = C.grassHi;
+      ctx.fillRect(x, y, w, Math.max(1, Math.floor(scale)));
+      // Black outline around whole block
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = outline;
+      ctx.strokeRect(x + outline / 2, y + outline / 2, w - outline, h - outline);
     });
   }
 
@@ -968,7 +2077,24 @@
   function update(dt = 1/60) {
     frame++;
     if (factoidTimer > 0) factoidTimer -= dt * 60;
-    // Camera: keep player at ~35% from left
+
+    // Story Mode: camera self-drives, narration beats fire at world checkpoints, gameplay pauses.
+    if (storyMode) {
+      updateKillQuips();
+      const camLimit = Math.max(0, W - vw / scale);
+      cam = Math.min(cam + STORY_CAM_SPEED, camLimit);
+      const readHead = cam + vw / scale * 0.35;
+      STORY_BEATS.forEach(b => {
+        if (!b.fired && readHead >= b.at) {
+          b.fired = true;
+          showFactoid(b.text);
+        }
+      });
+      if (cam >= camLimit && factoidTimer <= 0) setStoryMode(false);
+      return;
+    }
+
+    // Standard play: camera tracks player at ~35% from the left edge.
     const targetCam = player.x - vw / scale * 0.35;
     cam = Math.max(0, Math.min(targetCam, Math.max(0, W - vw / scale)));
 
@@ -981,11 +2107,15 @@
 
     if (shootCooldown > 0) shootCooldown--;
     if (muzzleFlash > 0) muzzleFlash--;
+    if (iFrames > 0) iFrames--;
 
     updatePlayer();
     updateEnemies();
+    updateCannons();
+    updateCannonballs();
     updateCollectibles(dt);
     updateProjectiles();
+    updateKillQuips();
     if (state === 'DYING') {
       deathTimer--;
       if (deathTimer <= 0) { spawnPlayer(); state = 'PLAY'; }
@@ -997,14 +2127,20 @@
     ctx.fillStyle = C.gameBg;
     ctx.fillRect(0, 0, vw, vh);
     drawSky();
+    drawMountains();
+    drawClouds();
     drawSkyBanners();
     drawPlatforms();
     drawSpikes();
     drawEnemies();
+    drawCannons();
+    drawCannonballs();
     drawCollectibles();
     drawProjectiles();
     drawFlag();
     drawPlayer();
+    drawExplosions();
+    drawKillQuips();
     drawHUD();
     drawFactoid();
   }
@@ -1015,7 +2151,8 @@
     lastTime = now;
     update(dt);
     render();
-    rafId = requestAnimationFrame(loop);
+    // Self-terminate when the game ends. Retry will start a fresh rAF chain via resetState → requestAnimationFrame.
+    if (state !== 'END') rafId = requestAnimationFrame(loop);
   }
   rafId = requestAnimationFrame(loop);
   </script>
