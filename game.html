@@ -217,6 +217,18 @@
     Z4: "MSN, ESPN, Getty. Different scales. Same instinct: what does the user actually need?",
   };
 
+  // Editorial sky banners: italic serif pull quotes scattered across the level.
+  // x = world x, y = world y (sky band, above platforms at y=560).
+  const SKY_FACTOIDS = [
+    { x: 260,  y: 150, text: "4 years. Shipping product." },
+    { x: 940,  y: 120, text: "Figma since day one." },
+    { x: 1580, y: 160, text: "Founding Designer at FinalLayer." },
+    { x: 2220, y: 130, text: "I design. I code." },
+    { x: 2900, y: 155, text: "CXFacts. 30 days. Shipped." },
+    { x: 3560, y: 125, text: "Two Nordic banks. Closed." },
+    { x: 4240, y: 150, text: "MSN. ESPN. Getty." },
+  ];
+
   function resetState() {
     cam = 0; lives = 3; score = 0; coins = 0;
     state = 'PLAY'; deathTimer = 0; checkpointX = 40; frame = 0; powerup = null;
@@ -225,6 +237,7 @@
     artifactDefs.forEach(a => a.alive = true);
     powerupDefs.forEach(p => p.alive = true);
     projectiles.length = 0;
+    shootCooldown = 0; muzzleFlash = 0;
     spawnPlayer();
   }
 
@@ -260,13 +273,12 @@
   function sfxLose()     { [400,300,200,100].forEach((f,i) => setTimeout(() => beep(f, 0.15, 'square', 0.15), i*130)); }
 
   /* ── RESIZE ── */
-  let vw, vh, scale, offX, offY;
+  let vw, vh, scale, offX = 0, offY = 0;
   function resize() {
     const dpr = window.devicePixelRatio || 1;
     vw = window.innerWidth; vh = window.innerHeight;
-    const wa = W / H, va = vw / vh;
-    if (va > wa) { scale = vh / H; offX = (vw - W * scale) / 2; offY = 0; }
-    else          { scale = vw / W; offX = 0; offY = (vh - H * scale) / 2; }
+    scale = vh / H;
+    offX = 0; offY = 0;
     canvas.width  = vw * dpr; canvas.height = vh * dpr;
     canvas.style.width = vw + 'px'; canvas.style.height = vh + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -434,8 +446,44 @@
 
     const ay = bt + Math.ceil(3*scale);
     const sw2 = walk ? Math.sin(player.wf * 0.4) * Math.ceil(4*scale) : 0;
-    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(f * Math.ceil(6*scale), ay + Math.ceil(5*scale) + sw2); ctx.stroke();
+    // Front arm — held straight horizontally to aim the gun, not the walking diagonal.
+    const armTipX = f * Math.ceil(8 * scale);
+    const armTipY = ay + Math.ceil(1 * scale);
+    ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(armTipX, armTipY); ctx.stroke();
+    // Back arm — still swings with stride for life.
     ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(-f * Math.ceil(5*scale), ay + Math.ceil(5*scale) - sw2); ctx.stroke();
+
+    // Gun — minimal charcoal pistol at the fingertips.
+    const gunLen = Math.ceil(7 * scale);
+    const gunH = Math.max(2, Math.ceil(3 * scale));
+    ctx.fillStyle = C.fg;
+    ctx.fillRect(
+      armTipX + (f > 0 ? 0 : -gunLen),
+      armTipY - Math.floor(gunH / 2),
+      gunLen,
+      gunH
+    );
+    // Grip: a tiny stub under the barrel
+    ctx.fillRect(
+      armTipX + (f > 0 ? Math.ceil(1 * scale) : -Math.ceil(3 * scale)),
+      armTipY + Math.floor(gunH / 2),
+      Math.ceil(2 * scale),
+      Math.ceil(3 * scale)
+    );
+    // Muzzle flash — gold burst for a few frames after firing
+    if (muzzleFlash > 0) {
+      const mx = armTipX + f * (gunLen + Math.ceil(2 * scale));
+      const my = armTipY;
+      const flashAlpha = muzzleFlash / 5;
+      ctx.fillStyle = `rgba(255, 215, 0, ${flashAlpha})`;
+      ctx.beginPath();
+      ctx.arc(mx, my, Math.ceil(5 * scale), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha * 0.8})`;
+      ctx.beginPath();
+      ctx.arc(mx, my, Math.ceil(2 * scale), 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     if (walk) {
       const ls = Math.sin(player.wf * 0.4) * Math.ceil(5*scale);
@@ -560,16 +608,27 @@
   });
 
   const projectiles = [];
+  let shootCooldown = 0;   // frames until next shot allowed
+  let muzzleFlash = 0;     // frames of muzzle flash remaining
 
   function throwProjectile() {
-    if (powerup && powerup.type === 'bolt') {
-      sfxThrow();
-      projectiles.push({ x: player.x + player.w/2, y: player.y + 8, w:8, h:8, vx: player.facing * 7, alive:true });
-    }
+    if (state !== 'PLAY') return;
+    if (shootCooldown > 0) return;
+    const rapid = powerup && powerup.type === 'bolt';
+    shootCooldown = rapid ? 8 : 22;
+    muzzleFlash = 5;
+    sfxThrow();
+    projectiles.push({
+      x: player.x + (player.facing > 0 ? player.w : -8),
+      y: player.y + 10,
+      w: 8, h: 4,
+      vx: player.facing * (rapid ? 9 : 7),
+      alive: true
+    });
   }
 
   window.addEventListener('keydown', e => {
-    if (e.code === 'KeyX') throwProjectile();
+    if (e.code === 'KeyX' || e.code === 'KeyF') throwProjectile();
   });
 
   /* ── TOUCH CONTROLS ── */
@@ -666,10 +725,23 @@
   }
 
   function drawProjectiles() {
-    ctx.fillStyle = C.proj;
     projectiles.forEach(p => {
       if (!p.alive) return;
-      ctx.fillRect(sx(p.x), sy(p.y), sw(p.w), sh(p.h));
+      const px = sx(p.x), py = sy(p.y);
+      const pw = sw(p.w), ph = sh(p.h);
+      const dir = Math.sign(p.vx) || 1;
+      // Streak trail — 2x length behind the bullet, fading out
+      const trail = ctx.createLinearGradient(px, py, px - dir * pw * 2, py);
+      trail.addColorStop(0, 'rgba(255, 215, 0, 0.65)');
+      trail.addColorStop(1, 'rgba(255, 215, 0, 0)');
+      ctx.fillStyle = trail;
+      ctx.fillRect(px - (dir > 0 ? pw * 2 : 0), py, pw * 2, ph);
+      // Bullet core
+      ctx.fillStyle = C.proj;
+      ctx.fillRect(px, py, pw, ph);
+      // Bright tip
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.fillRect(px + (dir > 0 ? pw - Math.ceil(2 * scale) : 0), py, Math.ceil(2 * scale), ph);
     });
   }
 
@@ -851,6 +923,33 @@
     });
   }
 
+  /* ── DRAW: SKY BANNERS ── */
+  // Editorial italic-serif pull quotes floating across the sky, parallax 0.55.
+  // No cloud shapes: the type IS the visual — minimal, confident, on-brand.
+  function drawSkyBanners() {
+    const parallax = 0.55;
+    const fs = Math.max(11, Math.ceil(17 * scale));
+    ctx.save();
+    ctx.font = `italic 400 ${fs}px "DM Serif Display", Georgia, serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const lineH = Math.max(1, Math.ceil(1.2 * scale));
+    const lineW = Math.ceil(34 * scale);
+    SKY_FACTOIDS.forEach(b => {
+      const sxB = Math.floor((b.x - cam * parallax) * scale + offX);
+      const syB = Math.floor(b.y * scale + offY);
+      const w = ctx.measureText(b.text).width;
+      if (sxB + w / 2 < -20 || sxB - w / 2 > vw + 20) return; // cull offscreen
+      // Accent hairline above the quote
+      ctx.fillStyle = 'rgba(155, 45, 122, 0.32)';
+      ctx.fillRect(sxB - lineW / 2, syB, lineW, lineH);
+      // Quote
+      ctx.fillStyle = 'rgba(42, 37, 53, 0.38)';
+      ctx.fillText(b.text, sxB, syB + Math.ceil(10 * scale));
+    });
+    ctx.restore();
+  }
+
   /* ── DRAW: PLATFORMS ── */
   function drawPlatforms() {
     platforms.forEach(p => {
@@ -880,6 +979,9 @@
       if (p.x <= p.minX || p.x + p.w >= p.maxX) p.dx *= -1;
     });
 
+    if (shootCooldown > 0) shootCooldown--;
+    if (muzzleFlash > 0) muzzleFlash--;
+
     updatePlayer();
     updateEnemies();
     updateCollectibles(dt);
@@ -895,6 +997,7 @@
     ctx.fillStyle = C.gameBg;
     ctx.fillRect(0, 0, vw, vh);
     drawSky();
+    drawSkyBanners();
     drawPlatforms();
     drawSpikes();
     drawEnemies();
