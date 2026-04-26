@@ -71,7 +71,7 @@ These are Keshav's taste constraints. Violating them will be reverted.
 
 ## Per-Page Notes
 
-**`index.html`** — homepage uses `scroll-snap-type: y mandatory`. Adding a new section requires `scroll-snap-align: start` on the element or scroll snapping will break.
+**`index.html`** — homepage uses natural vertical scroll. No scroll-snap. `scroll-padding-top: 80px` keeps anchor jumps clear of the fixed nav.
 
 **`work/rizzle.html`** — interactive component demos (buttons, forms, modals, toasts, dropdowns) are self-contained CSS+HTML with no external dependencies. Demo cards use `background: #070708` with scoped dark overrides for all child components. The sidebar section uses a static PNG (`Assets/rizzle-nav.png`) — do not attempt to rebuild it as a CSS replica.
 

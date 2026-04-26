@@ -8,32 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script>
-    (function () {
-      try {
-        var stored = localStorage.getItem('theme');
-        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
-      } catch (e) {}
-    })();
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #EDEAE3;
-      --fg: #2A2535;
-      --muted: #7A7490;
-      --accent: #9B2D7A;
-      --border: rgba(42, 37, 53, 0.1);
-      --border-strong: rgba(42, 37, 53, 0.35);
-      --surface: #F4F1EC;
-      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
-      --sans: 'Inter', sans-serif;
-      --serif: 'DM Serif Display', serif;
-      --ease: cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    [data-theme="dark"] {
       --bg: #1F1E1B;
       --fg: #F0EBE3;
       --muted: #9E988E;
@@ -42,6 +20,9 @@
       --border-strong: rgba(240, 235, 227, 0.28);
       --surface: #2A2825;
       --nav-bg: rgba(31, 30, 27, 0.94);
+      --sans: 'Inter', sans-serif;
+      --serif: 'DM Serif Display', serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     html {
@@ -80,13 +61,6 @@
     .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -0.015em; line-height: 1; color: var(--fg); transition: transform 0.35s var(--ease), letter-spacing 0.35s var(--ease); }
     .logo-dot { color: var(--accent); font-style: normal; margin-left: 1px; }
     .nav-logo:hover .logo-word { transform: translateY(-1px); letter-spacing: 0; }
-    .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0; transition: color 0.2s, border-color 0.2s, transform 0.25s var(--ease); }
-    .theme-toggle:hover { color: var(--fg); border-color: var(--fg); transform: rotate(-15deg); }
-    .theme-icon { width: 16px; height: 16px; }
-    .theme-icon-sun  { display: none; }
-    .theme-icon-moon { display: block; }
-    [data-theme="dark"] .theme-icon-sun  { display: block; }
-    [data-theme="dark"] .theme-icon-moon { display: none; }
 
     .nav-center { display: flex; justify-content: center; }
     .nav-links { display: flex; gap: 44px; list-style: none; }
@@ -159,27 +133,27 @@
        BREADCRUMB
     ───────────────────────────────────────── */
     .breadcrumb {
-      position: fixed; top: 80px; left: 52px; z-index: 90;
       display: flex; align-items: center; gap: 6px;
+      padding: 96px 52px 0;
       font-size: 10px; font-weight: 400; letter-spacing: 0.06em;
       color: var(--muted);
+      max-width: 100%;
       opacity: 0; transform: translateY(-6px);
       animation: breadcrumbIn 0.5s var(--ease) 0.4s forwards;
-      transition: top 0.4s var(--ease);
     }
     .breadcrumb a {
       color: var(--muted); text-decoration: none;
       transition: color 0.2s;
+      white-space: nowrap; flex-shrink: 0;
     }
     .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb-sep { opacity: 0.4; }
-    .breadcrumb-current { color: var(--fg); font-weight: 500; }
-    .breadcrumb-back {
-      display: none; align-items: center; gap: 4px;
-      font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
-      text-decoration: none; transition: color 0.2s, transform 0.3s var(--ease);
+    .breadcrumb-sep { opacity: 0.4; flex-shrink: 0; }
+    .breadcrumb-current {
+      color: var(--fg); font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+      min-width: 0;
     }
-    .breadcrumb-back:hover { color: var(--fg); transform: translateX(-3px); }
     @keyframes breadcrumbIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -225,7 +199,7 @@
       min-height: 100svh;
       display: flex; flex-direction: column;
       align-items: flex-start; justify-content: flex-end;
-      padding: 120px 52px 80px;
+      padding: 32px 52px 80px;
       position: relative;
       overflow: hidden;
       scroll-snap-align: start;
@@ -303,7 +277,7 @@
       scroll-snap-align: start;
     }
 
-    /* ── Open text columns — no boxes ── */
+    /* ── Open text columns · no boxes ── */
     .cs-overview-grid {
       display: grid;
       grid-template-columns: 1.4fr 1fr;
@@ -332,7 +306,7 @@
     }
     .cs-card-body strong { font-weight: 600; color: var(--fg); }
 
-    /* Problem/challenge — large serif, left accent rule */
+    /* Problem/challenge · large serif, left accent rule */
     .cs-card.problem {
       border-left: 2px solid var(--accent);
       padding-left: 28px;
@@ -346,7 +320,7 @@
       color: var(--fg);
     }
 
-    /* Stat callout — inline accent badge */
+    /* Stat callout · inline accent badge */
     .cs-stat-callout {
       display: inline-flex; align-items: center; gap: 8px;
       margin-top: 24px;
@@ -359,7 +333,7 @@
       color: var(--accent); line-height: 1;
     }
 
-    /* ── Meta strip — horizontal, typographic, no boxes ── */
+    /* ── Meta strip · horizontal, typographic, no boxes ── */
     .cs-meta-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -693,13 +667,13 @@
     .st-tab:hover:not(.active) { color: var(--fg); background: color-mix(in srgb, var(--fg) 3%, transparent); }
     .st-body { padding: 24px; }
     .st-group-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    /* Color tab — two-col rows */
+    /* Color tab · two-col rows */
     .st-color-row { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; padding: 20px 0; border-bottom: 1px solid var(--border); align-items: start; }
     .st-color-row:last-child { border-bottom: none; padding-bottom: 0; }
     .st-color-row:first-child { padding-top: 0; }
     .st-color-name { font-size: 11px; font-weight: 600; color: var(--fg); margin-bottom: 6px; }
     .st-color-note { font-size: 11px; line-height: 1.6; color: var(--muted); }
-    /* Swatch grid — right col, chips stay small since column is constrained */
+    /* Swatch grid · right col, chips stay small since column is constrained */
     .st-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 7px; }
     .st-sw { cursor: default; }
     .st-sw:hover .st-sw-chip { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
@@ -1028,8 +1002,8 @@
     @media (max-width: 1024px) {
       nav { padding: 22px 36px; }
       nav.scrolled { padding: 14px 36px; }
-      .breadcrumb { left: 36px; }
-      .cs-hero { padding: 100px 36px 64px; }
+      .breadcrumb { padding: 92px 36px 0; }
+      .cs-hero { padding: 28px 36px 64px; }
       .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding-left: 36px; padding-right: 36px; }
       .cs-overview-grid { grid-template-columns: 1fr; gap: 48px; }
       .cs-meta-row { grid-template-columns: 1fr 1fr; }
@@ -1047,14 +1021,15 @@
       nav { padding: 20px 24px; }
       .nav-center, .nav-right { display: none; }
       .nav-hamburger { display: flex; }
-      .breadcrumb { top: 76px; left: 24px; }
-      .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; }
-      .breadcrumb-back { display: flex; }
-      .cs-hero { padding: 80px 24px 52px; }
+      .breadcrumb { padding: 84px 24px 0; font-size: 9px; }
+      .cs-hero { padding: 24px 24px 52px; }
       .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding: 64px 24px; }
       .cs-meta-row { grid-template-columns: 1fr; }
-      .cs-meta-card { border-right: none !important; padding-right: 0 !important; margin-right: 0 !important; padding-top: 24px; border-top: 1px solid var(--border); }
+      .cs-meta-card { border-right: none !important; padding-right: 0 !important; margin-right: 0 !important; padding-top: 16px; border-top: 1px solid var(--border); }
       .cs-meta-card:first-child { border-top: none; padding-top: 0; }
+      .persona-stat { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .pstat-l { font-size: 11px; }
+      .cs-part-label { width: 100%; justify-content: center; }
       .cs-card.problem { padding-left: 20px; }
       .cs-insight-grid { grid-template-columns: 1fr; }
       /* Phase tabs: scrollable row so they never wrap or collapse */
@@ -1068,7 +1043,8 @@
       footer { flex-direction: column; align-items: flex-start; padding: 28px 24px 36px; gap: 16px; }
     }
     @media (max-width: 480px) {
-      .cs-hero { padding: 72px 20px 44px; }
+      .breadcrumb { padding: 80px 20px 0; }
+      .cs-hero { padding: 20px 20px 44px; }
       .cs-overview, .cs-process, .cs-phase-section, .cs-screens, .cs-results, .cs-next { padding: 52px 20px; }
       .cs-hero-title { font-size: clamp(38px, 9vw, 80px); }
       .cs-section-title { font-size: clamp(26px, 7vw, 56px); }
@@ -1083,7 +1059,7 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       MERGED — PART ONE/TWO LABELS + BRIDGE + PROCESS ASSETS
+       MERGED · PART ONE/TWO LABELS + BRIDGE + PROCESS ASSETS
     ══════════════════════════════════════════════════════ */
 
     /* Part eyebrow */
@@ -1117,7 +1093,7 @@
       max-width: 460px; margin: 0 auto;
     }
 
-    /* Process rows (vertical — used in Part Two) */
+    /* Process rows (vertical · used in Part Two) */
     .cs-process-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1416,8 +1392,7 @@
 
     /* ─── FOOTER ─── */
     footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
-    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
-    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) invert(1) opacity(0.04);}
     .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
     .footer-brand{display:flex;flex-direction:column;gap:20px;}
     .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
@@ -1468,7 +1443,7 @@
       filter: drop-shadow(0 24px 48px rgba(0,0,0,0.18));
     }
 
-    /* ─── Wireframes v2 — CXFacts blue palette ─── */
+    /* ─── Wireframes v2 · CXFacts blue palette ─── */
     /* Fixed palette: always light, intentionally document-like */
     --wf-bg: #F4F3EE; --wf-surface: #ECEAE3; --wf-border: #CECBC1;
     --wf-line: #D4D0C6; --wf-fill: #E2DFD7; --wf-dark: #1B1D3F;
@@ -1536,8 +1511,8 @@
     .cx-val { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 10px; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
 
     /* ─── Sitemap ─── */
-    .cx-sitemap { overflow-x: auto; padding: 32px 0 20px; }
-    .cx-tree { display: flex; flex-direction: column; align-items: center; }
+    .cx-sitemap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 32px 0 20px; }
+    .cx-tree { display: flex; flex-direction: column; align-items: center; min-width: 720px; }
     .cx-tree-root { display: flex; flex-direction: column; align-items: center; }
     .cx-tree-node { padding: 6px 14px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); font-size: 11px; font-weight: 600; color: var(--fg); font-family: var(--sans); white-space: nowrap; text-align: center; }
     .cx-tree-node.root { background: var(--accent); color: #fff; border-color: var(--accent); font-size: 12px; }
@@ -1592,10 +1567,6 @@
       <ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul>
     </div>
     <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
-        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
-      </button>
       <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
     </div>
     <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
@@ -1605,14 +1576,11 @@
 
   <!-- ── Breadcrumb ── -->
   <nav class="breadcrumb" aria-label="Breadcrumb">
-    <!-- Full breadcrumb (desktop) -->
     <a href="../index.html">Home</a>
     <span class="breadcrumb-sep">/</span>
     <a href="../index.html#work">Work</a>
     <span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">CXFacts</span>
-    <!-- Compact back link (mobile) -->
-    <a href="../index.html#work" class="breadcrumb-back">← Back</a>
   </nav>
 
   <!-- ══════════════════════════════════════════
@@ -1715,7 +1683,7 @@
     <h2 class="cs-section-title reveal reveal-d1">Five phases.<br><em>One product.</em></h2>
     <p class="cs-section-sub reveal reveal-d2">From first interview to final screens. Three months, five phases. Everything below is the full story.</p>
 
-    <!-- 5-column phase overview grid — replaces tab list panels -->
+    <!-- 5-column phase overview grid · replaces tab list panels -->
     <div class="cs-process-overview reveal reveal-d3">
       <div class="cs-phase-card">
         <div class="cs-phase-card-num">01</div>
@@ -2484,7 +2452,7 @@
         <div class="st-color-row">
           <div>
             <div class="st-color-name">Warning</div>
-            <div class="st-color-note">Amber for attention without alarm. 50–200 for low-response-rate banners. 500 for icons. 600–700 for text on white — yellow alone never passes AA.</div>
+            <div class="st-color-note">Amber for attention without alarm. 50–200 for low-response-rate banners. 500 for icons. 600–700 for text on white. Yellow alone never passes AA.</div>
           </div>
           <div class="st-swatch-grid">
             <div class="st-sw"><div class="st-sw-chip" style="background:#FFFBEB;border:1px solid rgba(0,0,0,.07);"><div class="st-sw-hint">50</div></div><div class="st-sw-label">50</div></div>
@@ -2500,7 +2468,7 @@
         <div class="st-color-row">
           <div>
             <div class="st-color-name">Background</div>
-            <div class="st-color-note">Page, card, panel, and border surfaces. Light end only — these never carry meaning, just structural depth.</div>
+            <div class="st-color-note">Page, card, panel, and border surfaces. Light end only. These never carry meaning, just structural depth.</div>
           </div>
           <div class="st-swatch-grid">
             <div class="st-sw"><div class="st-sw-chip" style="background:#FFFFFF;border:1px solid rgba(0,0,0,.09);"><div class="st-sw-hint">white</div></div><div class="st-sw-label">white</div></div>
@@ -2533,7 +2501,7 @@
       <div class="st-body" id="st-type" style="display:none;">
         <!-- Hero specimen -->
         <div class="st-type-hero">
-          <div class="st-type-overline">Inter — Product Sans</div>
+          <div class="st-type-overline">Inter · Product Sans</div>
           <div class="st-type-numerals"><span>95%</span> task complete &nbsp;&nbsp; <span>6.2×</span> login growth &nbsp;&nbsp; <span>2</span> banks</div>
           <div class="st-type-pills">
             <span class="st-type-pill">Inter Variable</span>
@@ -2544,7 +2512,7 @@
         </div>
         <!-- Weight waterfall -->
         <div class="st-waterfall">
-          <div class="st-waterfall-label">Weight scale — same size, same text</div>
+          <div class="st-waterfall-label">Weight scale · same size, same text</div>
           <div class="st-wf-row"><span class="st-wf-sample" style="font-weight:300;">Dashboard Overview</span><span class="st-wf-weight">Light · 300</span></div>
           <div class="st-wf-row"><span class="st-wf-sample" style="font-weight:400;">Dashboard Overview</span><span class="st-wf-weight">Regular · 400</span></div>
           <div class="st-wf-row"><span class="st-wf-sample" style="font-weight:500;">Dashboard Overview</span><span class="st-wf-weight">Medium · 500</span></div>
@@ -2578,8 +2546,8 @@
       <!-- Spacing & Radius -->
       <div class="st-body" id="st-space" style="display:none;">
 
-        <!-- Zone 1: Token ladder — visual proof of the 8pt grid -->
-        <div class="sp-overline">8pt base grid — every stop is intentional</div>
+        <!-- Zone 1: Token ladder · visual proof of the 8pt grid -->
+        <div class="sp-overline">8pt base grid · every stop is intentional</div>
         <div class="sp-ladder">
           <div class="sp-unit">
             <div class="sp-block" style="width:4px;height:4px;"></div>
@@ -2617,7 +2585,7 @@
 
         <!-- Zone 2: Applied in context -->
         <div class="sp-ctx-section">
-          <div class="sp-ctx-label">Inset — card padding</div>
+          <div class="sp-ctx-label">Inset · card padding</div>
           <div class="sp-ctx-desc">Tight for dense tables, comfortable for cards, loose for hero panels.</div>
           <div class="sp-inset-demos">
             <div>
@@ -2645,7 +2613,7 @@
         </div>
 
         <div class="sp-ctx-section">
-          <div class="sp-ctx-label">Gap — list rhythm</div>
+          <div class="sp-ctx-label">Gap · list rhythm</div>
           <div class="sp-ctx-desc">Tighter gap reads as a group; looser gap reads as distinct items.</div>
           <div class="sp-gap-pair">
             <div>
@@ -2671,7 +2639,7 @@
 
         <!-- Zone 3: Radius gallery -->
         <div class="sp-ctx-section">
-          <div class="sp-ctx-label">Radius — corner character</div>
+          <div class="sp-ctx-label">Radius · corner character</div>
           <div class="sp-ctx-desc">Each stop has a personality. Sharp for data, rounded for actions, pill for badges.</div>
           <div class="sp-rad-gallery">
             <div class="sp-rad-unit">
@@ -2723,7 +2691,7 @@
         <div class="st-comp-row">
           <div>
             <div class="st-comp-name">Form inputs</div>
-            <div class="st-comp-note">Focus ring at 3px. Radio options are the core survey interaction — selected state must be unambiguous.</div>
+            <div class="st-comp-note">Focus ring at 3px. Radio options are the core survey interaction. Selected state must be unambiguous.</div>
           </div>
           <div>
             <input class="st-input-mock" placeholder="Type your question..." />
@@ -2736,7 +2704,7 @@
         <div class="st-comp-row">
           <div>
             <div class="st-comp-name">Toggles</div>
-            <div class="st-comp-note">Settings and filter controls. On state is always Primary blue — never a semantic color.</div>
+            <div class="st-comp-note">Settings and filter controls. On state is always Primary blue, never a semantic color.</div>
           </div>
           <div>
             <div class="st-toggle-row">
@@ -2757,7 +2725,7 @@
         <div class="st-comp-row">
           <div>
             <div class="st-comp-name">Data cards</div>
-            <div class="st-comp-note">KPI display for the bank dashboard. Number dominates — label and trend are supporting context.</div>
+            <div class="st-comp-note">KPI display for the bank dashboard. Number dominates. Label and trend are supporting context.</div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
             <div class="st-metric-card">
@@ -2786,7 +2754,7 @@
         <div class="st-comp-row">
           <div>
             <div class="st-comp-name">Progress + badges</div>
-            <div class="st-comp-note">Survey completion and survey status. Badges are read-only state indicators — never interactive.</div>
+            <div class="st-comp-note">Survey completion and survey status. Badges are read-only state indicators, never interactive.</div>
           </div>
           <div>
             <div class="st-progress-head"><span class="st-progress-title">Q4 Survey completion</span><span class="st-progress-pct">73%</span></div>
@@ -2822,7 +2790,7 @@
       <div class="cs-screen-item wide reveal">
         <img src="../Assets/ss4.png" alt="CXFacts login screen" loading="lazy" decoding="async" style="width:100%;display:block;" />
         <div class="cs-screen-label">Login Screen</div>
-        <div class="cs-screen-desc">First impression — the only screen where we could lose a user before they'd seen anything</div>
+        <div class="cs-screen-desc">First impression. The only screen where we could lose a user before they'd seen anything</div>
       </div>
 
       <!-- Dashboard -->
@@ -2863,7 +2831,7 @@
     <div class="cs-section-eyebrow reveal">Outcomes</div>
     <h2 class="cs-section-title reveal reveal-d1">Two stories.<br><em>One set of numbers.</em></h2>
 
-    <div class="cs-results-grid" style="grid-template-columns: repeat(3,1fr);">
+    <div class="cs-results-grid">
       <div class="cs-result-item reveal">
         <div class="cs-result-number">78<span>%</span></div>
         <div class="cs-result-label">of users manually consolidated partner data across 3+ systems weekly; the hypothesis that drove every design decision</div>
@@ -2892,7 +2860,7 @@
   </section>
 
   <!-- ══════════════════════════════════════════
-       BRIDGE — connective tissue between parts
+       BRIDGE · connective tissue between parts
   ══════════════════════════════════════════ -->
   <section class="cs-bridge" id="feature">
     <div class="cs-bridge-eyebrow reveal">Part Two</div>
@@ -2911,7 +2879,7 @@
 
   <!-- ── Feature hero image ── -->
   <div class="reveal" style="padding: 0 52px 80px;">
-    <img src="../Assets/customquestion.png" alt="CXFacts Custom Question feature — shipped screen" loading="lazy" decoding="async" style="width:100%;display:block;border-radius:16px;filter:drop-shadow(0 32px 64px rgba(0,0,0,0.2));" />
+    <img src="../Assets/customquestion.png" alt="CXFacts Custom Question feature, shipped screen" loading="lazy" decoding="async" style="width:100%;display:block;border-radius:16px;filter:drop-shadow(0 32px 64px rgba(0,0,0,0.2));" />
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -3017,7 +2985,7 @@
   </div>
   <div class="cs-process-screenshot reveal">
     <div class="cs-screenshot-label">What shipped</div>
-    <img src="../Assets/p1.png" alt="Discover phase — project brief and stakeholder alignment" loading="lazy" decoding="async" />
+    <img src="../Assets/p1.png" alt="Discover phase: project brief and stakeholder alignment" loading="lazy" decoding="async" />
   </div>
 
   <!-- Define -->
@@ -3070,7 +3038,7 @@
     <div class="cs-ghost-num">02</div>
   </div>
   <div class="cs-process-screenshot reveal">
-    <img src="../Assets/p2.png" alt="Define phase — personas and user journey mapping" loading="lazy" decoding="async" />
+    <img src="../Assets/p2.png" alt="Define phase: personas and user journey mapping" loading="lazy" decoding="async" />
   </div>
 
   <!-- Design -->
@@ -3124,7 +3092,7 @@
     <div class="cs-ghost-num">03</div>
   </div>
   <div class="cs-process-screenshot reveal">
-    <img src="../Assets/p3.png" alt="Design phase — wireframes and component design" loading="lazy" decoding="async" />
+    <img src="../Assets/p3.png" alt="Design phase: wireframes and component design" loading="lazy" decoding="async" />
   </div>
 
   <!-- Deliver -->
@@ -3171,7 +3139,7 @@
     <div class="cs-ghost-num">04</div>
   </div>
   <div class="cs-process-screenshot reveal">
-    <img src="../Assets/p4.png" alt="Deliver phase — handoff and developer collaboration" loading="lazy" decoding="async" />
+    <img src="../Assets/p4.png" alt="Deliver phase: handoff and developer collaboration" loading="lazy" decoding="async" />
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -3184,13 +3152,13 @@
     </div>
     <div class="cs-challenges-grid">
       <div class="cs-challenge-card reveal">
-        <img src="../Assets/imp1.png" alt="Iteration 01 — Previously Used Questions" loading="lazy" decoding="async" class="cs-challenge-img" />
+        <img src="../Assets/imp1.png" alt="Iteration 01: Previously Used Questions" loading="lazy" decoding="async" class="cs-challenge-img" />
         <div class="cs-challenge-eyebrow">Iteration 01</div>
         <h3 class="cs-challenge-title">Previously Used Questions</h3>
         <p class="cs-challenge-body">First round of wireframe testing surfaced something I hadn't designed for: users didn't want to rebuild the same question twice. "I asked this last quarter, why can't I just reuse it?" That became a side drawer, reachable right from the question creation screen. The kind of thing that feels obvious in hindsight.</p>
       </div>
       <div class="cs-challenge-card reveal reveal-d1">
-        <img src="../Assets/imp2.png" alt="Iteration 02 — Character Counter" loading="lazy" decoding="async" class="cs-challenge-img" />
+        <img src="../Assets/imp2.png" alt="Iteration 02: Character Counter" loading="lazy" decoding="async" class="cs-challenge-img" />
         <div class="cs-challenge-eyebrow">Iteration 02</div>
         <h3 class="cs-challenge-title">Character Counter</h3>
         <p class="cs-challenge-body">Nobody writes a 400-character survey question. Except when they do. During testing, a user hammered the question field and the layout collapsed. We benchmarked limits across Google Forms and SurveyMonkey, landed on counts that covered real usage, then added a live counter. Not glamorous. Completely necessary.</p>
@@ -3381,23 +3349,11 @@
   </a>
 
   <script>
-    /* ── THEME TOGGLE ── */
-    (function initThemeToggle() {
-      const btn = document.getElementById('themeToggle');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        try { localStorage.setItem('theme', next); } catch (e) {}
-      });
-    })();
 
     /* ── SMART NAV ── */
     const nav = document.getElementById('nav');
     const scrollTopBtn = document.getElementById('scrollTop');
     const emailBtn = document.getElementById('emailButton');
-    const breadcrumb = document.querySelector('.breadcrumb');
     let lastY = 0;
 
     window.addEventListener('scroll', () => {
@@ -3406,8 +3362,6 @@
       nav.classList.toggle('scrolled', y > 48);
       scrollTopBtn.classList.toggle('visible', y > 500);
       emailBtn.classList.toggle('visible', y > 500);
-      // Shift breadcrumb when nav is scrolled
-      breadcrumb.style.top = y > 48 ? '54px' : '80px';
       lastY = y;
     }, { passive: true });
 

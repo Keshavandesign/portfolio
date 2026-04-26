@@ -8,23 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script>
-    (function(){try{var s=localStorage.getItem('theme'),p=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',s||(p?'dark':'light'));}catch(e){}}());
-  </script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
-      --bg:#EDEAE3;--fg:#2A2535;--muted:#7A7490;--accent:#9B2D7A;
-      --border:rgba(42,37,53,.10);--border-strong:rgba(42,37,53,.35);
-      --surface:#F4F1EC;--nav-bg:color-mix(in srgb,var(--fg) 96%,transparent);
-      --sans:'Inter',sans-serif;--serif:'DM Serif Display',serif;
-      --ease:cubic-bezier(.22,1,.36,1);
-      --slack:#4A154B;--slack-light:#611f69;
-    }
-    [data-theme="dark"]{
       --bg:#1F1E1B;--fg:#F0EBE3;--muted:#9E988E;--accent:#E569A9;
       --border:rgba(240,235,227,.10);--border-strong:rgba(240,235,227,.28);
       --surface:#2A2825;--nav-bg:rgba(31,30,27,.94);
+      --sans:'Inter',sans-serif;--serif:'DM Serif Display',serif;
+      --ease:cubic-bezier(.22,1,.36,1);
+      --slack:#4A154B;--slack-light:#611f69;
     }
     html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
     body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;overflow-x:hidden;transition:background-color .35s var(--ease),color .35s var(--ease);}
@@ -37,11 +29,6 @@
     .logo-word{font-family:var(--serif);font-style:italic;font-size:24px;font-weight:400;letter-spacing:-.015em;line-height:1;color:var(--fg);transition:transform .35s var(--ease),letter-spacing .35s var(--ease);}
     .logo-dot{color:var(--accent);font-style:normal;margin-left:1px;}
     .nav-logo:hover .logo-word{transform:translateY(-1px);letter-spacing:0;}
-    .theme-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:color .2s,border-color .2s,transform .25s var(--ease);}
-    .theme-toggle:hover{color:var(--fg);border-color:var(--fg);transform:rotate(-15deg);}
-    .theme-icon{width:16px;height:16px;}
-    .theme-icon-sun{display:none;}.theme-icon-moon{display:block;}
-    [data-theme="dark"] .theme-icon-sun{display:block;}[data-theme="dark"] .theme-icon-moon{display:none;}
     .nav-center{display:flex;justify-content:center;}
     .nav-links{display:flex;gap:44px;list-style:none;}
     .nav-links a{font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--muted);position:relative;transition:color .2s;}
@@ -63,20 +50,18 @@
     .mobile-nav-links a{display:block;font-family:var(--serif);font-size:clamp(36px,8vw,56px);color:var(--fg);text-decoration:none;transform:translateY(110%);opacity:0;transition:color .2s,transform .5s var(--ease),opacity .5s var(--ease);}
     .mobile-nav.open .mobile-nav-links a{transform:translateY(0);opacity:1;}
     .mobile-nav-links a:hover{color:var(--accent);}
-    .breadcrumb{position:fixed;top:88px;left:52px;z-index:90;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:top .4s var(--ease);}
-    .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;}
+    .breadcrumb{display:flex;align-items:center;gap:8px;padding:96px 52px 0;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);max-width:100%;}
+    .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;white-space:nowrap;flex-shrink:0;}
     .breadcrumb a:hover{color:var(--accent);}
-    .breadcrumb-sep{opacity:.4;}
-    .breadcrumb-current{color:var(--fg);font-weight:500;}
-    .breadcrumb-back{display:none;font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s,transform .3s var(--ease);}
-    .breadcrumb-back:hover{color:var(--fg);transform:translateX(-3px);}
-    @media(max-width:1024px){nav{padding:22px 36px;}nav.scrolled{padding:14px 36px;}.breadcrumb{left:36px;}}
-    @media(max-width:768px){nav{padding:20px 24px;}.nav-center,.nav-right{display:none;}.nav-hamburger{display:flex;}.breadcrumb{top:76px;left:24px;}.breadcrumb-sep,.breadcrumb a:not(:last-of-type){display:none;}.breadcrumb-back{display:flex;}}
+    .breadcrumb-sep{opacity:.4;flex-shrink:0;}
+    .breadcrumb-current{color:var(--fg);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+    @media(max-width:1024px){nav{padding:22px 36px;}nav.scrolled{padding:14px 36px;}.breadcrumb{padding:92px 36px 0;}}
+    @media(max-width:768px){nav{padding:20px 24px;}.nav-center,.nav-right{display:none;}.nav-hamburger{display:flex;}.breadcrumb{padding:84px 24px 0;font-size:10px;}}
 
     .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);transform-origin:left;transform:scaleX(0);z-index:200;transition:transform .1s linear;}
 
     /* ── HERO ── */
-    .cs-hero{padding:140px 52px 80px;border-bottom:1px solid var(--border);}
+    .cs-hero{min-height:100svh;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:32px 52px 80px;border-bottom:1px solid var(--border);}
     .cs-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
     .cs-tag{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);padding:4px 10px;border-radius:100px;}
     .cs-hero h1{font-family:var(--serif);font-size:clamp(40px,5.5vw,80px);font-weight:400;line-height:1.02;letter-spacing:-.03em;margin-bottom:24px;}
@@ -87,7 +72,7 @@
     .cs-meta-item+.cs-meta-item{padding-left:32px;border-left:1px solid var(--border);}
     .cs-meta-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
     .cs-meta-value{font-size:14px;}
-    @media(max-width:768px){.cs-hero{padding:110px 24px 56px;}.cs-meta-row{flex-wrap:wrap;}.cs-meta-item{flex:1 1 50%;padding:16px 0 0!important;border-left:none!important;}}
+    @media(max-width:768px){.cs-hero{padding:24px 24px 56px;}.cs-meta-row{flex-wrap:wrap;}.cs-meta-item{flex:1 1 50%;padding:16px 0 0!important;border-left:none!important;}}
 
     /* ── SECTIONS ── */
     .section{padding:90px 52px;border-top:1px solid var(--border);}
@@ -192,8 +177,7 @@
   
     /* ─── FOOTER ─── */
     footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
-    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
-    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) invert(1) opacity(0.04);}
     .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
     .footer-brand{display:flex;flex-direction:column;gap:20px;}
     .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
@@ -221,7 +205,8 @@
     @media(max-width:640px){footer{padding:56px 24px 0;}.footer-main{grid-template-columns:1fr;gap:40px;padding-bottom:56px;}.footer-brand{grid-column:auto;}.footer-sig{height:80%;right:-6%;}}
 
     @media(max-width:600px){
-      .cs-hero,.hero{padding:110px 20px 56px;}
+      .breadcrumb{padding:80px 20px 0;}
+      .cs-hero,.hero{padding:20px 20px 56px;}
       .section,.cs-section{padding:64px 20px;}
       .slack-shell,.screen-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
       .cta-banner{padding:64px 20px;}
@@ -235,10 +220,6 @@
     <a href="../index.html" class="nav-logo" aria-label="Keshav Anand home"><span class="logo-word">Keshav<span class="logo-dot">.</span></span></a>
     <div class="nav-center"><ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul></div>
     <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
       <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
     </div>
     <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
@@ -248,7 +229,6 @@
     <a href="../index.html">Home</a><span class="breadcrumb-sep">/</span>
     <a href="../index.html#mini">Mini Projects</a><span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">Slack</span>
-    <a href="../index.html#mini" class="breadcrumb-back">← Back</a>
   </nav>
 
   <div class="mobile-nav" id="mobileNav">
@@ -267,11 +247,11 @@
       <span class="cs-tag">Information Architecture</span>
     </div>
     <h1 class="reveal rd1">Coming back to Slack<br>feels like <em>punishment.</em></h1>
-    <p class="cs-hero-sub reveal rd2">You step away for two hours. You return to 340 unread messages across 18 channels. The actual signal — one blocker, two decisions — is buried somewhere in there. This isn't a notification problem. It's an information architecture failure.</p>
+    <p class="cs-hero-sub reveal rd2">You step away for two hours. You return to 340 unread messages across 18 channels. The actual signal (one blocker, two decisions) is buried somewhere in there. This isn't a notification problem. It's an information architecture failure.</p>
     <div class="cs-meta-row reveal rd3">
       <div class="cs-meta-item"><p class="cs-meta-label">Type</p><p class="cs-meta-value">Mini Project · 2 days</p></div>
       <div class="cs-meta-item"><p class="cs-meta-label">Problem</p><p class="cs-meta-value">Catch-up experience after absence</p></div>
-      <div class="cs-meta-item"><p class="cs-meta-label">Root cause</p><p class="cs-meta-value">All messages are equal — none are</p></div>
+      <div class="cs-meta-item"><p class="cs-meta-label">Root cause</p><p class="cs-meta-value">All messages are equal, so none are</p></div>
     </div>
   </section>
 
@@ -280,7 +260,7 @@
     <p class="sec-eyebrow reveal">The real problem</p>
     <h2 class="sec-heading reveal rd1">Slack treats every message<br>as <em>equally urgent.</em> They're not.</h2>
     <p class="sec-body reveal rd2">
-      <p>A red badge means "unread." That's all it means. A meme in #random and a prod outage in #incidents both look identical in the sidebar. Slack's information model has no urgency, no relationship, no context — just a count.</p>
+      <p>A red badge means "unread." That's all it means. A meme in #random and a prod outage in #incidents both look identical in the sidebar. Slack's information model has no urgency, no relationship, no context, just a count.</p>
       <p>The catch-up experience is "scroll up until you feel okay." There's no way to answer the only question that matters when you return: <strong>did anything actually need me?</strong></p>
     </p>
 
@@ -288,7 +268,7 @@
       <div class="principle reveal">
         <div class="principle-n">01</div>
         <div class="principle-head">No triage layer</div>
-        <div class="principle-body">Slack surfaces everything. "Everything" is noise. Without a triage layer, the user is the triage layer — every time, manually, at cognitive cost.</div>
+        <div class="principle-body">Slack surfaces everything. "Everything" is noise. Without a triage layer, the user is the triage layer. Every time, manually, at cognitive cost.</div>
       </div>
       <div class="principle reveal rd1">
         <div class="principle-n">02</div>
@@ -311,8 +291,8 @@
   <!-- REDESIGN -->
   <section class="section">
     <p class="sec-eyebrow reveal">The redesign</p>
-    <h2 class="sec-heading reveal rd1">Catch-Up Mode —<br><em>signal, not scroll.</em></h2>
-    <p class="sec-body reveal rd2">A new surface that activates when you've been away. Not a summary. Not AI magic. Just a structured triage view that groups what you missed into three buckets — so you can process it in order of what actually matters.</p>
+    <h2 class="sec-heading reveal rd1">Catch-Up Mode.<br><em>Signal, not scroll.</em></h2>
+    <p class="sec-body reveal rd2">A new surface that activates when you've been away. Not a summary. Not AI magic. Just a structured triage view that groups what you missed into three buckets, so you can process it in order of what actually matters.</p>
 
     <div class="split">
       <div class="split-text reveal">
@@ -320,7 +300,7 @@
         <h3 class="split-heading">340 unread.<br>No <em>way in.</em></h3>
         <div class="split-body">
           <p>The current sidebar gives you a count. Each channel has a red badge. You have to open each one, scan, and decide if anything needed you. There's no shortcut. No priority. Just a list.</p>
-          <p>Users develop coping strategies — muting channels, ignoring badges — that defeat the purpose of the tool entirely.</p>
+          <p>Users develop coping strategies (muting channels, ignoring badges) that defeat the purpose of the tool entirely.</p>
         </div>
       </div>
       <div class="screens reveal rd1">
@@ -356,7 +336,7 @@
         <h3 class="split-heading">Catch-Up Mode.<br>Three <em>buckets.</em></h3>
         <div class="split-body">
           <p>When you return after an absence, Slack offers Catch-Up Mode: a single view of everything you missed, sorted into <strong>Needs you</strong> (mentions + DMs), <strong>Happening now</strong> (active threads), and <strong>When you're ready</strong> (the rest).</p>
-          <p>You process top-down. You reply inline. You mark buckets done. No channel hopping. The badge count goes to zero because you actually processed it — not because you scrolled past it.</p>
+          <p>You process top-down. You reply inline. You mark buckets done. No channel hopping. The badge count goes to zero because you actually processed it, not because you scrolled past it.</p>
         </div>
       </div>
       <div class="screens reveal rd1">
@@ -376,13 +356,13 @@
             </div>
             <div class="catchup-main">
               <div class="catchup-header">
-                <div><div class="catchup-title">Catch-Up</div><div class="catchup-subtitle">While you were away — 2:00–4:15 PM</div></div>
+                <div><div class="catchup-title">Catch-Up</div><div class="catchup-subtitle">While you were away · 2:00–4:15 PM</div></div>
                 <div class="catchup-badge">179 total</div>
               </div>
               <div class="catchup-buckets">
                 <div class="catchup-bucket">
                   <div class="catchup-bucket-head"><div class="catchup-bucket-dot" style="background:#CD2553;"></div><span class="catchup-bucket-label" style="color:#CD2553;">Needs you · 2</span></div>
-                  <div class="catchup-item"><span class="catchup-item-ch">#engineering</span><span class="catchup-item-text">@keshav this is blocking the demo tomorrow — Suki</span><span class="catchup-item-action warn">Reply</span></div>
+                  <div class="catchup-item"><span class="catchup-item-ch">#engineering</span><span class="catchup-item-text">@keshav this is blocking the demo tomorrow, Suki</span><span class="catchup-item-action warn">Reply</span></div>
                   <div class="catchup-item"><span class="catchup-item-ch">DM · Priya</span><span class="catchup-item-text">Can you review the auth PR before 5pm?</span><span class="catchup-item-action warn">Reply</span></div>
                 </div>
                 <div class="catchup-bucket">
@@ -391,7 +371,7 @@
                 </div>
                 <div class="catchup-bucket" style="opacity:.6;">
                   <div class="catchup-bucket-head"><div class="catchup-bucket-dot" style="background:rgba(255,255,255,.25);"></div><span class="catchup-bucket-label" style="color:rgba(255,255,255,.4);">When you're ready · 176</span></div>
-                  <div class="catchup-item"><span class="catchup-item-ch">#general</span><span class="catchup-item-text">47 messages — mostly memes, 1 team lunch poll</span><span class="catchup-item-action">Skip</span></div>
+                  <div class="catchup-item"><span class="catchup-item-ch">#general</span><span class="catchup-item-text">47 messages, mostly memes, 1 team lunch poll</span><span class="catchup-item-action">Skip</span></div>
                 </div>
               </div>
             </div>
@@ -411,7 +391,6 @@
   </section>
 
   <script>
-    (function(){const btn=document.getElementById('themeToggle');if(!btn)return;btn.addEventListener('click',()=>{const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}});})();
     const nav=document.getElementById('nav'),bar=document.getElementById('progressBar');let lastY=0;
     window.addEventListener('scroll',()=>{const y=window.scrollY;if(nav){nav.classList.toggle('hide',y>lastY&&y>120);nav.classList.toggle('scrolled',y>48);}if(bar){const t=document.documentElement.scrollHeight-window.innerHeight;bar.style.transform=`scaleX(${t>0?y/t:0})`;}lastY=y;},{passive:true});
     const hamburger=document.getElementById('hamburger'),mobileNav=document.getElementById('mobileNav');let menuOpen=false;
