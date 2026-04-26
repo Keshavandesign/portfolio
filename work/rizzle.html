@@ -8,32 +8,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script>
-    (function(){try{var s=localStorage.getItem('theme'),p=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',s||(p?'dark':'light'));}catch(e){}}());
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #EDEAE3; --fg: #2A2535; --muted: #7A7490;
-      /* Rizzle brand colors — override portfolio pink for this case study */
-      --accent: #BB00ED;
-      --accent-form: #D7FF00;
-      --accent-form-fg: #000;
-      --border: rgba(42,37,53,0.1); --border-strong: rgba(42,37,53,0.28);
-      --surface: #F4F1EC;
-      --nav-bg: color-mix(in srgb, var(--fg) 96%, transparent);
-      --sans: 'Inter', sans-serif; --work: 'Work Sans', sans-serif;
-      --serif: 'DM Serif Display', serif;
-      --ease: cubic-bezier(0.22,1,0.36,1);
-    }
-    [data-theme="dark"] {
       --bg: #1F1E1B; --fg: #F0EBE3; --muted: #9E988E;
+      /* Rizzle brand accent: violet on dark */
       --accent: #D359F3;
       --accent-form: #D7FF00;
       --accent-form-fg: #000;
       --border: rgba(240,235,227,0.10); --border-strong: rgba(240,235,227,0.26);
       --surface: #2A2825; --nav-bg: rgba(31,30,27,0.94);
+      --sans: 'Inter', sans-serif; --work: 'Work Sans', sans-serif;
+      --serif: 'DM Serif Display', serif;
+      --ease: cubic-bezier(0.22,1,0.36,1);
     }
 
     html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
@@ -52,13 +40,6 @@
     .logo-word { font-family: var(--serif); font-style: italic; font-size: 24px; font-weight: 400; letter-spacing: -0.015em; line-height: 1; color: var(--fg); transition: transform 0.35s var(--ease), letter-spacing 0.35s var(--ease); }
     .logo-dot { color: var(--accent); font-style: normal; margin-left: 1px; }
     .nav-logo:hover .logo-word { transform: translateY(-1px); letter-spacing: 0; }
-    .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong); background: transparent; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0; transition: color 0.2s, border-color 0.2s, transform 0.25s var(--ease); }
-    .theme-toggle:hover { color: var(--fg); border-color: var(--fg); transform: rotate(-15deg); }
-    .theme-icon { width: 16px; height: 16px; }
-    .theme-icon-sun  { display: none; }
-    .theme-icon-moon { display: block; }
-    [data-theme="dark"] .theme-icon-sun  { display: block; }
-    [data-theme="dark"] .theme-icon-moon { display: none; }
     .nav-center { display: flex; justify-content: center; }
     .nav-links { display: flex; gap: 44px; list-style: none; }
     .nav-links a { font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--muted); position: relative; transition: color 0.2s; }
@@ -87,18 +68,16 @@
     .mobile-nav.open .mobile-nav-links li:nth-child(4) a { transition-delay: 0.20s; }
     .mobile-nav.open .mobile-nav-links a { transform: translateY(0); opacity: 1; }
     .mobile-nav-links a:hover { color: var(--accent); }
-    .breadcrumb { position: fixed; top: 80px; left: 52px; z-index: 90; display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); transition: top 0.4s var(--ease); }
-    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; padding: 96px 52px 0; font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); max-width: 100%; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; white-space: nowrap; flex-shrink: 0; }
     .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb-sep { opacity: 0.4; }
-    .breadcrumb-current { color: var(--fg); font-weight: 500; }
-    .breadcrumb-back { display: none; align-items: center; gap: 4px; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); text-decoration: none; transition: color 0.2s, transform 0.3s var(--ease); }
-    .breadcrumb-back:hover { color: var(--fg); transform: translateX(-3px); }
-    @media (max-width: 1024px) { nav { padding: 22px 36px; } nav.scrolled { padding: 14px 36px; } .breadcrumb { left: 36px; } }
-    @media (max-width: 768px) { nav { padding: 20px 24px; } .nav-center, .nav-right { display: none; } .nav-hamburger { display: flex; } .breadcrumb { top: 76px; left: 24px; } .breadcrumb-sep, .breadcrumb a:not(:last-of-type) { display: none; } .breadcrumb-back { display: flex; } }
+    .breadcrumb-sep { opacity: 0.4; flex-shrink: 0; }
+    .breadcrumb-current { color: var(--fg); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    @media (max-width: 1024px) { nav { padding: 22px 36px; } nav.scrolled { padding: 14px 36px; } .breadcrumb { padding: 92px 36px 0; } }
+    @media (max-width: 768px) { nav { padding: 20px 24px; } .nav-center, .nav-right { display: none; } .nav-hamburger { display: flex; } .breadcrumb { padding: 84px 24px 0; font-size: 9px; } }
 
     /* ─── HERO ─── */
-    .hero { padding: 360px 52px 100px; border-bottom: 1px solid var(--border-strong); }
+    .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px 52px 80px; border-bottom: 1px solid var(--border-strong); }
     .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
     .hero-headline { font-family: var(--serif); font-size: clamp(40px,5.5vw,76px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 28px; }
     .hero-headline em { font-style: italic; color: var(--accent); }
@@ -108,11 +87,14 @@
     .meta-item + .meta-item { padding-left: 32px; border-left: 1px solid var(--border); }
     .meta-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
     .meta-value { font-size: 14px; }
-    @media (max-width:768px) { .hero { padding: 120px 24px 64px; } .hero-meta { flex-wrap: wrap; gap: 0; } .meta-item { flex: 1 1 50%; padding: 20px 0 0 0 !important; border-left: none !important; } }
+    @media (max-width:768px) { .hero { padding: 24px 24px 52px; } .hero-meta { flex-wrap: wrap; gap: 0; } .meta-item { flex: 1 1 50%; padding: 20px 0 0 0 !important; border-left: none !important; } }
 
     /* ─── SECTIONS ─── */
-    .section { padding: 110px 52px; border-top: 1px solid var(--border); }
+    .section { padding: 110px 52px; border-top: 1px solid var(--border); overflow-x: hidden; }
+    .section > *, .two-col > * { min-width: 0; max-width: 100%; }
+    .col-text, .col-demo { min-width: 0; }
     @media (max-width:768px) { .section { padding: 72px 24px; } }
+    @media (max-width:480px) { .section { padding: 56px 20px; } }
 
     /* Section counter + label row */
     .sec-row { display: flex; align-items: center; gap: 16px; margin-bottom: 56px; }
@@ -137,7 +119,7 @@
     code { font-family: var(--work); font-size: 11px; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; }
 
     /* ─── DEMO CARD ─── */
-    /* A clean, on-theme container — no dark windows */
+    /* A clean, on-theme container, no dark windows */
     .demo-card {
       background: #070708;
       border: 1px solid rgba(255,255,255,0.08);
@@ -206,7 +188,13 @@
     .stat-item + .stat-item { padding-left: 28px; border-left: 1px solid var(--border); }
     .stat-n { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 400; color: var(--accent); letter-spacing: -.02em; line-height: 1; }
     .stat-d { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
-    @media (max-width:768px) { .stat-row { grid-template-columns: 1fr 1fr; gap: 0; } .stat-item:nth-child(2){ border-right:none; } .stat-item:nth-child(3){ border-top:1px solid var(--border); border-left:none; padding-left:0; } .stat-item:nth-child(4){ border-top:1px solid var(--border); } }
+    @media (max-width:768px) {
+      .stat-row { grid-template-columns: 1fr 1fr; gap: 0; }
+      .stat-item { padding: 14px 16px; }
+      .stat-item:nth-child(odd) { padding-left: 0; }
+      .stat-item:nth-child(even) { padding-right: 0; padding-left: 16px; border-left: 1px solid var(--border); }
+      .stat-item:nth-child(n+3) { border-top: 1px solid var(--border); }
+    }
 
     /* ─── PROCESS ─── */
     .process-list { margin-top: 48px; }
@@ -235,7 +223,7 @@
 
     /* ─────────────────────────────────────────
        RIZZLE COMPONENTS
-       All colours use portfolio tokens — no hardcoded darks.
+       All colours use portfolio tokens. No hardcoded darks.
     ───────────────────────────────────────── */
 
     /* ── Buttons ── */
@@ -414,8 +402,9 @@
     /* ── Typography specimen upgrade ── */
     .rz-type-hero { padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     .rz-type-overline { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .rz-type-numerals { font-family: var(--work); font-size: clamp(26px, 4vw, 42px); font-weight: 700; letter-spacing: -.02em; line-height: 1; color: var(--fg); margin-bottom: 12px; }
-    .rz-type-numerals span { color: var(--accent); }
+    .rz-type-numerals { font-family: var(--work); font-size: clamp(26px, 4vw, 42px); font-weight: 700; letter-spacing: -.02em; line-height: 1; color: var(--fg); margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px 24px; }
+    .rz-type-numeral-item { white-space: nowrap; }
+    .rz-type-numerals .rz-type-numeral-item > span { color: var(--accent); }
     .rz-type-pills { display: flex; gap: 6px; flex-wrap: wrap; }
     .rz-type-pill { font-size: 9px; font-weight: 500; color: var(--muted); background: color-mix(in srgb, var(--fg) 5%, transparent); border: 1px solid var(--border); padding: 3px 8px; border-radius: 100px; }
     .rz-wf-section { padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
@@ -577,8 +566,7 @@
 
     /* ─── FOOTER ─── */
     footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 52px 0;position:relative;overflow:hidden;}
-    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) opacity(0.055);}
-    [data-theme="dark"] .footer-sig{filter:brightness(0) invert(1) opacity(0.04);}
+    .footer-sig{position:absolute;top:0;right:-2%;height:130%;width:auto;pointer-events:none;filter:brightness(0) invert(1) opacity(0.04);}
     .footer-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;padding-bottom:80px;}
     .footer-brand{display:flex;flex-direction:column;gap:20px;}
     .footer-logo{font-family:var(--serif);font-style:italic;font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.025em;line-height:1;color:var(--fg);text-decoration:none;}
@@ -609,12 +597,13 @@
       .demo-card-body{padding:16px;}
       .demo-card-body-sm{padding:12px;}
       .btn-col{flex-direction:row;flex-wrap:wrap;}
+      .btn-state-tag{display:none;}
       .tab-bar{gap:0;}
       .hero-sub{font-size:15px;}
       .col-heading{font-size:clamp(22px,6vw,36px);}
       .rz-ed-step { flex-direction: column; gap: 4px; }
       .rz-ed-ann { min-width: unset; }
-      .rz-type-numerals { font-size: clamp(20px, 5vw, 36px); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+      .rz-type-numerals { font-size: clamp(20px, 5vw, 36px); gap: 4px 16px; }
       .rz-ladder { gap: 5px; }
       .tab-btn { padding: 8px 10px; font-size: 10px; }
     }
@@ -631,10 +620,6 @@
       <ul class="nav-links"><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#about">About</a></li></ul>
     </div>
     <div class="nav-right" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
-        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
-      </button>
       <a href="../docs/Keshav_Anand_Resume.pdf" class="nav-btn" target="_blank" rel="noopener">Resume</a>
     </div>
     <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
@@ -648,7 +633,6 @@
     <a href="../index.html#work">Work</a>
     <span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">Rizzle Design System</span>
-    <a href="../index.html#work" class="breadcrumb-back">← Back</a>
   </nav>
 
   <div class="mobile-nav" id="mobileNav">
@@ -773,7 +757,7 @@
           <button class="tab-btn" data-panel="tp-rad">Radius</button>
         </div>
         <div id="tp-sp" class="tab-panel active">
-          <div class="rz-wf-label" style="margin-top:4px;">8pt base grid — ascending proof</div>
+          <div class="rz-wf-label" style="margin-top:4px;">8pt base grid · ascending proof</div>
           <div class="rz-ladder">
             <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:7px;height:7px;"></div><div class="rz-ladder-tok">xs</div><div class="rz-ladder-px">4</div></div>
             <div class="rz-ladder-unit"><div class="rz-ladder-block" style="width:14px;height:14px;"></div><div class="rz-ladder-tok">sm</div><div class="rz-ladder-px">8</div></div>
@@ -788,14 +772,14 @@
           <div class="rz-sp-ctx">
             <div class="rz-sp-ctx-label">Used in product</div>
             <div style="font-size:10px;color:var(--muted);line-height:1.8;font-family:var(--work);">
-              <code>spacing-sm (8px)</code> — icon-to-label gap<br>
-              <code>spacing-lg (16px)</code> — card inner padding<br>
-              <code>spacing-3xl (32px)</code> — section dividers
+              <code>spacing-sm (8px)</code> for icon-to-label gap<br>
+              <code>spacing-lg (16px)</code> for card inner padding<br>
+              <code>spacing-3xl (32px)</code> for section dividers
             </div>
           </div>
         </div>
         <div id="tp-rad" class="tab-panel">
-          <div class="rz-wf-label" style="margin-top:4px;">Corner character — same box, different personality</div>
+          <div class="rz-wf-label" style="margin-top:4px;">Corner character · same box, different personality</div>
           <div class="rz-rad-gallery">
             <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:0;"></div><div class="rz-rad-name">None</div><div class="rz-rad-val">0</div></div>
             <div class="rz-rad-unit"><div class="rz-rad-box" style="border-radius:2px;"></div><div class="rz-rad-name">XS</div><div class="rz-rad-val">2px</div></div>
@@ -829,8 +813,12 @@
       <div class="col-demo reveal rd1">
         <!-- Hero specimen -->
         <div class="rz-type-hero">
-          <div class="rz-type-overline">Work Sans — Video platform sans</div>
-          <div class="rz-type-numerals"><span>120+</span> components &nbsp;&nbsp; <span>4×</span> fewer handoffs &nbsp;&nbsp; <span>3</span> squads</div>
+          <div class="rz-type-overline">Work Sans · Video platform sans</div>
+          <div class="rz-type-numerals">
+            <span class="rz-type-numeral-item"><span>120+</span> components</span>
+            <span class="rz-type-numeral-item"><span>4×</span> fewer handoffs</span>
+            <span class="rz-type-numeral-item"><span>3</span> squads</span>
+          </div>
           <div class="rz-type-pills">
             <span class="rz-type-pill">Work Sans Variable</span>
             <span class="rz-type-pill">Weights 300–700</span>
@@ -840,7 +828,7 @@
         </div>
         <!-- Weight waterfall -->
         <div class="rz-wf-section">
-          <div class="rz-wf-label">Weight scale — same size, same text</div>
+          <div class="rz-wf-label">Weight scale · same size, same text</div>
           <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:300;">Creating together</span><span class="rz-wf-weight">Light · 300</span></div>
           <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:400;">Creating together</span><span class="rz-wf-weight">Regular · 400</span></div>
           <div class="rz-wf-row"><span class="rz-wf-sample" style="font-weight:500;">Creating together</span><span class="rz-wf-weight">Medium · 500</span></div>
@@ -898,7 +886,7 @@
           <button class="tab-btn" data-panel="cp-sem">Semantic</button>
           <button class="tab-btn" data-panel="cp-neu">Neutral</button>
         </div>
-        <div id="cp-neu" class="tab-panel active">
+        <div id="cp-neu" class="tab-panel">
           <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Neutral · warm gray</div>
           <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(52px,1fr));">
             <div class="swatch" data-hex="#FFFFFF"><div class="swatch-chip" style="background:#FFFFFF;border:1px solid rgba(0,0,0,.08)"><div class="copy-hint">COPY</div></div><div class="swatch-name">0</div><div class="swatch-hex">#FFFFFF</div></div>
@@ -917,7 +905,7 @@
             <div class="swatch" data-hex="#000000"><div class="swatch-chip" style="background:#000000"><div class="copy-hint">COPY</div></div><div class="swatch-name">1300</div><div class="swatch-hex">#000000</div></div>
           </div>
         </div>
-        <div id="cp-pri" class="tab-panel">
+        <div id="cp-pri" class="tab-panel active">
           <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:4px;">Brand Primary · #BB00ED</div>
           <div class="swatch-grid">
             <div class="swatch" data-hex="#FCF5FE"><div class="swatch-chip" style="background:#FCF5FE;border:1px solid rgba(0,0,0,.06)"><div class="copy-hint">COPY</div></div><div class="swatch-name">0</div><div class="swatch-hex">#FCF5FE</div></div>
@@ -968,7 +956,7 @@
           </div>
         </div>
         <div id="cp-sem" class="tab-panel">
-          <div style="font-size:10px;color:var(--muted);line-height:1.6;font-family:var(--work);margin-top:4px;margin-bottom:4px;padding-bottom:12px;border-bottom:1px solid var(--border);">Semantic tokens sit on top of primitives. Engineers reference intent — <code>color.error.idle</code> — not values. One token swap updates the whole product.</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;font-family:var(--work);margin-top:4px;margin-bottom:4px;padding-bottom:12px;border-bottom:1px solid var(--border);">Semantic tokens sit on top of primitives. Engineers reference intent (<code>color.error.idle</code>) not values. One token swap updates the whole product.</div>
           <div class="sem-group">
             <div class="sem-group-label">Success</div>
             <div class="swatch-grid" style="grid-template-columns:repeat(auto-fill,minmax(56px,1fr));">
@@ -1431,16 +1419,6 @@
   <div id="cpToast">Copied to clipboard</div>
 
   <script>
-    /* theme */
-    (function initThemeToggle() {
-      const btn = document.getElementById('themeToggle');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        try { localStorage.setItem('theme', next); } catch(e){}
-      });
-    })();
 
     /* nav scroll-hide + scrolled */
     const nav = document.getElementById('nav');
@@ -1511,7 +1489,7 @@
     });
     document.addEventListener('click', () => document.querySelectorAll('.rz-dropdown.open').forEach(d => d.classList.remove('open')));
 
-    /* sidebar — removed (replaced by PNG) */
+    /* sidebar: removed (replaced by PNG) */
 
     /* modals */
     document.getElementById('openInfo').addEventListener('click', () => document.getElementById('modalInfo').classList.add('open'));
@@ -1627,7 +1605,7 @@
   </div>
 
   <style>
-    /* ── FLOATING INDEX — numbers strip (desktop ≥1280px) ── */
+    /* ── FLOATING INDEX · numbers strip (desktop ≥1280px) ── */
     /* Sits entirely within the 52px left gutter, zero layout impact */
     .ds-index {
       display: none;
@@ -1654,7 +1632,7 @@
       .next-section,
       .cta-banner,
       footer { padding-left: 92px; }
-      .breadcrumb { left: 92px; }
+      .breadcrumb { padding-left: 92px; }
     }
     .ds-index-label { display: none; }
     .ds-index-list {
